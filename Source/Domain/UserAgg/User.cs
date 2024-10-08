@@ -1,0 +1,208 @@
+﻿using Common.Domain;
+using Common.Domain.Exceptions;
+using Domain.UserAgg;
+using Domain.UserAgg.Service;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+
+namespace Domain.UserAgg
+{
+    public class User : IdentityUser 
+    {
+        private User()
+        {
+            
+        }
+      //  public long Id { get; set; }
+        public DateTime CreationDate { get; set; }
+      
+        public string Name { get; set; }
+        public string? Family { get; private set; }
+        public string Password { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+
+        public UserAvatar Avatar { get; set; }
+
+        public List<Wallet> Wallets { get; } = new List<Wallet>();
+        public List<UserFriends> friends { get; } = new List<UserFriends>();
+        public List<UserEvent> userEvents { get; } = new List<UserEvent>();
+        public List<RequestBox> RequestBox { get; } =new List<RequestBox>();
+
+
+        public User( string email, string userName, string phoneNumber, string password, IUserService userService)
+        {
+            Guard(phoneNumber,userService);
+            GuardUserName(userName, userService);
+            Password = password;
+            Email = email;
+            UserName = userName;
+            //Family = family;
+            PhoneNumber = phoneNumber;
+            //Password = password;
+            CreationDate = DateTime.Now;
+            Avatar = new UserAvatar(0);
+
+        }
+       
+        public User(string email, string userName, string phoneNumber, string password)
+        {
+            Avatar = new UserAvatar(0);
+            Avatar.UserId = Id;
+            Password = password;
+            Email = email;
+            UserName = userName;
+            //Family = family;
+            PhoneNumber = phoneNumber;
+            //Password = password;
+            Avatar = new UserAvatar(0);
+
+        }
+
+        //public User( string phoneNumber, IUserService userService)
+        //{
+        //    Guard(phoneNumber,userService);
+        //    PhoneNumber = phoneNumber;
+        //   // this.UserName = UserName;, string UserName
+        //   // Password = password;
+        //    CreationDate = DateTime.Now;
+
+        //}
+
+        public void Edit(string name, string family, string phoneNumber, string email, string userName, IUserService userService)
+        {
+            //Guard(phoneNumber, userService);
+            Name = name;
+            Family = family;
+            PhoneNumber = phoneNumber;
+            Email = email;
+            UserName = userName;
+        }
+
+        public void ChargeWallet(Wallet wallet)
+        {
+            wallet.UserId = Id;
+            Wallets.Add(wallet);
+        }
+
+        public void AddEvent(List<long> eventId)
+        {
+            List<UserEvent> participants = new List<UserEvent>();
+
+            foreach (var item in eventId)
+            {
+                participants.Add(new UserEvent(item));
+            }
+            participants.ForEach(f => f.UserId = Id);
+
+            userEvents.Clear();
+            userEvents.AddRange(participants);
+        }
+        public void AddFriend(List<string> friendsId)
+        {
+            List<UserFriends> friendsList = new List<UserFriends>();
+
+            foreach (var item in friendsId)
+            {
+                friendsList.Add(new UserFriends(item));
+            }
+            friends.ForEach(f => f.CurrentUserId = Id);
+
+            friends.Clear();
+            friends.AddRange(friendsList);
+        }
+        public void AddRequest(string receiverId)
+        {
+            foreach (var item in RequestBox)
+            {
+                if (item.ReceiverId == receiverId && item.SenderId == Id)
+                {
+                    throw new Exception("شما به این کاربر یک بار درخواست دادید!");
+                }
+            }
+            if (Id == receiverId)
+            {
+                throw new Exception("درخواست شما نامعتبر است!");
+            }
+            var request = new RequestBox(receiverId, UserName);
+           
+            request.SenderId = Id;
+            
+            RequestBox.Add(request);
+        }
+        public void AddFriend(string friendId)
+        {
+
+            foreach (var item in friends)
+            {
+                if (item.CurrentUserId == Id && item.UserFriendId == friendId ||
+                    item.CurrentUserId == friendId && item.UserFriendId == Id)
+                {
+                    throw new Exception("درخواست غیر مجاز است!");
+                }
+            }
+            var friend = new UserFriends(friendId);
+           
+            friend.CurrentUserId = Id;
+
+            
+            friends.Add(friend);
+        }
+        public void RemoveRequest(string receiverId, string senderId)
+        {
+            var request = RequestBox.Where(f => f.SenderId == senderId && f.ReceiverId == receiverId || f.SenderId == receiverId && f.ReceiverId == senderId).FirstOrDefault();
+            RequestBox.Remove(request);
+        }
+        public void RemoveFriend(string friendId)
+        {
+            var friend = friends.Where(f => f.CurrentUserId == Id && f.UserFriendId == friendId).FirstOrDefault();
+            friends.Remove(friend);
+        }
+
+        public void AddAvatar(UserAvatar avatar)
+        {
+            avatar.UserId = Id;
+            this.Avatar = avatar;
+        }
+        public void SetAvatar(UserAvatar avatar)
+        {
+            avatar.UserId = Id;
+            this.Avatar = null; 
+            this.Avatar = avatar;
+        }
+        public void Guard(
+             string phoneNumber, IUserService userService)
+        {
+             if (phoneNumber.Length != 11)
+                throw new InvalidDomainDataException("شماره موبایل نامعتبر است");
+
+            //if (string.IsNullOrWhiteSpace(name))
+            //    throw new InvalidDomainDataException(" نام نامعتبر است");
+            
+            //if (string.IsNullOrWhiteSpace(family))
+            //    throw new InvalidDomainDataException(" نام خانوادگی نامعتبر است");
+
+            if (phoneNumber != PhoneNumber)
+                if (userService.PhoneNumberIsExist(phoneNumber))
+                    throw new Exception("شما با این شماره تماس ثبت نام کرده اید!");
+            
+            //if (email != Email)
+            //    if (userService.EmailIsExist(email))
+            //        throw new Exception("شما از این ایمیل در یک اکانت استفاده کرده اید!");
+
+        }
+        public void GuardUserName(
+             string userName, IUserService userService)
+        {
+             if (string.IsNullOrWhiteSpace(userName))
+                throw new InvalidDomainDataException("نام کاربری را وارد کنید!");
+
+            if (userName != UserName)
+                if (userService.UserNameIsExist(userName))
+                    throw new Exception("شما با این نام کاربری ثبت نام کرده اید!");
+            
+        }
+    } 
+  
+} 
+

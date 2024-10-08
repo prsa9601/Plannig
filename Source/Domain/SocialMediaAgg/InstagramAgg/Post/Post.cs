@@ -1,0 +1,100 @@
+﻿using Common.Domain;
+using Common.Domain.Exceptions;
+using Common.Domain.Utils;
+using Domain.SocialMediaAgg.TelegramAgg.Post;
+using System.ComponentModel.DataAnnotations.Schema;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace Domain.SocialMediaAgg.InstagramAgg.Post
+{
+    public class Post : BaseEntity
+    {
+        public DateTime DateOfPosting { get; private set; }
+        //public string Picture { get; private set; }
+        public string Description { get; private set; }
+        public string ImageName { get; private set; }
+        public string PostId { get; set; }
+        public string VideoName { get; private set; }
+        public string InstagramUserName { get; set; }
+        //public string Title { get; private set; }
+        public string Link { get; private set; }
+        // public string Slug { get; private set; }
+        public bool IsSend { get; private set; } = false;
+        public long InstagramId { get; private set; } //InstagramPostId OR TelegramPostId
+       // [NotMapped]
+        public List<InstagramPostImage> Images { get; private set; }
+        //[NotMapped]
+        public List<InstagramPostVideo> Videos { get; private set; }
+
+        private Post()
+        {
+            Images = new List<InstagramPostImage>();
+            Videos = new List<InstagramPostVideo>();
+        }
+        public Post(DateTime dateOfPosting, string description, string link, string imageName, string videoName)
+        {
+            DateOfPosting = dateOfPosting;
+            Description = description;
+            Link = link;
+            // Slug = slug?.ToSlug(); string slug,
+            ImageName = imageName;
+            VideoName = videoName;
+        }
+        public void Edit(DateTime dateOfPosting, string description, string link, string imageName, string videoName)
+        {
+            DateOfPosting = dateOfPosting;
+            Description = description;
+            Link = link;
+            //Slug = slug?.ToSlug(); string slug,
+            ImageName = imageName;
+            VideoName = videoName;
+        }
+        public void SetPostImage(string imageName)
+        {
+            NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
+            ImageName = imageName;
+        }
+
+        public void AddImage(InstagramPostImage image)
+        {
+            image.PostId = PostId;
+            Images.Add(image);
+        }
+        public void SetPostVideo(string imageName)
+        {
+            NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
+            ImageName = imageName;
+        }
+ 
+        public void AddVideo(InstagramPostImage image)
+        {
+            image.PostId = PostId;
+            Images.Add(image);
+        }
+        public string RemoveImage(long id)
+        {
+            var image = Images.FirstOrDefault(f => f.Id == id);
+            if (image == null)
+                throw new NullOrEmptyDomainDataException("عکس یافت نشد");
+
+            Images.Remove(image);
+            return image.ImageName;
+        }
+        //public void Edit(DateTime dateOfPosting, string discription, string link)
+        //{
+        //    DateOfPosting = dateOfPosting;
+        //    Discription = discription;
+        //    Link = link;
+        //}
+        public void Send()
+        {
+            if (DateTime.Now >= DateOfPosting)
+            {
+                IsSend = true;
+            }
+            else
+                throw new Exception("ارسال پست در  این زمان مجاز نیست!");
+        }
+    }
+}
+

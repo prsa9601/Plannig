@@ -1,0 +1,23 @@
+﻿using Application.Package.Add;
+using Application.Package.Delete;
+using Application.Package.Edit;
+using Application.Package.SetSpecification;
+using Application.SocialMedia.Instagram.Post.SetImageToPost;
+using Common.Application;
+using Query.Package.DTOs;
+
+namespace Presentation.Facade.Package
+{
+    public interface IPackageFacade
+    {
+        Task<OperationResult> Add(AddPackageCommand command);
+        Task<OperationResult> Edit(EditPackageCommand command);
+        Task<OperationResult> Delete(RemovePackageCommand command);
+        Task<OperationResult> SetImage(SetImageCommand command);
+        Task<OperationResult> SetSpecification(SetSpecificationPackageCommand command);
+
+        Task<List<PackageDto?>> GetListPackages();
+        Task<PackageDto?> GetPackage(long id);
+
+    }
+}
