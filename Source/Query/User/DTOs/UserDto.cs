@@ -1,5 +1,6 @@
 ﻿using Common.Query;
 using Domain.UserAgg;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,14 @@ namespace Query.User.DTOs
         public string Id { get; set; }
         public DateTime CreationDate { get; set; }
         public string Name { get; set; }
+        public string UserName { get; set; }
         public string Family { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
 
         public UserAvatarDto avatar { get; set; }
-
+        public List<UserRoleDto> Roles { get; set; } = new List<UserRoleDto>();
         public List<FriendsDto> friends { get; set; }
     }
     public class FriendsDto :BaseDto
@@ -30,6 +32,12 @@ namespace Query.User.DTOs
         public UserAvatarDto avatar { get; set; }
 
     }
+    public class UserRoleDto : IdentityRole
+    {
+        public string RoleId { get; set; }
+        public string RoleName { get; set; } = string.Empty;
+    }
+
     public class UserAvatarDto : BaseDto
     {
         public string UserId { get; set; }

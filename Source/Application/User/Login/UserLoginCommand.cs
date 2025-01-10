@@ -1,10 +1,13 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Common.Application;
 using Microsoft.AspNetCore.Identity;
 using Common.Application.SecurityUtil;
 using Domain.UserAgg.Repository;
 using Domain.UserAgg.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application.User.Login
 {
@@ -62,16 +65,35 @@ namespace Application.User.Login
                 return OperationResult.Error("پسورد شما اشتباه است!");
             }
 
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName!)
+            };
+              
                 //var claim = new Claim(ClaimTypes.NameIdentifier, user.Id);
                 //var claim = new Claim(ClaimTypes.NameIdentifier, user.Id);
-                //var r =  await  _userManager.AddClaimAsync(user,claim);
-                new Claim(ClaimTypes.NameIdentifier , user.Id);
+                var r =  await  _userManager.AddClaimsAsync(user,claims);
+               
+              await _signInManager.SignInAsync(user, request.rememberMe);
 
-             await _signInManager.SignInAsync(user, request.rememberMe);
-            
+            //var tokenHandler = new JwtSecurityTokenHandler();
+            //var key = Encoding.ASCII.GetBytes(&quot@#MY_BIG_SECRET_KEY@#&quot);
+            //var tokenDescription = new SecurityTokenDescriptor
+            //{
+            //    Subject = new ClaimsIdentity(new Claim[]                      {
+            //            new Claim(ClaimTypes.Name, myLoginModelType.Email)
+            //        }
+            //    ),
+            //    Expires = DateTime.UtcNow.AddDays(1),
+            //    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            //};
+            //var token = tokenHandler.CreateToken(tokenDescription);
+            //var tokenString = tokenHandler.WriteToken(token);
+            // Ok(new { token = tokenString });
 
-            
-             return OperationResult.Success();
+
+            return OperationResult.Success();
             
         }
     }

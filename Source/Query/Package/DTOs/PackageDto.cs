@@ -1,5 +1,4 @@
 ﻿using Common.Query;
-using Domain.PackageAgg;
 
 namespace Query.Package.DTOs
 {
@@ -10,9 +9,10 @@ namespace Query.Package.DTOs
         public string Link { get; set; }
         public int Price { get; set; }
         public List<PackageSpecificationDto> Specification { get; set; }
+        public bool Active { get; set; } = false;
 
     }
-
+   
     public class PackageSpecificationDto : BaseDto
     {
         public string Key { get; set; }

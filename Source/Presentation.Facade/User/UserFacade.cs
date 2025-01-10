@@ -1,17 +1,25 @@
 ﻿using Application.User._Friend.Add;
 using Application.User._Friend.Remove;
+using Application.User.AddToken;
 using Application.User.Delete;
 using Application.User.Edit;
 using Application.User.Login;
 using Application.User.Logout;
 using Application.User.Register;
+using Application.User.RemoveToken;
 using Application.User.SetEvent;
 using Common.Application;
+using Common.Application.SecurityUtil;
+using Common.Domain.ValueObjects;
 using MediatR;
+using Query.User._Friend.DTOs;
 using Query.User.DTOs;
+using Query.User.GetById;
 using Query.User.GetByPhoneNumber;
 using Query.User.GetByUserName;
 using Query.User.GetCurrentUser;
+using Query.User.SearchUser;
+using Query.User.UserTokens.GetByJwtToken;
 
 namespace Presentation.Facade.User
 {
@@ -52,9 +60,9 @@ namespace Presentation.Facade.User
         //    //});
         //}
 
-      
 
-      
+
+
 
         //public async Task<UserDto?> GetUserByPhoneNumber(string phoneNumber)
         //{
@@ -86,6 +94,18 @@ namespace Presentation.Facade.User
             return await _mediator.Send(command);
         }
 
+        public async Task<UserDto?> GetUserById(string userId)
+        {
+            return await _mediator.Send(new GetUserByIdQuery(userId));
+
+        }
+
+        public async Task<UserFilterResult> SearchUser(UserFilterParam param)
+        {
+            return await _mediator.Send(new SearchUserFilterQuery(param));
+        }
+
+
         public async Task<UserDto?> GetCurrentUser(string Id)
         {
             return await _mediator.Send(new GetCurrentUserQuery(Id));
@@ -109,6 +129,29 @@ namespace Presentation.Facade.User
         public async Task<OperationResult> RemoveFriend(RemoveFriendUserCommand command)
         {
             return await _mediator.Send(command);
+        }
+        public async Task<UserTokenDto?> GetUserTokenByJwtToken(string jwtToken)
+        {
+            var hashJwtToken = Sha256Hasher.Hash(jwtToken);
+            //return await _cache.GetOrSet(CacheKeys.UserToken(hashJwtToken), () =>
+            //{
+            return await _mediator.Send(new GetUserTokenByJwtTokenQuery(hashJwtToken));
+            //});
+        }
+        public async Task<OperationResult> AddToken(AddUserTokenCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> RemoveToken(RemoveUserTokenCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (result.Status != OperationResultStatus.Success)
+                return OperationResult.Error();
+
+            //await _cache.RemoveAsync(CacheKeys.UserToken(result.Data));
+            return OperationResult.Success();
         }
 
         //public async Task<UserDto?> GetUserById(long Id)

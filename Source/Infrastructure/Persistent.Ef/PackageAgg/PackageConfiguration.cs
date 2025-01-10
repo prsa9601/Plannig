@@ -8,7 +8,7 @@ namespace Infrastructure.Persistent.Ef.PackageAgg
     {
         public void Configure(EntityTypeBuilder<Package> builder)
         {
-            builder.ToTable("Package", "dbo");
+            builder.ToTable("Package", "package");
             builder.Property(i=>i.Title)
                 .IsRequired().IsUnicode();
             builder.Property(i=>i.Link)
@@ -18,10 +18,17 @@ namespace Infrastructure.Persistent.Ef.PackageAgg
 
             builder.OwnsMany(b=>b.Specification , option =>
             {
-                option.ToTable("specification", "dbo");
+                option.ToTable("Specification", "package");
                 option.HasIndex(b => b.Id);
                 option.HasKey(b=>b.PackageId);
             });
+            //builder.OwnsMany(b=>b.activePackages , option =>
+            //{
+            //    option.ToTable("activePackages", "package");
+            //    option.HasIndex(b => b.Id);
+            //    option.HasKey(b => b.PackageId);
+            //    //option.HasIndex(b=>b.PackageId);
+            //});
 
         }
     }

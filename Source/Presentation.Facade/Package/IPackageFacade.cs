@@ -1,6 +1,8 @@
 ﻿using Application.Package.Add;
 using Application.Package.Delete;
 using Application.Package.Edit;
+using Application.Package.RemoveActivePackage;
+using Application.Package.SetActivePackage;
 using Application.Package.SetSpecification;
 using Application.SocialMedia.Instagram.Post.SetImageToPost;
 using Common.Application;
@@ -15,6 +17,8 @@ namespace Presentation.Facade.Package
         Task<OperationResult> Delete(RemovePackageCommand command);
         Task<OperationResult> SetImage(SetImageCommand command);
         Task<OperationResult> SetSpecification(SetSpecificationPackageCommand command);
+        Task<OperationResult> SetActivePackage(SetActivePackageCommand command);
+        Task<OperationResult> RemoveActivePackage(RemoveActivePackageCommand command);
 
         Task<List<PackageDto?>> GetListPackages();
         Task<PackageDto?> GetPackage(long id);

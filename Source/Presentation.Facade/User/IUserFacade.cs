@@ -1,7 +1,4 @@
-﻿using Application.Event.Add;
-using Application.Event.Delete;
-using Application.Event.Edit;
-using Application.User._Friend.Add;
+﻿using Application.User._Friend.Add;
 using Application.User._Friend.Remove;
 using Application.User.Delete;
 using Application.User.Edit;
@@ -12,6 +9,9 @@ using Common.Application;
 using Query.User.DTOs;
 using System.Security.Claims;
 using Application.User.Logout;
+using Application.User.AddToken;
+using Application.User.RemoveToken;
+using Query.User._Friend.DTOs;
 
 namespace Presentation.Facade.User
 {
@@ -26,9 +26,15 @@ namespace Presentation.Facade.User
         Task<OperationResult> AddFriend(AddFriendsUserCommand command);
         Task<OperationResult> RemoveFriend(RemoveFriendUserCommand command);
 
+        Task<UserFilterResult> SearchUser(UserFilterParam param);
+        Task<UserDto?> GetUserById(string userId);
         Task<UserDto?> GetCurrentUser(string Id);
         Task<UserDto?> GetUserByPhoneNumber(string phoneNumber);
-        Task<UserDto?> GetUserByUserName(string userName);
+        Task<UserDto?> GetUserByUserName(string userName); 
+        Task<OperationResult> AddToken(AddUserTokenCommand command);
+        Task<OperationResult> RemoveToken(RemoveUserTokenCommand command);
+        Task<UserTokenDto?> GetUserTokenByJwtToken(string jwtToken);
+
         //Task<UserDto?> GetUserById(long Id);
 
 

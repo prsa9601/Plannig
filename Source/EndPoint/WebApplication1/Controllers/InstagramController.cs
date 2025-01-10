@@ -10,7 +10,9 @@ using Application.SocialMedia.Instagram.Story.Delete;
 using Application.SocialMedia.Instagram.Story.Edit;
 using Common.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Planning.Api.Model.InstagramModel;
 using Presentation.Facade.Instagram;
+using static Planning.Api.Model.InstagramModel.InstagramViewModel;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,15 +29,24 @@ namespace Planning.Api.Controllers
             _facade = facade;
         }
 
-        
         [HttpPost]
-        public async Task<ApiResult> AddPost([FromBody] AddPostInstagramCommand instagramCommand)
+        public async Task<ApiResult> AddPost([FromForm] AddPostInstagramViewModel command)
         {
-            var result = await _facade.Add(instagramCommand);
+            DateTime dateTime = DateTime.Parse(command.DateOfPosting);
+
+            var result = await _facade.Add(new AddPostInstagramCommand()
+            {
+                DateOfPosting = dateTime,
+                Description = command.Description,
+                ImageName = command.ImageName,
+                InstagramId = command.InstagramId,
+                Link = command.Link,
+                VideoName = command.VideoName
+            });
             return CommandResult(result);
         }
         [HttpPost("AddStory")]
-        public async Task<ApiResult> UploadStory([FromBody] Application.SocialMedia
+        public async Task<ApiResult> UploadStory([FromForm] Application.SocialMedia
             .Instagram.Story.SendToInstagram.SendToInstagramCommand command)
         {
             var result = await _facade.UploadStory(command);

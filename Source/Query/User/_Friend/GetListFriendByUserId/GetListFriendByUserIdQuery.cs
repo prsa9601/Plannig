@@ -1,4 +1,9 @@
-﻿using Common.Query;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Common.Query;
 using Infrastructure.Persistent.Ef;
 using Microsoft.EntityFrameworkCore;
 using Query.User._Friend.DTOs;
@@ -6,29 +11,30 @@ using Query.User._RequestBox;
 
 namespace Query.User._Friend.GetListFriendByUserId
 {
-    public class GtListFriendByUserIdQuery : IQuery<List<FriendDto?>>
+    public class GetListFriendByUserIdQuery : IQuery<List<FriendDto?>>
     {
-        public GtListFriendByUserIdQuery(string userName)
+        public GetListFriendByUserIdQuery(string id)
         {
-            UserName = userName;
+            Id = id;
         }
-        public string UserName { get; set; }
+
+        public string Id { get; set; }
     }
-    internal class GtListFriendByUserIdQueryHandler : IQueryHandler<GetListFriendByUserId.GtListFriendByUserIdQuery, List<FriendDto?>>
+    internal class GetListFriendByUserIdQueryHandler : IQueryHandler<GetListFriendByUserIdQuery, List<FriendDto?>>
     {
         private readonly PlanningContext _context;
 
-        public GtListFriendByUserIdQueryHandler(PlanningContext context)
+        public GetListFriendByUserIdQueryHandler(PlanningContext context)
         {
             _context = context;
         }
 
-        public async Task<List<FriendDto>> Handle(GtListFriendByUserIdQuery request, CancellationToken cancellationToken)
+        public async Task<List<FriendDto?>> Handle(GetListFriendByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var requests = await _context.Users.Where(i => i.UserName.Equals(request.UserName)).Select(i => i.friends).ToListAsync();
+            var requests = await _context.Users.Where(i => i.Id.Equals(request.Id)).Select(i => i.friends).ToListAsync();
             
-            var user = await _context.Users.Where(i => i.UserName == request.UserName).FirstOrDefaultAsync();
-            
+            var user = await _context.Users.Where(i => i.Id == request.Id).FirstOrDefaultAsync();
+
             var friends = new List<FriendDto>();
             foreach (var item in requests)
             {
@@ -50,6 +56,5 @@ namespace Query.User._Friend.GetListFriendByUserId
             }
             return friends;
         }
-   
     }
 }

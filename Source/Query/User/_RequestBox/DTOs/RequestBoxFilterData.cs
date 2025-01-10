@@ -9,13 +9,14 @@ namespace Query.User._RequestBox.DTOs
         public string UserNameSender { get; set; }
         public string UserNameReceived { get; set; }
         public string SenderId { get; set; }
-
+        public string Description { get; set; }
+        public string Title { get; set; }
         public string ReceivedId { get; set; }
 
     }
     public class RequestBoxFilterParam : BaseFilterParam
     {
-        public string UserName { get; set; }
+        public string UserId { get; set; }
         public filter filter { get; set; }
     }
     public class RequestBoxFilterResult : BaseFilter<RequestBoxFilterData, RequestBoxFilterParam>

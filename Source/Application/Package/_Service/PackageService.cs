@@ -17,5 +17,6 @@ namespace Application.Package._Service
         {
             return _repository.Exists(s => s.Title == title);
         }
+
     }
 }

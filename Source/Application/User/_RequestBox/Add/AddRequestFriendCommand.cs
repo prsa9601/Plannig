@@ -23,11 +23,19 @@ namespace Application.User._RequestBox.Add
             try
             {
                 var receiver = await _repository.GetTrackingByUserName(request.userNameFriend);
+                if (string.IsNullOrWhiteSpace(request.userName))
+                {
+                    return OperationResult.NotFound("خطایی سمت سرور رخ داده در اسرع وقت درستش میکنیم.");
+                }
+                else if (string.IsNullOrWhiteSpace(request.userNameFriend))
+                {
+                    return OperationResult.NotFound("کاربر مورد نظر یافت نشد.");
+                }
                 if (receiver != null)
                 {
                     var user = await _repository.GetTrackingByUserName(request.userName);
-                    //receiver.AddRequest(user.Id);
-                    user.AddRequest(receiver.Id);
+                    receiver.AddRequest(user.UserName,user.Id);
+                    //user.AddRequest(receiver.Id);
                     await _repository.Save();
                     return OperationResult.Success();
                 }

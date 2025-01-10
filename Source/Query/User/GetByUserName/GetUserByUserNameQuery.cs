@@ -5,10 +5,10 @@ using Query.User.DTOs;
 
 namespace Query.User.GetByUserName
 {
-    public record class GetUserByUserNameQuery(string userName) : IQuery<UserDto>;
+    public record class GetUserByUserNameQuery(string userName) : IQuery<UserDto?>;
 
 
-    public class GetUserByUserNameQueryHandler : IQueryHandler<GetUserByUserNameQuery, UserDto>
+    public class GetUserByUserNameQueryHandler : IQueryHandler<GetUserByUserNameQuery, UserDto?>
     {
         private readonly PlanningContext _context;
 
@@ -17,7 +17,7 @@ namespace Query.User.GetByUserName
             _context = context;
         }
 
-        public async Task<UserDto> Handle(GetUserByUserNameQuery request, CancellationToken cancellationToken)
+        public async Task<UserDto?> Handle(GetUserByUserNameQuery request, CancellationToken cancellationToken)
         {
             var model = await _context.Users.FirstOrDefaultAsync(i => i.UserName == request.userName);
             return model.Map(_context);

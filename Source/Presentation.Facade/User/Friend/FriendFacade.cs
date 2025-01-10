@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.User._Friend.Add;
+﻿using Application.User._Friend.Add;
 using Application.User._Friend.Remove;
 using Common.Application;
 using MediatR;
 using Query.User._Friend.DTOs;
+using Query.User._Friend.GetFiendFilterForProfile;
 using Query.User._Friend.GetListFriendByUserId;
+using Query.User._Friend.GetListFriendByUserIdForProfile;
+using Query.User._Friend.GetListFriendByUserName;
+using Query.User.DTOs;
+using Query.User.SearchUser;
 
 namespace Presentation.Facade.User.Friend
 {
@@ -25,9 +25,24 @@ namespace Presentation.Facade.User.Friend
             return await _mediator.Send(command);
         }
 
+        public async Task<List<FriendDto?>> GetFriendsByUserName(string userName)
+        {
+            return await _mediator.Send(new GtListFriendByUserNameQuery(userName));
+        }
         public async Task<List<FriendDto?>> GetFriendsByUserId(string id)
         {
-            return await _mediator.Send(new GtListFriendByUserIdQuery(id));
+            return await _mediator.Send(new GetListFriendByUserIdQuery(id));
+        }
+
+
+        public async Task<UserFriendFilterResult> GetFriendsByUserIdForProfile(UserFriendFilterParam param)
+        {
+            return await _mediator.Send(new GetListFriendByUserIdForProfileQuery(param));
+        }
+
+        public async Task<FriendDtoForProfileResult?> GetFriendFilterForProfileQuery(FriendDtoForProfileParam param)
+        {
+            return await _mediator.Send(new GetFriendFilterForProfileQuery(param));
         }
 
         public async Task<OperationResult> RemoveFriend(RemoveFriendUserCommand command)

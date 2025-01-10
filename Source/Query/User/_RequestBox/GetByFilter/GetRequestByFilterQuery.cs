@@ -27,42 +27,47 @@ namespace Query.User._RequestBox.GetByFilter
         {
             var @params = request.FilterParams;
 
-            var user = await _context.Users.Where(i => i.UserName.Equals(request.FilterParams.UserName))
-                .FirstOrDefaultAsync();
+            var requestBox = await _context.Users.Select(i => i.RequestBox).ToListAsync();
 
-            var result = user.RequestBox;
-
+            var result =  requestBox.Select(i=>
+                i.Where(i=>i.ReceiverId.Equals(request.FilterParams.UserId)
+                                                        ||i.SenderId.Equals(request.FilterParams.UserId)));
+          
             List<RequestBoxFilterData> requests1 = new List<RequestBoxFilterData>();
 
             foreach (var item in result) 
             {
-                //foreach (var data in item) 
-                //{
+                foreach (var item1 in item)
+                {
+
+
                     var data2 = new RequestBoxFilterData
                     {
-                        Id = item.Id,
-                        CreationDate = item.CreationDate,
-                        UserNameSender = item.SenderId.GetUserNameByIdUser(_context),
-                        UserNameReceived = item.ReceiverId.GetUserNameByIdUser(_context),
+                        Id = item1.Id,
+                        CreationDate = item1.CreationDate,
+                        UserNameSender = item1.SenderId.GetUserNameByIdUser(_context),
+                        UserNameReceived = item1.ReceiverId.GetUserNameByIdUser(_context),
+                        ReceivedId = item1.ReceiverId,
+                        SenderId = item1.SenderId,
+                        Description = item1.Description,
+                        Title = item1.Title
                     };
-                    requests1.Add(data2); 
-                //}
+                    requests1.Add(data2);
+                }
             }
-            //if (@params.PostId != null)
-            //    result = result.Where(r => r.PostId == @params.PostId);
 
             switch (@params.filter)
             {
                 case filter.SendRequest:
                     {
-                        requests1 = requests1.Where(i=>i.UserNameSender == user.UserName).ToList();
+                        requests1 = requests1.Where(i=>i.SenderId == request.FilterParams.UserId).ToList();
                         if (requests1.Count == 0)
                             return null;
                         break;
                     }
                 case filter.ReceiveRequest:
                     {
-                        requests1 = requests1.Where(r => r.UserNameReceived == user.UserName).ToList();
+                        requests1 = requests1.Where(r => r.ReceivedId == request.FilterParams.UserId).ToList();
                         if (requests1.Count == 0)
                             return null;
                         break;
@@ -70,18 +75,6 @@ namespace Query.User._RequestBox.GetByFilter
              
 
             }
-
-
-            //if (@params.UserId != null)
-            //    result = result.Where(r => r.UserId == @params.UserId);
-
-            //if (@params.StartDate != null)
-            //    result = result.Where(r => r.CreationDate.Date >= @params.StartDate.Value.Date);
-
-            //if (@params.EndDate != null)
-            //    result = result.Where(r => r.CreationDate.Date <= @params.EndDate.Value.Date);
-
-             
 
             var skip = (@params.PageId - 1) * @params.Take;
             var model = new RequestBoxFilterResult()

@@ -1,6 +1,8 @@
 ﻿using Application.Package.Add;
 using Application.Package.Delete;
 using Application.Package.Edit;
+using Application.Package.RemoveActivePackage;
+using Application.Package.SetActivePackage;
 using Application.Package.SetSpecification;
 using Application.SocialMedia.Instagram.Post.SetImageToPost;
 using Common.Application;
@@ -35,6 +37,11 @@ namespace Presentation.Facade.Package
             return await _mediator.Send(command);
         }
 
+        public async Task<OperationResult> RemoveActivePackage(RemoveActivePackageCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
         public async Task<List<PackageDto?>> GetListPackages()
         {
             return await _mediator.Send(new GetPackageListQuery());
@@ -45,14 +52,19 @@ namespace Presentation.Facade.Package
             return await _mediator.Send(new GetPackageByIdQuery(id));
         }
 
-        public Task<OperationResult> SetImage(SetImageCommand command)
+        public async Task<OperationResult> SetImage(SetImageCommand command)
         {
-            throw new NotImplementedException();
+            return await _mediator.Send(command);
         }
 
-        public Task<OperationResult> SetSpecification(SetSpecificationPackageCommand command)
+        public async Task<OperationResult> SetSpecification(SetSpecificationPackageCommand command)
         {
-            throw new NotImplementedException();
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> SetActivePackage(SetActivePackageCommand command)
+        {
+            return await _mediator.Send(command);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Common.Query;
+﻿using Common.Query;
 using Infrastructure.Persistent.Ef;
 using Microsoft.EntityFrameworkCore;
 using Query.Package.DTOs;

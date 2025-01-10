@@ -1,5 +1,6 @@
 ﻿using Domain.EventAgg.Repository;
 using Domain.PackageAgg.Repository;
+using Domain.RoleAgg.Repository;
 using Domain.UserAgg;
 using Domain.UserAgg.Repository;
 using Infrastructure.Persistent.Ef;
@@ -13,7 +14,9 @@ using Infrastructure.Persistent.Ef.InstagramAgg;
 using Infrastructure.Persistent.Ef.TelegramAgg;
 using Domain.SocialMediaAgg.InstagramAgg;
 using Domain.SocialMediaAgg.TelegramAgg.Repository;
+using Infrastructure.Persistent.Dapper;
 using Infrastructure.Persistent.Ef.PackageAgg;
+using Infrastructure.Persistent.Ef.Role;
 
 
 namespace Infrastructure
@@ -27,11 +30,12 @@ namespace Infrastructure
             services.AddScoped<IUserRepository<Domain.UserAgg.User>, UserRepository<Domain.UserAgg.User>>();
             services.AddScoped<IInstagramRepository, InstagramRepository>();
             services.AddScoped<ITelegramRepository, TelegramRepository>();
+            services.AddScoped<IRoleRepository<Domain.RoleAgg.Role>, RoleRepository<Domain.RoleAgg.Role>>();
             //services.AddSingleton<IPostRepository, PostRepository>();
 
             //services.AddSingleton<ICustomPublisher, CustomPublisher>();
 
-            services.AddDefaultIdentity<Domain.UserAgg.User>(options =>
+            services.AddIdentity<Domain.UserAgg.User, Domain.RoleAgg.Role>(options =>
             {
 
                 // User Options
@@ -71,7 +75,7 @@ namespace Infrastructure
             //.AddDefaultTokenProviders();
             //.AddErrorDescriber<PersianIdentityErrors>();
 
-           // services.AddTransient(_ => new DapperContext(connectionString));
+            services.AddTransient(_ => new DapperContext(connectionString));
             services.AddDbContext<PlanningContext>(option =>
             {
                 option.UseSqlServer(connectionString);

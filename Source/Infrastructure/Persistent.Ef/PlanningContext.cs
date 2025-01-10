@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Infrastructure.Persistent.Ef
 {
-    public class PlanningContext : IdentityDbContext<Domain.UserAgg.User>
+    public class PlanningContext : IdentityDbContext<Domain.UserAgg.User, Domain.RoleAgg.Role, string>
     {
         //private readonly ICustomPublisher _publisher;, ICustomPublisher publisher
         public PlanningContext(DbContextOptions<PlanningContext> options) : base(options)

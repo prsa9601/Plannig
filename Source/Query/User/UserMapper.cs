@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Persistent.Ef;
+using Microsoft.EntityFrameworkCore;
 using Query.User.DTOs;
 
 namespace Query.User
@@ -9,18 +10,36 @@ namespace Query.User
         {
             var model = new UserDto()
             {
+                Password = user.Password,
+                UserName = user.UserName,
                 Email = user.Email,
                 CreationDate = user.CreationDate,
                 Family = user.Family,
-                friends = user.friends.FriendsMap(context),
-                Id=user.Id,
+                friends = user.friends.FriendsMap(context)!,
+                Id = user.Id,
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
-                avatar = user.Id.MapAvatar(context),
+                avatar = user.Id.MapAvatar(context)!,
             };
             return model;
         }
-        public static List<FriendsDto> FriendsMap(this List<Domain.UserAgg.UserFriends> user, PlanningContext context)
+        public static UserFilterData? Map(this Domain.UserAgg.User? user,string CurrentUserId, PlanningContext context)
+        {
+            var model = new UserFilterData()
+            {
+                Password = user.Password,
+                Email = user.Email,
+                CreationDate = user.CreationDate,
+                Family = user.Family,
+                CurrentUserId = CurrentUserId,
+                Id = user.Id,
+                Name = user.Name,
+                PhoneNumber = user.PhoneNumber,
+                avatar = user.Id.MapAvatar(context)!,
+            };
+            return model;
+        }
+        public static List<FriendsDto?> FriendsMap(this List<Domain.UserAgg.UserFriends>? user, PlanningContext context)
         {
             var friends = new List<FriendsDto>();
             foreach (var item in user)
@@ -37,7 +56,7 @@ namespace Query.User
             }
             return friends;
         }
-        public static UserAvatarDto MapAvatar(this string id, PlanningContext context)
+        public static UserAvatarDto? MapAvatar(this string id, PlanningContext context)
         {
             var avatar = context.Users.Where(i => i.Id == id).Select(i => i.Avatar).FirstOrDefault();
             return new UserAvatarDto()
@@ -47,6 +66,23 @@ namespace Query.User
                 CreationDate = avatar.CreationDate,
                 UserId = avatar.UserId,
             };
+        }
+        public static async Task<UserDto?> SetUserRoleTitles(this UserDto? userDto, PlanningContext context)
+        {
+            var roleIds = userDto.Roles.Select(r => r.RoleId);
+            var result = await context.Roles.Where(r => roleIds.Contains(r.Id)).ToListAsync();
+            var roles = new List<UserRoleDto>();
+            foreach (var role in result)
+            {
+                roles.Add(new UserRoleDto()
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name!
+                });
+            }
+
+            userDto.Roles = roles;
+            return userDto;
         }
     }
 }

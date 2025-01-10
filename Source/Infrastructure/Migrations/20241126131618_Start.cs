@@ -23,12 +23,19 @@ namespace Infrastructure.Migrations
             migrationBuilder.EnsureSchema(
                 name: "telegram");
 
+            migrationBuilder.EnsureSchema(
+                name: "package");
+
+            migrationBuilder.EnsureSchema(
+                name: "role");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -109,7 +116,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Package",
-                schema: "dbo",
+                schema: "package",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -117,6 +124,7 @@ namespace Infrastructure.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -196,6 +204,28 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Permissions",
+                schema: "role",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Permission = table.Column<int>(type: "int", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permissions", x => new { x.RoleId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_Permissions_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -220,8 +250,8 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -265,8 +295,8 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -343,6 +373,54 @@ namespace Infrastructure.Migrations
                     table.PrimaryKey("PK_RequestBox", x => new { x.UserId, x.Id });
                     table.ForeignKey(
                         name: "FK_RequestBox_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                schema: "user",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => new { x.UserId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_Roles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tokens",
+                schema: "user",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HashJwtToken = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    HashRefreshToken = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    TokenExpireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RefreshTokenExpireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Device = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -472,8 +550,8 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "specification",
-                schema: "dbo",
+                name: "Specification",
+                schema: "package",
                 columns: table => new
                 {
                     PackageId = table.Column<long>(type: "bigint", nullable: false)
@@ -486,11 +564,11 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_specification", x => x.PackageId);
+                    table.PrimaryKey("PK_Specification", x => x.PackageId);
                     table.ForeignKey(
-                        name: "FK_specification_Package_PackageId1",
+                        name: "FK_Specification_Package_PackageId1",
                         column: x => x.PackageId1,
-                        principalSchema: "dbo",
+                        principalSchema: "package",
                         principalTable: "Package",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -588,30 +666,6 @@ namespace Infrastructure.Migrations
                         principalSchema: "telegram",
                         principalTable: "Telegrams",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AvatarFriend",
-                schema: "user",
-                columns: table => new
-                {
-                    UserFriendsUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserFriendsId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    avatar = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AvatarFriend", x => new { x.UserFriendsUserId, x.UserFriendsId });
-                    table.ForeignKey(
-                        name: "FK_AvatarFriend_friends_UserFriendsUserId_UserFriendsId",
-                        columns: x => new { x.UserFriendsUserId, x.UserFriendsId },
-                        principalSchema: "user",
-                        principalTable: "friends",
-                        principalColumns: new[] { "UserId", "Id" },
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -766,12 +820,6 @@ namespace Infrastructure.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AvatarFriend_UserId",
-                schema: "user",
-                table: "AvatarFriend",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_eventUser_EventId",
                 schema: "dbo",
                 table: "eventUser",
@@ -825,15 +873,21 @@ namespace Infrastructure.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_specification_Id",
-                schema: "dbo",
-                table: "specification",
+                name: "IX_Roles_UserId",
+                schema: "user",
+                table: "Roles",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Specification_Id",
+                schema: "package",
+                table: "Specification",
                 column: "Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_specification_PackageId1",
-                schema: "dbo",
-                table: "specification",
+                name: "IX_Specification_PackageId1",
+                schema: "package",
+                table: "Specification",
                 column: "PackageId1");
 
             migrationBuilder.CreateIndex(
@@ -858,6 +912,12 @@ namespace Infrastructure.Migrations
                 name: "IX_TelegramProfile_TelegramId1",
                 table: "TelegramProfile",
                 column: "TelegramId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tokens_UserId",
+                schema: "user",
+                table: "Tokens",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_userEvents_UserId",
@@ -906,12 +966,12 @@ namespace Infrastructure.Migrations
                 schema: "user");
 
             migrationBuilder.DropTable(
-                name: "AvatarFriend",
-                schema: "user");
-
-            migrationBuilder.DropTable(
                 name: "eventUser",
                 schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "friends",
+                schema: "user");
 
             migrationBuilder.DropTable(
                 name: "Images",
@@ -925,12 +985,20 @@ namespace Infrastructure.Migrations
                 name: "InstagramProfile");
 
             migrationBuilder.DropTable(
+                name: "Permissions",
+                schema: "role");
+
+            migrationBuilder.DropTable(
                 name: "RequestBox",
                 schema: "user");
 
             migrationBuilder.DropTable(
-                name: "specification",
-                schema: "dbo");
+                name: "Roles",
+                schema: "user");
+
+            migrationBuilder.DropTable(
+                name: "Specification",
+                schema: "package");
 
             migrationBuilder.DropTable(
                 name: "Stories",
@@ -938,6 +1006,10 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "TelegramProfile");
+
+            migrationBuilder.DropTable(
+                name: "Tokens",
+                schema: "user");
 
             migrationBuilder.DropTable(
                 name: "userEvents",
@@ -955,19 +1027,15 @@ namespace Infrastructure.Migrations
                 name: "Wallet");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "friends",
-                schema: "user");
-
-            migrationBuilder.DropTable(
                 name: "Events",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "Package",
-                schema: "dbo");
+                schema: "package");
 
             migrationBuilder.DropTable(
                 name: "StoryImage");

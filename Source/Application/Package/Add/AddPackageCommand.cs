@@ -37,7 +37,9 @@ namespace Application.Package.Add
             var imageName = await _fileService
                 .SaveFileAndGenerateName(request.Picture, Directories.PackageImages);
 
-            var package = new Domain.PackageAgg.Package(request.Price, request.Title, imageName, request.Link, _service);
+            var package = new Domain.PackageAgg.Package(request.Price, request.Title, imageName, request.Link, _service); 
+            _repository.Add(package);
+
             var specifications = new List<PackageSpecification>();
             request.Specifications.ToList().ForEach(specification =>
             {

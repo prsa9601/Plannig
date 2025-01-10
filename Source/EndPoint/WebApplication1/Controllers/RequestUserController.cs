@@ -2,8 +2,10 @@
 using Application.User._RequestBox.Remove;
 using Common.AspNetCore;
 using Dapper;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Planning.Api.Model.RequestBox;
 using Presentation.Facade.User.Request;
 using Query.User._RequestBox.DTOs;
 
@@ -23,16 +25,19 @@ namespace Planning.Api.Controllers
         [HttpPost]
         public async Task<ApiResult> Add([FromBody] string ReceiverUserName)
         {
+            //var q = User.Identity.Name;
+            //var qq = User.GetUserIdToString();
+            //var qqq = User.GetUserName();
             var result = await _facade.AddRequest(new AddRequestFriendCommand()
             {
-                userName = User.Identity.Name,
+                userName = User.GetUserName(),
                 userNameFriend = ReceiverUserName
             });
             return CommandResult(result);
         }
         [Authorize]
         [HttpDelete]
-        public async Task<ApiResult> Remove([FromBody] string FriendUserName)
+        public async Task<ApiResult> Remove([FromQuery] string FriendUserName)
         {
             var result = await _facade.RemoveRequest(new RemoveRequestFriendCommand()
             {
@@ -49,7 +54,7 @@ namespace Planning.Api.Controllers
             return QueryResult(result);
         }
         [Authorize]
-        [HttpGet("GetById")]
+        [HttpGet("GetById{id}")]
         public async Task<ApiResult<RequestDto?>> GetRequestById(long id)
         {
             var result = await _facade.GetRequestById(id, User.Identity.Name);
@@ -57,14 +62,16 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpGet("GetFilter")]
-        public async Task<ApiResult<RequestBoxFilterResult?>> GetRequestByFilter([FromQuery]RequestBoxFilterParam param)
+        public async Task<ApiResult<RequestBoxFilterResult?>> GetRequestByFilter([FromQuery]RequestBoxParamViewModel param)
         {
+            var UserId = User.Identity.GetUserId();
+
             var result = await _facade.GetRequestByFilter(new RequestBoxFilterParam()
             {
                 PageId = param.PageId,
                 Take = param.Take,
                 filter = param.filter,
-                UserName = User.Identity.Name
+                UserId = User.Identity.GetUserId()
             });
             return QueryResult(result);
         }

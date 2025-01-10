@@ -7,15 +7,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Domain.UserAgg
 {
-    public class User : IdentityUser 
+    public class User : IdentityUser
     {
         private User()
         {
-            
+
         }
-      //  public long Id { get; set; }
+        //  public long Id { get; set; }
         public DateTime CreationDate { get; set; }
-      
+
         public string Name { get; set; }
         public string? Family { get; private set; }
         public string Password { get; set; }
@@ -24,15 +24,17 @@ namespace Domain.UserAgg
 
         public UserAvatar Avatar { get; set; }
 
-        public List<Wallet> Wallets { get; } = new List<Wallet>();
-        public List<UserFriends> friends { get; } = new List<UserFriends>();
-        public List<UserEvent> userEvents { get; } = new List<UserEvent>();
-        public List<RequestBox> RequestBox { get; } =new List<RequestBox>();
+        public List<UserRole?> Roles { get; } = new List<UserRole?>();
+        public List<UserToken?> Tokens { get; } = new List<UserToken?>();
+        public List<Wallet?> Wallets { get; } = new List<Wallet?>();
+        public List<UserFriends?> friends { get; } = new List<UserFriends?>();
+        public List<UserEvent?> userEvents { get; } = new List<UserEvent?>();
+        public List<RequestBox?> RequestBox { get; } = new List<RequestBox?>();
 
 
-        public User( string email, string userName, string phoneNumber, string password, IUserService userService)
+        public User(string email, string userName, string phoneNumber, string password, IUserService userService)
         {
-            Guard(phoneNumber,userService);
+            Guard(phoneNumber, userService);
             GuardUserName(userName, userService);
             Password = password;
             Email = email;
@@ -44,7 +46,7 @@ namespace Domain.UserAgg
             Avatar = new UserAvatar(0);
 
         }
-       
+
         public User(string email, string userName, string phoneNumber, string password)
         {
             Avatar = new UserAvatar(0);
@@ -68,7 +70,43 @@ namespace Domain.UserAgg
         //    CreationDate = DateTime.Now;
 
         //}
+        public void SetRoles(List<UserRole> roles)
+        {
+            roles.ForEach(f => f.UserId = Id);
+            Roles.Clear();
+            Roles.AddRange(roles);
+        }
 
+        public void SetUserRoles(List<string> roles)
+        {
+            List<UserRole> userRoles = new List<UserRole>();
+            foreach (var item in roles)
+            {
+                userRoles.Add(new UserRole(item));
+            }
+            userRoles.ForEach(f => f.UserId = Id);
+            Roles.Clear();
+            Roles.AddRange(userRoles);
+        }
+        public void AddToken(string hashJwtToken, string hashRefreshToken, DateTime tokenExpireDate, DateTime refreshTokenExpireDate, string device)
+        {
+            var activeTokenCount = Tokens.Count(c => c.RefreshTokenExpireDate > DateTime.Now);
+            if (activeTokenCount == 3)
+                throw new InvalidDomainDataException("امکان استفاده از 4 دستگاه همزمان وجود ندارد");
+
+            var token = new UserToken(hashJwtToken, hashRefreshToken, tokenExpireDate, refreshTokenExpireDate, device);
+            token.UserId = Id;
+            Tokens.Add(token);
+        }
+        public string RemoveToken(long tokenId)
+        {
+            var token = Tokens.FirstOrDefault(f => f.Id == tokenId);
+            if (token == null)
+                throw new InvalidDomainDataException("invalid TokenId");
+
+            Tokens.Remove(token);
+            return token.HashJwtToken;
+        }
         public void Edit(string name, string family, string phoneNumber, string email, string userName, IUserService userService)
         {
             //Guard(phoneNumber, userService);
@@ -101,7 +139,6 @@ namespace Domain.UserAgg
         public void AddFriend(List<string> friendsId)
         {
             List<UserFriends> friendsList = new List<UserFriends>();
-
             foreach (var item in friendsId)
             {
                 friendsList.Add(new UserFriends(item));
@@ -110,6 +147,25 @@ namespace Domain.UserAgg
 
             friends.Clear();
             friends.AddRange(friendsList);
+        }
+        public void AddRequest(string userName, string senderId)
+        {
+            foreach (var item in RequestBox)
+            {
+                if (item.SenderId == senderId && item.ReceiverId == Id)
+                {
+                    throw new Exception("شما به این کاربر یک بار درخواست دادید!");
+                }
+            }
+            if (Id == senderId)
+            {
+                throw new Exception("درخواست شما نامعتبر است!");
+            }
+            var request = new RequestBox(Id, userName);
+
+            request.SenderId = senderId;
+
+            RequestBox.Add(request);
         }
         public void AddRequest(string receiverId)
         {
@@ -125,28 +181,34 @@ namespace Domain.UserAgg
                 throw new Exception("درخواست شما نامعتبر است!");
             }
             var request = new RequestBox(receiverId, UserName);
-           
+
             request.SenderId = Id;
-            
+
             RequestBox.Add(request);
         }
         public void AddFriend(string friendId)
         {
-
-            foreach (var item in friends)
+            if (RequestBox.Any(i => (i.ReceiverId.Equals(friendId) && i.SenderId.Equals(Id))
+                                    || i.ReceiverId.Equals(Id) && i.SenderId.Equals(friendId)))
             {
-                if (item.CurrentUserId == Id && item.UserFriendId == friendId ||
-                    item.CurrentUserId == friendId && item.UserFriendId == Id)
+                foreach (var item in friends)
                 {
-                    throw new Exception("درخواست غیر مجاز است!");
+                    if (item.CurrentUserId == Id && item.UserFriendId == friendId ||
+                        item.CurrentUserId == friendId && item.UserFriendId == Id)
+                    {
+                        throw new Exception("درخواست غیر مجاز است!");
+                    }
                 }
-            }
-            var friend = new UserFriends(friendId);
-           
-            friend.CurrentUserId = Id;
+                var friend = new UserFriends(friendId);
 
-            
-            friends.Add(friend);
+                friend.CurrentUserId = Id;
+
+
+                friends.Add(friend);
+            }
+
+            throw new Exception("درخواست غیر مجاز است!");
+
         }
         public void RemoveRequest(string receiverId, string senderId)
         {
@@ -167,25 +229,25 @@ namespace Domain.UserAgg
         public void SetAvatar(UserAvatar avatar)
         {
             avatar.UserId = Id;
-            this.Avatar = null; 
+            this.Avatar = null;
             this.Avatar = avatar;
         }
         public void Guard(
              string phoneNumber, IUserService userService)
         {
-             if (phoneNumber.Length != 11)
+            if (phoneNumber.Length != 11)
                 throw new InvalidDomainDataException("شماره موبایل نامعتبر است");
 
             //if (string.IsNullOrWhiteSpace(name))
             //    throw new InvalidDomainDataException(" نام نامعتبر است");
-            
+
             //if (string.IsNullOrWhiteSpace(family))
             //    throw new InvalidDomainDataException(" نام خانوادگی نامعتبر است");
 
             if (phoneNumber != PhoneNumber)
                 if (userService.PhoneNumberIsExist(phoneNumber))
                     throw new Exception("شما با این شماره تماس ثبت نام کرده اید!");
-            
+
             //if (email != Email)
             //    if (userService.EmailIsExist(email))
             //        throw new Exception("شما از این ایمیل در یک اکانت استفاده کرده اید!");
@@ -194,15 +256,15 @@ namespace Domain.UserAgg
         public void GuardUserName(
              string userName, IUserService userService)
         {
-             if (string.IsNullOrWhiteSpace(userName))
+            if (string.IsNullOrWhiteSpace(userName))
                 throw new InvalidDomainDataException("نام کاربری را وارد کنید!");
 
             if (userName != UserName)
                 if (userService.UserNameIsExist(userName))
                     throw new Exception("شما با این نام کاربری ثبت نام کرده اید!");
-            
+
         }
-    } 
-  
-} 
+    }
+
+}
 

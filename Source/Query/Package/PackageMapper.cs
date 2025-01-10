@@ -20,6 +20,7 @@ namespace Query.Package
                 Id = model.Id,
                 ImageName = model.ImageName,
                 Link = model.Link,
+                Active = model.Active,
                 Specification = model.Specification.MapSpecification()
             };
         }
@@ -41,5 +42,6 @@ namespace Query.Package
             }
             return specification;
         }
+       
     }
 }

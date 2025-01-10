@@ -22,7 +22,7 @@ namespace Application.User._Friend.Remove
                 return OperationResult.NotFound();
             if (user == null)
                 return OperationResult.NotFound();
-            //friend.RemoveFriend(user.Id);
+            friend.RemoveFriend(user.Id);
             user.RemoveFriend(friend.Id);
             await _repository.Save();
             return OperationResult.Success();

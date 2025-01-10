@@ -21,9 +21,14 @@ namespace Application.Package.Delete
 
         public async Task<OperationResult> Handle(RemovePackageCommand request, CancellationToken cancellationToken)
         {
-            var result = await _repository.Delete(request.id);
-            if(result == false)
+            //var result = await _repository.Delete(request.id);
+            var package = await _repository.GetTracking(request.id);
+
+            if(package == null)
                 return OperationResult.NotFound();
+            else if(package.Active == true)
+                return OperationResult.Error("امکان حذف یک پکیج فعال وجود نداره!");
+            await _repository.Delete(package.Id);
             await _repository.Save();
             return OperationResult.Success();
         }

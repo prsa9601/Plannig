@@ -5,10 +5,10 @@ using Query.User.DTOs;
 
 namespace Query.User.GetByPhoneNumber
 {
-    public record class GetUserByPhoneNumberQuery(string phoneNumber) : IQuery<UserDto>;
+    public record class GetUserByPhoneNumberQuery(string phoneNumber) : IQuery<UserDto?>;
     
     
-    public class GetUserByPhoneNumberQueryHandler : IQueryHandler<GetUserByPhoneNumberQuery, UserDto>
+    public class GetUserByPhoneNumberQueryHandler : IQueryHandler<GetUserByPhoneNumberQuery, UserDto?>
     {
         private readonly PlanningContext _context;
 

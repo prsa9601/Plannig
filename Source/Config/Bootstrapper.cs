@@ -1,6 +1,7 @@
 ﻿using Application._Utilities;
 using Application.Event.Add;
 using Application.Package._Service;
+using Application.Role.Create;
 using Application.User;
 using Application.User._RequestBox;
 using Domain.PackageAgg.Service;
@@ -23,6 +24,7 @@ namespace Config
             InfrastructureBootstrapper.Init(services, connectionString);
 
             services.AddMediatR(typeof(AddEventCommandHandler).Assembly);
+            services.AddMediatR(typeof(CreateRoleCommandValidator).Assembly);
             services.AddMediatR(typeof(Directories).Assembly);
 
             services.AddMediatR(typeof(GetEventByIdQuery).Assembly);

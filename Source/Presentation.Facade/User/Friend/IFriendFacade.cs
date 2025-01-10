@@ -2,6 +2,8 @@
 using Application.User._Friend.Remove;
 using Common.Application;
 using Query.User._Friend.DTOs;
+using Query.User._Friend.GetListFriendByUserId;
+using Query.User._Friend.GetListFriendByUserIdForProfile;
 
 namespace Presentation.Facade.User.Friend
 {
@@ -9,6 +11,9 @@ namespace Presentation.Facade.User.Friend
     { 
         Task<OperationResult> AddFriend(AddFriendsUserCommand command);
         Task<OperationResult> RemoveFriend(RemoveFriendUserCommand command);
-        Task<List<FriendDto?>> GetFriendsByUserId(string UserName);
+        Task<List<FriendDto?>> GetFriendsByUserName(string userName);
+        Task<List<FriendDto?>> GetFriendsByUserId(string id);
+        Task<UserFriendFilterResult> GetFriendsByUserIdForProfile(UserFriendFilterParam param);
+        Task<FriendDtoForProfileResult?> GetFriendFilterForProfileQuery(FriendDtoForProfileParam param);
     }
 }

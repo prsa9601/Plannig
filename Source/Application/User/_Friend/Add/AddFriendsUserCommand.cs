@@ -26,7 +26,7 @@ namespace Application.User._Friend.Add
                 return OperationResult.NotFound();
 
             user.AddFriend(friend.Id);
-            //friend.AddFriend(user.Id);
+            friend.AddFriend(user.Id);
             await _repository.Save();
             return OperationResult.Success();
         }

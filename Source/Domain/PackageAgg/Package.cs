@@ -2,6 +2,8 @@
 using Common.Domain;
 using Common.Domain.Exceptions;
 using Domain.PackageAgg.Service;
+using Domain.RoleAgg;
+using Domain.UserAgg;
 
 namespace Domain.PackageAgg
 {
@@ -10,12 +12,13 @@ namespace Domain.PackageAgg
         public string Title { get; private set; }
         public string ImageName { get; private set; }
         public string Link { get; private set; }
+        public bool Active { get; set; } = false;
         public int Price { get; private set; }
-        public List<PackageSpecification> Specification { get; private set; }
+        public List<PackageSpecification> Specification { get; set; }
 
         private Package()
         {
-            
+
         }
         public Package(int price, string title, string imageName, string link, IPackageService _service)
         {
@@ -28,7 +31,6 @@ namespace Domain.PackageAgg
 
         public void Edit(int price, string title, string link, IPackageService _service)
         {
-            Guard(title, _service);
             Title = title;
             Link = link;
             Price = price;
@@ -44,28 +46,22 @@ namespace Domain.PackageAgg
 
             if (_service.ExistTitle(title))
                 throw new DuplicateNameException($"this {title} has already been used");
-
         }
         public void SetSpecification(List<PackageSpecification> specifications)
         {
             specifications.ForEach(s => s.PackageId = Id);
+
             Specification = specifications;
         }
-
-    }
-    public class PackageSpecification : BaseEntity
-    {
-        public PackageSpecification(string key, string value)
+        
+        public void SetActivePackage()
         {
-            NullOrEmptyDomainDataException.CheckString(key, nameof(key));
-            NullOrEmptyDomainDataException.CheckString(value, nameof(value));
-
-            Key = key;
-            Value = value;
+            Active = true;
         }
-
-        public long PackageId { get; internal set; }
-        public string Key { get; private set; }
-        public string Value { get; private set; }
+        public void RemoveActivePackage()
+        {
+            Active = false;
+        }
+         
     }
 }

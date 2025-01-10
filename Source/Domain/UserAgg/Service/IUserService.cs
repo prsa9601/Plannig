@@ -1,5 +1,4 @@
 ﻿
-
 namespace Domain.UserAgg.Service
 {
     public interface IUserService

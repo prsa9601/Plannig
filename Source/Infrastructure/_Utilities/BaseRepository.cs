@@ -23,6 +23,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return await Context.Set<TEntity>().AsTracking().FirstOrDefaultAsync(t => t.Id.Equals(id));
 
     }
+    public async Task<List<TEntity?>> GetListTrackingAsync()
+    {
+        return await Context.Set<TEntity>().AsTracking().Select(i=>i).ToListAsync();
+
+    }
     public async Task<TEntity?> GetTrackingWithString(string id)
     {
         return await Context.Set<TEntity>().AsTracking().FirstOrDefaultAsync(t => t.Id.Equals(id));

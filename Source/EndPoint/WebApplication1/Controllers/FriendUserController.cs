@@ -1,11 +1,14 @@
 ﻿using Application.User._Friend.Add;
 using Application.User._Friend.Remove;
 using Common.AspNetCore;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Planning.Api.Model.Friend;
 using Presentation.Facade.User.Friend;
 using Query.User._Friend.DTOs;
+using Query.User.DTOs;
 
 namespace Planning.Api.Controllers
 {
@@ -33,11 +36,46 @@ namespace Planning.Api.Controllers
             var result = await _facade.RemoveFriend(new RemoveFriendUserCommand(User.Identity.Name, ReceiverUserName));
             return CommandResult(result);
         }
+    
         [HttpGet]
         [Authorize]
         public async Task<ApiResult<List<FriendDto>?>> GetFriendsByUserName()
         {
-            var result = await _facade.GetFriendsByUserId(User.Identity.Name);
+            var result = await _facade.GetFriendsByUserName(User.Identity.Name);
+            return QueryResult(result);
+        }
+        [HttpGet("GetFriendsForProfile")]
+        [Authorize]
+        public async Task<ApiResult<FriendDtoForProfileResult?>> GetFriendsByUserName([FromQuery]FriendDtoForProfileParamViewModel param)
+        {
+            var result = await _facade.GetFriendFilterForProfileQuery(new FriendDtoForProfileParam()
+            {
+                CurrentUserId = User.GetUserIdToString(),
+                PageId = param.PageId,
+                Take = param.Take,
+                UserName = param.UserName
+            });
+            return QueryResult(result);
+        }
+        [HttpGet("GetByUserId")]
+        [Authorize]
+        public async Task<ApiResult<List<FriendDto>?>> GetFriendsByUserId()
+        {
+            var result = await _facade.GetFriendsByUserId(User.GetUserIdToString());
+            return QueryResult(result);
+        }
+   
+        [HttpGet("searchUserForProfile")]
+        [Authorize]
+        public async Task<ApiResult<UserFriendFilterResult>> GetFriendsByUserIdForProfile([FromQuery] UserFriendFilterParam param)
+        {
+            var result = await _facade.GetFriendsByUserIdForProfile(new UserFriendFilterParam()
+            {
+                CurrentUserId = User.GetUserIdToString(),
+                PageId = param.PageId,
+                Take = param.Take,
+                UserName = param.UserName
+            });
             return QueryResult(result);
         }
     }

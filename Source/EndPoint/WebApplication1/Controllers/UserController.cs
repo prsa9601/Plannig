@@ -70,6 +70,26 @@ namespace Planning.Api.Controllers
                 throw new Exception(ex.Message);
             }
         }
+        [HttpGet("searchUser")]
+        [Authorize]
+        public async Task<ApiResult<UserFilterResult>> SearchUser([FromQuery] UserFilterParam param)
+        {
+            try
+            {
+                var result = await _facade.SearchUser(new UserFilterParam()
+                {
+                    PageId = param.PageId,
+                    UserName = param.UserName,
+                    Take = param.Take,
+                    CurrentUserId = User.GetUserIdToString()
+                });
+                return QueryResult(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         [HttpGet("GetByUserName/{userName}")]
         public async Task<ApiResult<UserDto?>> GetCurrentByUserName(string userName)
         {

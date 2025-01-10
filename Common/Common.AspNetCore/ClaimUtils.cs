@@ -19,6 +19,14 @@ public static class ClaimUtils
 
         return Convert.ToString(principal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     }
+    public static string GetUserName(this ClaimsPrincipal principal)
+    {
+        if (principal == null)
+            throw new ArgumentNullException(nameof(principal));
+
+        return Convert.ToString(principal.FindFirst(ClaimTypes.Name)?.Value!);
+
+    }
     public static string GetPhoneNumber(this ClaimsPrincipal principal)
     {
         if (principal == null)
@@ -32,4 +40,5 @@ public static class ClaimUtils
         Claim? claim = claimsIdentity?.FindFirst("Id");
         return claim?.Value ?? string.Empty;
     }
+ 
 }

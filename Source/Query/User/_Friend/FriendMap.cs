@@ -1,5 +1,7 @@
-﻿using Infrastructure.Persistent.Ef;
+﻿ using Infrastructure.Persistent.Ef;
+using Microsoft.EntityFrameworkCore;
 using Query.User._Friend.DTOs;
+using Query.User.DTOs;
 
 namespace Query.User._Friend
 {
@@ -16,5 +18,17 @@ namespace Query.User._Friend
                 UserId = avatar.UserId,
             };
         }
+        //public static FriendDtoForProfile MapFriend(this Domain.UserAgg.User user, string CurrentUserId, PlanningContext _context)
+        //{
+        //    return new FriendDtoForProfile()
+        //    {
+        //        UserId = user.Id,
+        //        FriendUserName = user.UserName,
+        //        CreationDate = user.CreationDate,
+        //        FriendId = CurrentUserId,
+        //        IsFriend = false
+
+        //    };
+        //}
     }
 }
