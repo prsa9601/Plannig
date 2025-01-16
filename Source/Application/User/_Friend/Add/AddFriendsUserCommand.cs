@@ -25,10 +25,19 @@ namespace Application.User._Friend.Add
             if (user == null)
                 return OperationResult.NotFound();
 
-            user.AddFriend(friend.Id);
-            friend.AddFriend(user.Id);
-            await _repository.Save();
-            return OperationResult.Success();
+            var result = user.AddFriend(friend.Id);
+            if(result)
+            {
+                friend.AddFriends(user.Id);
+                user.RemoveRequest(user.Id, friend.Id);
+                await _repository.Save();
+                return OperationResult.Success();
+            }
+            else
+            {
+                return OperationResult.Error("درخواست نامعتبر است.");
+            }
+        
         }
     }
 }

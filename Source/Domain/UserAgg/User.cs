@@ -186,7 +186,7 @@ namespace Domain.UserAgg
 
             RequestBox.Add(request);
         }
-        public void AddFriend(string friendId)
+        public bool AddFriend(string friendId)
         {
             if (RequestBox.Any(i => (i.ReceiverId.Equals(friendId) && i.SenderId.Equals(Id))
                                     || i.ReceiverId.Equals(Id) && i.SenderId.Equals(friendId)))
@@ -205,9 +205,32 @@ namespace Domain.UserAgg
 
 
                 friends.Add(friend);
+                return true;
+            }
+            else
+            {
+                throw new Exception("درخواست غیر مجاز است!");
+                return false;
             }
 
-            throw new Exception("درخواست غیر مجاز است!");
+        }
+        public void AddFriends(string friendId)
+        {
+            
+                foreach (var item in friends)
+                {
+                    if (item.CurrentUserId == Id && item.UserFriendId == friendId ||
+                        item.CurrentUserId == friendId && item.UserFriendId == Id)
+                    {
+                        throw new Exception("درخواست غیر مجاز است!");
+                    }
+                }
+                var friend = new UserFriends(friendId);
+
+                friend.CurrentUserId = Id;
+
+
+                friends.Add(friend);
 
         }
         public void RemoveRequest(string receiverId, string senderId)

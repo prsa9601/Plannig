@@ -25,8 +25,7 @@ namespace Query.User._Friend.GetFiendFilterForProfile
         {
             var @param = request.FilterParams;
             var user = await _context.Users.Select(i => i).ToListAsync();
-            var userFriend = _context.Users.Select(i => i.friends).ToList();
-            var Friends = await _context.Users.Where(i => i.Id.Equals(userFriend.Select(i => i.Select(i => i.UserFriendId).ToList()))).ToListAsync();
+            var userFriend = await _context.Users.Where(i=>i.Id.Equals(@param.CurrentUserId)).FirstOrDefaultAsync();
             var result = new List<FriendDtoForProfile>();
             if (!string.IsNullOrWhiteSpace(param.UserName) && !string.IsNullOrWhiteSpace(param.CurrentUserId))
             {
@@ -145,8 +144,18 @@ namespace Query.User._Friend.GetFiendFilterForProfile
                 }
 
             }
+
             else if (string.IsNullOrWhiteSpace(param.UserName) && !string.IsNullOrWhiteSpace(param.CurrentUserId))
             {
+                List<Domain.UserAgg.User> Friends = new List<Domain.UserAgg.User>();
+
+                var friendIds = userFriend.friends.Select(i => i.UserFriendId).ToList();
+                foreach (var item in friendIds)
+                {
+                     Friends.AddRange(await _context.Users.Where(i => i.Id.Equals(item)).ToListAsync());
+
+                }
+
                 foreach (var item in Friends)
                 {
                     result.Add(new FriendDtoForProfile()
