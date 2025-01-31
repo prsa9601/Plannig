@@ -41,4 +41,23 @@ namespace Query.User._Friend.DTOs
     public class UserFriendFilterResult : BaseFilter<FriendDto, UserFriendFilterParam>
     {
     }
+    public class SearchFriendForEventData : BaseDto
+    {
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public string PhoneNumber { get; set; }
+
+        public UserFriendAvatarDto avatar { get; set; }
+    }
+
+  
+
+    public class SearchFriendForEventFilterParam : BaseFilterParam
+    {
+        public string UserName { get; set; } = string.Empty;
+        public string CurrentUserId { get; set; } = string.Empty;
+    }
+    public class SearchFriendForEventFilterResult : BaseFilter<SearchFriendForEventData, SearchFriendForEventFilterParam>
+    {
+    }
 }

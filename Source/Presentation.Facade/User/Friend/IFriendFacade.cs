@@ -14,6 +14,7 @@ namespace Presentation.Facade.User.Friend
         Task<List<FriendDto?>> GetFriendsByUserName(string userName);
         Task<List<FriendDto?>> GetFriendsByUserId(string id);
         Task<UserFriendFilterResult> GetFriendsByUserIdForProfile(UserFriendFilterParam param);
+        Task<SearchFriendForEventFilterResult> SearchFriendForEvent(SearchFriendForEventFilterParam param);
         Task<FriendDtoForProfileResult?> GetFriendFilterForProfileQuery(FriendDtoForProfileParam param);
     }
 }

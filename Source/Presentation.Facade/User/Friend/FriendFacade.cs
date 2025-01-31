@@ -3,6 +3,7 @@ using Application.User._Friend.Remove;
 using Common.Application;
 using MediatR;
 using Query.User._Friend.DTOs;
+using Query.User._Friend.FilterFriendByUserNameForEventPage;
 using Query.User._Friend.GetFiendFilterForProfile;
 using Query.User._Friend.GetListFriendByUserId;
 using Query.User._Friend.GetListFriendByUserIdForProfile;
@@ -38,6 +39,11 @@ namespace Presentation.Facade.User.Friend
         public async Task<UserFriendFilterResult> GetFriendsByUserIdForProfile(UserFriendFilterParam param)
         {
             return await _mediator.Send(new GetListFriendByUserIdForProfileQuery(param));
+        }
+
+        public async Task<SearchFriendForEventFilterResult> SearchFriendForEvent(SearchFriendForEventFilterParam param)
+        {
+            return await _mediator.Send(new FilterFriendByUserNameForEventPageQuery(param));
         }
 
         public async Task<FriendDtoForProfileResult?> GetFriendFilterForProfileQuery(FriendDtoForProfileParam param)

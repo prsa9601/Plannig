@@ -6,4 +6,9 @@ namespace Planning.Api.Model.Friend
     {
         public string UserName { get; set; } = string.Empty;
     }
+
+    public class SearchFriendForEventFilterParamModel : BaseFilterParam
+    {
+        public string UserName { get; set; } = string.Empty;
+    }
 }
