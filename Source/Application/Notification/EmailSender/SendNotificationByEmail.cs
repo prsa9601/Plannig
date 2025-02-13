@@ -7,7 +7,7 @@ namespace Application.Notification.EmailSender
 {
     public class SendNotificationByEmail : IBaseCommand
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
     }
     public class SendNotificationByEmailHandler : IBaseCommandHandler<SendNotificationByEmail>
     {
@@ -26,28 +26,41 @@ namespace Application.Notification.EmailSender
                 if (user == null)
                     return OperationResult.NotFound();
 
-                var password = user.Password;
+                if (string.IsNullOrWhiteSpace(user.Email))
+                    return OperationResult.Error("User email is not available");
 
-                var smtpClient = new SmtpClient("smtp.gmail.com")
+                using var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("parsa9601m@gmail.com", "@mp9601"),
+                    Credentials = new NetworkCredential(
+                        "parsa9601m@gmail.com",
+                        "leis nqek fthg fqbo"), // استفاده از پسورد مخصوص اپلیکیشن
                     EnableSsl = true
                 };
 
-                var mailMessage = new MailMessage
+                using var mailMessage = new MailMessage
                 {
                     From = new MailAddress("parsa9601m@gmail.com"),
+                    //To = {  "parsahavaset1@gmail.com","1234z1234@gmail.com"},
+                    To =
+                    {
+                        "parsahavaset1@gmail.com",
+                        "www.a1234z1234@gmail.com",
+                        "parham1234122@gmail.com",
+                        "parham09332294129@gmail.com"
+                    },
                     Subject = "Reminded",
-                    Body = "<i>This is a test email from your C# application.</i>"
+                    Body = "<i>عاااااااااااااااااااااااا</i>",
+                    IsBodyHtml = true
                 };
                 mailMessage.To.Add(user.Email);
 
-                smtpClient.Send(mailMessage);
+                await smtpClient.SendMailAsync(mailMessage); // استفاده از نسخه Async
                 return OperationResult.Success();
             }
             catch (Exception ex)
             {
+                // برای دیباگ بهتر میتوانید خطا را لاگ کنید
                 return OperationResult.Error($"Error sending email: {ex.Message}");
             }
         }

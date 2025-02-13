@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Presentation.Facade.Event;
 using Presentation.Facade.Instagram;
+using Presentation.Facade.Notification;
 using Presentation.Facade.Package;
 using Presentation.Facade.Telegram;
 using Presentation.Facade.User;
@@ -23,6 +24,7 @@ namespace Presentation.Facade
             services.AddScoped<IInstagramFacade, InstagramFacade>();
             services.AddScoped<IRequestFacade, RequestFacade>();
             services.AddScoped<IFriendFacade, FriendFacade>();
+            services.AddScoped<INotificationFacade, NotificationFacade>();
 
 
         }

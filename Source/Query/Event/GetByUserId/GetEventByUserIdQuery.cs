@@ -26,22 +26,27 @@ namespace Query.Event.GetByUserId
 
         public async Task<List<EventDto?>> Handle(GetEventByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var model = _context.Users.Include("userEvents").Where(i => i.Id.ToString() == request.userId).FirstOrDefault();
-            //var eventId = model.userEvents.Where(i => i.UserId.ToString() == request.userId).Select(i => i.EventId).ToList();
-            var eventId = model.userEvents.Select(i => i.EventId).ToList();
-            // List<Domain.EventAgg.Event> model1 = new List<Domain.EventAgg.Event>;
-            var model1 = new List<EventDto>();
-            foreach (var item in eventId)
+            var user = _context.Users.Include("userEvents").Where(i => i.Id.ToString() == request.userId).FirstOrDefault();
+            var events = _context.Events.Select(i => i.eventUser).ToList();
+            List<long> EventIds = new List<long>();
+            foreach (var item in events)
             {
-                var mo =  _context.Events.Where(i => i.Id == item).ToList().MapList();
-                foreach(var item1 in mo)
+                foreach (var item1 in item)
                 {
-
-                    model1.Add(item1);
-
+                    if (item1.UserName.Equals(user.UserName))
+                    {
+                        EventIds.Add(item1.EventId);
+                    }
                 }
             }
-            return model1;
+
+            
+            var model = new List<Domain.EventAgg.Event>();
+            foreach (var ids in EventIds)
+            {
+                model.Add(_context.Events.Where(i=>i.Id.Equals(ids)).FirstOrDefault());
+            }
+            return model.MapList();
         }
     }
 }

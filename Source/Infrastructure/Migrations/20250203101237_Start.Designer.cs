@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PlanningContext))]
-    [Migration("20241126131618_Start")]
+    [Migration("20250203101237_Start")]
     partial class Start
     {
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events", "dbo");
+                    b.ToTable("Events", "event");
                 });
 
             modelBuilder.Entity("Domain.PackageAgg.Package", b =>
@@ -551,7 +551,11 @@ namespace Infrastructure.Migrations
                             b1.Property<DateTime>("CreationDate")
                                 .HasColumnType("datetime2");
 
-                            b1.Property<string>("UserNumber")
+                            b1.Property<string>("CreatorUserName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("UserName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
@@ -559,7 +563,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasIndex("EventId");
 
-                            b1.ToTable("eventUser", "dbo");
+                            b1.ToTable("eventUser", "event");
 
                             b1.WithOwner()
                                 .HasForeignKey("EventId");

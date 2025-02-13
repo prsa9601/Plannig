@@ -1,6 +1,7 @@
 ﻿using Application.Event.Add;
 using Application.Event.Delete;
 using Application.Event.Edit;
+using Application.Event.SetDates;
 using Common.Application;
 using MediatR;
 using Query.Event.DTOs;
@@ -24,6 +25,11 @@ namespace Presentation.Facade.Event
         }
 
         public async Task<OperationResult> EditEvent(EditEventCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> SetDatesEvent(SetDatesEventCommand command)
         {
             return await _mediator.Send(command);
         }

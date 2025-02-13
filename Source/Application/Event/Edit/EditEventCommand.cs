@@ -16,8 +16,10 @@ namespace Application.Event.Edit
         public string Link { get; set; }
         public string EventAddress { get; set; }
         public bool accessNotification { get; set; }
+        public string creatorUserName{ get; set; }
+        
 
-        public List<string> userNumber { get; set; }
+        public List<string> userNames { get; set; }
         public Tagged tag { get; set; }
         public Domain.EventAgg.Enum.Notification notification { get; set; }
     }
@@ -36,8 +38,8 @@ namespace Application.Event.Edit
             if (Event == null)
                 return OperationResult.NotFound();
 
-            Event.Edit(request.userNumber, request.Title, request.StartTime, request.EndTime, request.Description, request.Link, request.EventAddress, request.accessNotification, request.tag, request.notification);
-            //Event.AddUser(request.userNumber);
+            Event.Edit(request.creatorUserName, request.userNames, request.Title, request.StartTime, request.EndTime, request.Description, request.Link, request.EventAddress, request.accessNotification, request.tag, request.notification);
+            //Event.AddUser(request.userNames);
 
             await _repository.Save();
             return OperationResult.Success();

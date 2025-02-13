@@ -9,7 +9,7 @@ namespace Query.Event
 {
     public static class EventMapper 
     {
-        public static List<EventDto> MapList(this List<Domain.EventAgg.Event> Event)
+        public static List<EventDto>? MapList(this List<Domain.EventAgg.Event>? Event)
         {
             var model = new List<EventDto>();
             foreach (var item in Event)
@@ -32,7 +32,7 @@ namespace Query.Event
             }
             return model;
         }
-        public static EventDto Map(this Domain.EventAgg.Event item)
+        public static EventDto? Map(this Domain.EventAgg.Event? item)
         {
            
                 var model = new EventDto()

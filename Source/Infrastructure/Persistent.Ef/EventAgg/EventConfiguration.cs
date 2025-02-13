@@ -8,7 +8,7 @@ namespace Infrastructure.Persistent.Ef.EventAgg
     {
         public void Configure(EntityTypeBuilder<Event> builder)
         {
-            builder.ToTable("Events","dbo");
+            builder.ToTable("Events","event");
 
             builder.Property(b=>b.Title).IsRequired().HasMaxLength(50);
 
@@ -16,7 +16,7 @@ namespace Infrastructure.Persistent.Ef.EventAgg
 
             builder.OwnsMany(b => b.eventUser, option =>
             {
-                option.ToTable("eventUser", "dbo");
+                option.ToTable("eventUser", "event");
                 option.HasIndex(b => b.EventId);
             });
         }

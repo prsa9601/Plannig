@@ -15,7 +15,7 @@ namespace Infrastructure.Migrations
                 name: "user");
 
             migrationBuilder.EnsureSchema(
-                name: "dbo");
+                name: "event");
 
             migrationBuilder.EnsureSchema(
                 name: "instagram");
@@ -75,7 +75,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Events",
-                schema: "dbo",
+                schema: "event",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -476,13 +476,14 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "eventUser",
-                schema: "dbo",
+                schema: "event",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventId = table.Column<long>(type: "bigint", nullable: false),
-                    UserNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatorUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -491,7 +492,7 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_eventUser_Events_EventId",
                         column: x => x.EventId,
-                        principalSchema: "dbo",
+                        principalSchema: "event",
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -821,7 +822,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_eventUser_EventId",
-                schema: "dbo",
+                schema: "event",
                 table: "eventUser",
                 column: "EventId");
 
@@ -967,7 +968,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "eventUser",
-                schema: "dbo");
+                schema: "event");
 
             migrationBuilder.DropTable(
                 name: "friends",
@@ -1028,7 +1029,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Events",
-                schema: "dbo");
+                schema: "event");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -23,8 +23,11 @@ namespace Application.Event.Add
                .NotNull().NotEmpty()
                .WithMessage(ValidationMessages.required("EndTime"));
           
-            RuleFor(r => DateTime.Parse(r.StartTime) >= DateTime.Parse(r.EndTime))
-                .NotNull().When(r=> DateTime.Parse(r.StartTime) >= DateTime.Parse(r.EndTime)).WithMessage("تاریخ شروع و پایان مصابقت ندارند!");
+            RuleFor(r => r.StartTime >= r.EndTime)
+                .NotNull().When(r=> r.StartTime >= r.EndTime).WithMessage("تاریخ شروع و پایان مصابقت ندارند!");
+
+            //RuleFor(r => DateTime.Parse(r.StartTime) >= DateTime.Parse(r.EndTime))
+            //    .NotNull().When(r=> DateTime.Parse(r.StartTime) >= DateTime.Parse(r.EndTime)).WithMessage("تاریخ شروع و پایان مصابقت ندارند!");
 
             //RuleFor(r => r.Link)
             //   .NotNull().NotEmpty()
