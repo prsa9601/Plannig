@@ -150,19 +150,19 @@ namespace Application.Notification
                     Body = "<i>عاااااااااااااااااااااااا</i>",
                     IsBodyHtml = true
                 };
-                int SendEmailCount = 0;
-                foreach (var item in users)
-                {
-                    if (item != null && item.Email != null)
-                    {
-                        mailMessage.To.Add(item.Email);
-                        SendEmailCount++;
-                    }
-                }
-                //mailMessage.To.Add(user.Email);
-                //var creator = users.Where(i => i.UserName.Equals(creatorUserName)).FirstOrDefault();
-                //تست این متد توی سه چهار تا پکیج و جندین ارسال ایمیل
-                await SetChange(SendEmailCount, creator!);
+                //int SendEmailCount = 0;
+                //foreach (var item in users)
+                //{
+                //    if (item != null && item.Email != null)
+                //    {
+                //        mailMessage.To.Add(item.Email);
+                //        SendEmailCount++;
+                //    }
+                //}
+                ////mailMessage.To.Add(user.Email);
+                ////var creator = users.Where(i => i.UserName.Equals(creatorUserName)).FirstOrDefault();
+                ////تست این متد توی سه چهار تا پکیج و جندین ارسال ایمیل
+                //await SetChange(SendEmailCount, creator!);
                 await smtpClient.SendMailAsync(mailMessage); // استفاده از نسخه Async
                 await _userRepository.Save();
                 //await _schedule.ScheduleEvent((startTime-sendTime),"",)
@@ -244,7 +244,7 @@ namespace Application.Notification
                     {
                         if (item.AccessNotification == true)
                         {
-                            var count = item.eventUser.Count();
+                            var count = item.EventUser.Count();
                             item.AccessNotification = false;
                             sendEmailCount -= count;
                             eventsIds.Add(item.Id);

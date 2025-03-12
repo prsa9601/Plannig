@@ -18,7 +18,7 @@ namespace Infrastructure.Persistent.Ef.EventAgg
             && i.StartTime.Equals(startTime)
             && i.Description.Equals(description)
             && i.Link.Equals(link) && i.EventAddress.Equals(eventAddress)
-            && i.tag.Equals(tag)
+            && i.Tag.Equals(tag)
             && i.notification.Equals(notificationEnum) && i.AccessNotification == accessNotification);
         }
     }

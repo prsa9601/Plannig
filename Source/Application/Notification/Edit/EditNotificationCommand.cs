@@ -83,7 +83,7 @@ namespace Application.Notification.Edit
                         , request.EventId
                         , request.EventStartTime,
                         request.SendTime,
-                        eventClass.eventUser.Select(i => i.CreatorUserName).FirstOrDefault()), DateTime.Now.AddMinutes(1));
+                        eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), DateTime.Now.AddMinutes(1));
 
                     //jobId For Schedule
                    //BackgroundJob.ContinueJobWith<INotificationService>(

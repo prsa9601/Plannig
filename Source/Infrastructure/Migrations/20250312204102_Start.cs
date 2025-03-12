@@ -89,7 +89,7 @@ namespace Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EventAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    tag = table.Column<int>(type: "int", nullable: false),
+                    Tag = table.Column<int>(type: "int", nullable: false),
                     notification = table.Column<int>(type: "int", nullable: false),
                     AccessNotification = table.Column<bool>(type: "bit", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)

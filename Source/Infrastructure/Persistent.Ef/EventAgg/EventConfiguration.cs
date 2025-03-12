@@ -11,10 +11,11 @@ namespace Infrastructure.Persistent.Ef.EventAgg
             builder.ToTable("Events","event");
 
             builder.Property(b=>b.Title).IsRequired().HasMaxLength(50);
+            builder.HasKey(b=>b.Id);
 
             builder.Property(b=>b.Description).IsRequired();
 
-            builder.OwnsMany(b => b.eventUser, option =>
+            builder.OwnsMany(b => b.EventUser, option =>
             {
                 option.ToTable("eventUser", "event");
                 option.HasIndex(b => b.EventId);

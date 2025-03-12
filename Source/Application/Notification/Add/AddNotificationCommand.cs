@@ -1,12 +1,13 @@
 ﻿using Common.Application;
-using Common.Application.Validation;
 using Domain.EventAgg.Repository;
 using Domain.Notification;
 using Domain.Notification.Repository;
 using Domain.Notification.Service;
-using FluentValidation;
+using Domain.UserAgg;
+using Domain.UserAgg.Repository;
 using FluentValidation.Validators;
 using Hangfire;
+using System.Net.Mail;
 using System.Net.WebSockets;
 
 namespace Application.Notification.Add
@@ -32,14 +33,17 @@ namespace Application.Notification.Add
     {
         private readonly INotificationRepository _repository;
         private readonly IEventRepository _eventRepository;
+        private readonly IUserRepository<Domain.UserAgg.User> _userRepository;
         private readonly INotificationService _service;
 
 
-        public AddNotificationCommandHandler(INotificationRepository repository, IEventRepository eventRepository, INotificationService service)
+        public AddNotificationCommandHandler(INotificationRepository repository, IEventRepository eventRepository
+            , INotificationService service, IUserRepository<Domain.UserAgg.User> userRepository)
         {
             _repository = repository;
             _eventRepository = eventRepository;
             _service = service;
+            _userRepository = userRepository;
         }
 
         public async Task<OperationResult<long>> Handle(AddNotificationCommand request, CancellationToken cancellationToken)
@@ -75,14 +79,24 @@ namespace Application.Notification.Add
                     //, notification.EventStartTime, notification.EventExpiredTime,
                     //notification.IsSend, notification.AllowedEmailCount, notification.IsActive
                     //, eventClass.eventUser.Select(i => i.CreatorUserName).FirstOrDefault());
-
+                    var creator = await _userRepository.GetTrackingByUserName(request.creatorUserName);
+                    int SendEmailCount = 0;
+                    foreach (var item in request.UserNames)
+                    {
+                        //if (item != null && item.Email != null)
+                        //{
+                        //    mailMessage.To.Add(item.Email);
+                            SendEmailCount++;
+                        //}
+                    } 
+                    await SetChange(SendEmailCount, creator!);
                     BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
                         , request.EventId
                     , notification.EventStartTime,
                     notification.SendTime,
-                    eventClass.eventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.EventStartTime-request.SendTime);
-                
-                    
+                    eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.EventStartTime);
+
+
                 }
 
                 return OperationResult<long>.Success(notification.Id);
@@ -96,23 +110,101 @@ namespace Application.Notification.Add
                 return OperationResult<long>.Error(e.Message);
             }
         }
-    }
-
-    internal class AddNotificationCommandValidator : AbstractValidator<AddNotificationCommand>
-    {
-        public AddNotificationCommandValidator()
+    
+      internal async Task SetChange(int SendEmailCount,
+      Domain.UserAgg.User creator)
         {
-            RuleFor(r => r.UserNames).NotEmpty().NotNull()
-                .WithMessage(ValidationMessages.required("User"));
 
-            //RuleFor(b => b.AllowedEmailCount).NotNull()
-            //    .WithMessage(ValidationMessages.minLength("تعداد ایمیل های مجاز", 0));
+            var creatorPackages = creator.UserPackages.Where(i =>
+            i.CreationDate + i.ExpiryDate > DateTime.Now).OrderBy(i => i.CreationDate)
+                .FirstOrDefault();
 
-            //RuleFor(r => r.AllowedEmailCount).NotNull()
-            //    .WithMessage(ValidationMessages.minLength("تعداد پیامک های مجاز", 0));
-            //RuleFor(r => r.Text)
-            //    .NotNull()
-            //    .MinimumLength(5).WithMessage(ValidationMessages.minLength("متن نظر", 5));
+            if (creatorPackages == null)
+                throw new Exception("کاربر عزیز شما پکیج فعالی ندارید!");
+            for (int i = 1; creatorPackages.AllowedEmailCount - SendEmailCount <= -10; i++)
+            {
+                SendEmailCount -= creatorPackages.AllowedEmailCount;
+                creatorPackages.AllowedEmailCount = 0;
+                creatorPackages = creator.UserPackages.Where(i =>
+                        i.CreationDate + i.ExpiryDate > DateTime.Now).OrderBy(i => i.CreationDate)
+                    .Skip(i).Take(1)
+                    .FirstOrDefault();
+                if (creatorPackages == null && SendEmailCount >= 10)
+                {
+                    int CountResult = await DeActiveLatestEventEmail(creator, SendEmailCount);
+                    if (CountResult <= 0)
+                    {
+                        throw new Exception(
+                        "تعداد درخواست ها برای ارسال ایمیل بیش تر از حد مجاز مصرفی شما است " +
+                        "، ما نوتیفیکیشن آخرین ایونت شما از نظر تایمی رو غیرفعال کردیم بعد" +
+                        " از شارژ حساب خود می توانید به صورت دستی نوتیفیکیشن ایونت خود را فعال کنید !");
+                    }
+                    else
+                        throw new Exception(
+                            "تعداد درخواست ها برای ارسال ایمیل بیش تر از حد مجاز مصرفی شما است");
+
+                }
+
+                else if (SendEmailCount <= 10 && SendEmailCount > 0)
+                {
+                    creatorPackages.AllowedEmailCount = -SendEmailCount;
+                }
+            }
+
+
+            creatorPackages.AllowedEmailCount -= SendEmailCount;
+            await _userRepository.Save();
+        }
+
+        private async Task<int> DeActiveLatestEventEmail(Domain.UserAgg.User userCreator,
+            int sendEmailCount)
+        {
+            try
+            {
+                var eventsId = userCreator.userEvents.Select(i => i);
+                var events = await _eventRepository.
+                    GetListByFilterAsync(i => i.Id.Equals(eventsId));
+                //event
+                var e = events!.OrderByDescending(i => i.CreationDate);
+                if (sendEmailCount >= 0)
+                {
+                    var eventsIds = new List<long>();
+                    foreach (var item in e)
+                    {
+                        if (item.AccessNotification == true)
+                        {
+                            var count = item.EventUser.Count();
+                            item.AccessNotification = false;
+                            sendEmailCount -= count;
+                            eventsIds.Add(item.Id);
+                            if (sendEmailCount <= 0)
+                            {
+                                Domain.EventAgg.Event? myevent = events!.FirstOrDefault(i => i.Id.Equals(eventsIds));
+                                myevent!
+                                    .DisableAccessNotification();
+                                await _eventRepository.Save();
+                                return sendEmailCount;
+                                //break;
+                            }
+                            //else
+                            //{
+                            //    events = e.ToList();
+                            //    await _eventRepository.Save();
+                            //    return sendEmailCount;
+                            //}
+                        }
+
+                    }
+
+
+                }
+                return sendEmailCount;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+
         }
     }
 }

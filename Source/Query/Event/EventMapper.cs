@@ -25,7 +25,7 @@ namespace Query.Event
                     Link = item.Link,
                     NotificationEnum = item.notification,
                     StartTime = item.StartTime,
-                    tag = item.tag,
+                    tag = item.Tag,
                     Title = item.Title,
                 };
                 model.Add(dto);
@@ -46,7 +46,7 @@ namespace Query.Event
                     Link = item.Link,
                     NotificationEnum = item.notification,
                     StartTime = item.StartTime,
-                    tag = item.tag,
+                    tag = item.Tag,
                     Title = item.Title,
                 };
                 
@@ -64,7 +64,7 @@ namespace Query.Event
                     EndTime = item.EndTime,
                     Id = item.Id,
                     StartTime = item.StartTime,
-                    tag = item.tag,
+                    tag = item.Tag,
                     Title = item.Title,
                 };
 

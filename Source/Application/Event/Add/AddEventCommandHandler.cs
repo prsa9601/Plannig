@@ -29,6 +29,17 @@ namespace Application.Event.Add
                 request.Link, request.EventAddress, request.tag, NotificationEnum.Email,
                 request.accessNotification);
 
+            await _repository.AddAsync(Event);
+            // await _service.Schedule("411f8274-5ee7-4bcc-8d43-e5214aa79aa7","aaaaaaaaaaa",DateTime.Now.AddSeconds(5), cancellationToken);
+            await _repository.Save();
+            if (request.userNames.Count() == 0)
+            {
+                Event.AddEventUser(request.creatorUserName);
+            }
+            else
+            {
+                Event.AddEventUser(request.creatorUserName, request.userNames);
+            }
             var creator = await _userRepository.GetTrackingByUserName(request.creatorUserName);
             List<Domain.UserAgg.User>? users = new List<Domain.UserAgg.User>();
             List<string>? usersEmail = new List<string>();
@@ -44,18 +55,18 @@ namespace Application.Event.Add
                 }
             }
             //var Event = new Domain.EventAgg.Event(request.userNames, request.Title, DateTime.Parse(request.StartTime), DateTime.Parse(request.EndTime),request.Description, request.Link, request.EventAddress, request.tag,request.NotificationEnum,request.accessNotification);
-            _repository.Add(Event);
+            //_repository.Add(Event);
             // await _service.Schedule("411f8274-5ee7-4bcc-8d43-e5214aa79aa7","aaaaaaaaaaa",DateTime.Now.AddSeconds(5), cancellationToken);
             await _repository.Save();
             //var Event2 = await _repository.FindEvent(request.Title, request.StartTime, request.EndTime, request.Description, request.Link, request.EventAddress, request.tag, request.NotificationEnum, request.accessNotification);
             //Event.AddUser(request.userNames);
             // await _repository.Save();
-            if (request.accessNotification == true)
-            {
-                var q = _schedule.ScheduleEvent(Event.StartTime,
-                    creator.Email, Event.Id, Event.Description, Event.Title,
-                    usersEmail);
-            }
+            //if (request.accessNotification == true)
+            //{
+            //    var q = _schedule.ScheduleEvent(Event.StartTime,
+            //        creator.Email, Event.Id, Event.Description, Event.Title,
+            //        usersEmail);
+            //}
 
             return OperationResult<long>.Success(Event.Id);
         }

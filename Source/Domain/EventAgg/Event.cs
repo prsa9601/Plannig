@@ -14,8 +14,8 @@ namespace Domain.EventAgg
         public string Link { get; private set; }
         public string EventAddress { get; private set; }
 
-        public Tagged tag { get; private set; }
-        public List<EventUser> eventUser { get; set; } 
+        public Tagged Tag { get; private set; }
+        public List<EventUser> EventUser { get; set; }
         public NotificationEnum notification { get; private set; }
         //public List<UserEvent> Participants { get; private set; }
 
@@ -41,14 +41,14 @@ namespace Domain.EventAgg
             users.ForEach(f => f.EventId = Id);
 
             //eventUser.Clear();
-            eventUser.Clear();
-            eventUser.AddRange(users);
+            EventUser.Clear();
+            EventUser.AddRange(users);
         }
         public void AddUser(string userName)
         {
             var user = new EventUser(userName);
             user.EventId = Id;
-            eventUser.Add(user);
+            EventUser.Add(user);
         }
 
         public Event(string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, Tagged tag, NotificationEnum notification, bool accessNotification)
@@ -61,15 +61,17 @@ namespace Domain.EventAgg
             Description = description;
             Link = link;
             EventAddress = eventAddress;
-            this.tag = tag;
+            this.Tag = tag;
             this.notification = notification;
             AccessNotification = accessNotification;
-            eventUser = new List<EventUser>();
+            EventUser = new List<EventUser>();
 
             //Participants = new List<UserEvent>();
             //Participants = new List<EventParticipants>();
         }
-        public Event(string creatorUserName, List<string>? userNames, string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, Tagged tag, NotificationEnum notification, bool accessNotification)
+        public Event(string creatorUserName, List<string>? userNames, string title,
+            DateTime startTime, DateTime endTime, string description, string link, string eventAddress,
+            Tagged tag, NotificationEnum notification, bool accessNotification)
         {
             Guard(title, startTime, endTime);
 
@@ -79,40 +81,39 @@ namespace Domain.EventAgg
             Description = description;
             Link = link;
             EventAddress = eventAddress;
-            this.tag = tag;
+            this.Tag = tag;
             this.notification = notification;
             AccessNotification = accessNotification;
-
-
-            if (userNames.Count != 0)
-            {
-                List<EventUser> users = new List<EventUser>();
-
-                foreach (var item in userNames)
-                {
-                    users.Add(new EventUser(item));
-                }
-                //users.Add(new EventUser(creatorUserName));
-                users.ForEach(f => f.EventId = Id);
-                users.ForEach(f => f.CreatorUserName = creatorUserName);
-                //eventUser.Clear();
-                //eventUser.Clear();
-                eventUser.AddRange(users);
-            }
-            else
-            {
-                EventUser user = new EventUser(creatorUserName);
-                user.EventId = Id;
-                user.CreatorUserName = creatorUserName;
-                //eventUser.Clear();
-                //eventUser.Clear();
-                eventUser.Add(user);
-            }
+            EventUser = new List<EventUser>();
 
             //Participants = new List<UserEvent>();
             //Participants = new List<EventParticipants>();
         }
 
+        public void AddEventUser(string creatorUserName)
+        {
+            EventUser user = new EventUser(creatorUserName);
+            user.EventId = Id;
+            user.CreatorUserName = creatorUserName;
+            //eventUser.Clear();
+            //eventUser.Clear();
+            EventUser.Add(user);
+        }
+        public void AddEventUser(string creatorUserName, List<string> userNames)
+        {
+            List<EventUser> users = new List<EventUser>();
+
+            foreach (var item in userNames)
+            {
+                users.Add(new EventUser(item));
+            }
+            //users.Add(new EventUser(creatorUserName));
+            users.ForEach(f => f.EventId = Id);
+            users.ForEach(f => f.CreatorUserName = creatorUserName);
+            //eventUser.Clear();
+            //eventUser.Clear();
+            EventUser.AddRange(users);
+        }
         //public Event(string title, DateTime startTime, DateTime endTime, string description)
         //{    
 
@@ -139,7 +140,7 @@ namespace Domain.EventAgg
             Description = description;
             Link = link;
             EventAddress = eventAddress;
-            this.tag = tag;
+            this.Tag = tag;
             this.notification = notification;
             AccessNotification = accessNotification;
 
@@ -154,8 +155,8 @@ namespace Domain.EventAgg
                 users.ForEach(f => f.EventId = Id);
                 users.ForEach(i => i.CreatorUserName = creatorUserName);
                 //eventUser.Clear();
-                eventUser.Clear();
-                eventUser.AddRange(users);
+                EventUser.Clear();
+                EventUser.AddRange(users);
             }
             //Participants = new List<UserEvent>();
             //Participants = new List<EventParticipants>();

@@ -54,15 +54,15 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Tag")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("notification")
-                        .HasColumnType("int");
-
-                    b.Property<int>("tag")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -596,7 +596,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.EventAgg.Event", b =>
                 {
-                    b.OwnsMany("Domain.EventAgg.EventUser", "eventUser", b1 =>
+                    b.OwnsMany("Domain.EventAgg.EventUser", "EventUser", b1 =>
                         {
                             b1.Property<long>("EventId")
                                 .HasColumnType("bigint");
@@ -628,7 +628,7 @@ namespace Infrastructure.Migrations
                                 .HasForeignKey("EventId");
                         });
 
-                    b.Navigation("eventUser");
+                    b.Navigation("EventUser");
                 });
 
             modelBuilder.Entity("Domain.PackageAgg.Package", b =>

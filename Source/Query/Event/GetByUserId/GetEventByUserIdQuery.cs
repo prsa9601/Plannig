@@ -27,7 +27,7 @@ namespace Query.Event.GetByUserId
         public async Task<List<EventDto?>> Handle(GetEventByUserIdQuery request, CancellationToken cancellationToken)
         {
             var user = _context.Users.Include("userEvents").Where(i => i.Id.ToString() == request.userId).FirstOrDefault();
-            var events = _context.Events.Select(i => i.eventUser).ToList();
+            var events = _context.Events.Select(i => i.EventUser).ToList();
             List<long> EventIds = new List<long>();
             foreach (var item in events)
             {
