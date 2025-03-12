@@ -24,6 +24,9 @@ namespace Infrastructure.Migrations
                 name: "telegram");
 
             migrationBuilder.EnsureSchema(
+                name: "dbo");
+
+            migrationBuilder.EnsureSchema(
                 name: "package");
 
             migrationBuilder.EnsureSchema(
@@ -115,6 +118,32 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notification",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EventId = table.Column<long>(type: "bigint", nullable: true),
+                    ScheduleId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsSend = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsSeen = table.Column<bool>(type: "bit", nullable: false),
+                    AllowedEmailCount = table.Column<int>(type: "int", nullable: false),
+                    AllowedSmsCount = table.Column<int>(type: "int", nullable: false),
+                    EventStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EventExpiredTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SendTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NotificationType = table.Column<int>(type: "int", nullable: false),
+                    UserNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notification", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Package",
                 schema: "package",
                 columns: table => new
@@ -126,6 +155,9 @@ namespace Infrastructure.Migrations
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
+                    AllowedEmailCount = table.Column<int>(type: "int", nullable: false),
+                    AllowedSmsCount = table.Column<int>(type: "int", nullable: false),
+                    ExpiryDate = table.Column<TimeSpan>(type: "time", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -443,6 +475,33 @@ namespace Infrastructure.Migrations
                     table.PrimaryKey("PK_userEvents", x => new { x.UserId, x.Id });
                     table.ForeignKey(
                         name: "FK_userEvents_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "userPackages",
+                schema: "user",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PackageId = table.Column<long>(type: "bigint", nullable: false),
+                    PackageTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AllowedEmailCount = table.Column<int>(type: "int", nullable: false),
+                    AllowedSmsCount = table.Column<int>(type: "int", nullable: false),
+                    ExpiryDate = table.Column<TimeSpan>(type: "time", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_userPackages", x => new { x.UserId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_userPackages_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -927,6 +986,12 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_userPackages_UserId",
+                schema: "user",
+                table: "userPackages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Videos_Id",
                 schema: "instagram",
                 table: "Videos",
@@ -986,6 +1051,10 @@ namespace Infrastructure.Migrations
                 name: "InstagramProfile");
 
             migrationBuilder.DropTable(
+                name: "Notification",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
                 name: "Permissions",
                 schema: "role");
 
@@ -1014,6 +1083,10 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "userEvents",
+                schema: "user");
+
+            migrationBuilder.DropTable(
+                name: "userPackages",
                 schema: "user");
 
             migrationBuilder.DropTable(

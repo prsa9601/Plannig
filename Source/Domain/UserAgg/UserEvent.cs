@@ -6,7 +6,6 @@ namespace Domain.UserAgg
     {
         public UserEvent(long eventId)
         {
-       
             EventId = eventId;
         }
         public string UserId { get; set; }

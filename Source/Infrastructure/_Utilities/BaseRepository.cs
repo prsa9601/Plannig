@@ -18,12 +18,18 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         return await Context.Set<TEntity>().FirstOrDefaultAsync(t => t.Id.Equals(id)); ;
     }
+
+    public async Task<List<TEntity>?> GetListByFilterAsync(Expression<Func<TEntity, bool>> expression)
+    {
+        return await Context.Set<TEntity>().AsTracking().ToListAsync();
+    }
+
     public async Task<TEntity?> GetTracking(long id)
     {
         return await Context.Set<TEntity>().AsTracking().FirstOrDefaultAsync(t => t.Id.Equals(id));
 
     }
-    public async Task<List<TEntity?>> GetListTrackingAsync()
+    public async Task<List<TEntity>?> GetListTrackingAsync()
     {
         return await Context.Set<TEntity>().AsTracking().Select(i=>i).ToListAsync();
 
@@ -69,12 +75,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return Context.Set<TEntity>().FirstOrDefault(t => t.Id.Equals(id)); ;
     }
 
-    public async Task<bool> Delete(long Id)
+    public async Task<bool> Delete(Expression<Func<TEntity , bool>> expression)
     {
         try
         {
-            var Entity = await Context.Set<TEntity>().FirstOrDefaultAsync(t => t.Id == Id);
-            Context.Set<TEntity>().Remove(Entity);
+            var Entity = await Context.Set<TEntity>().Where(expression).ToListAsync();
+            Context.Set<TEntity>().RemoveRange(Entity);
             return true;
         }
         catch
@@ -82,4 +88,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
             return false; 
         }
     }
+ 
+
+   
 }

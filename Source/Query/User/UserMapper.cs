@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Persistent.Ef;
 using Microsoft.EntityFrameworkCore;
 using Query.User.DTOs;
+using System.Security.Cryptography;
 
 namespace Query.User
 {
@@ -20,10 +21,12 @@ namespace Query.User
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
                 avatar = user.Id.MapAvatar(context)!,
+                userPackageDto = user.UserPackages.PackagesMap()!,
             };
             return model;
         }
-        public static UserFilterData? Map(this Domain.UserAgg.User? user,string CurrentUserId, PlanningContext context)
+        public static UserFilterData? Map(this Domain.UserAgg.User?
+            user,string CurrentUserId, PlanningContext context)
         {
             var model = new UserFilterData()
             {
@@ -55,6 +58,28 @@ namespace Query.User
                 friends.Add(model);
             }
             return friends;
+        }
+        public static List<UserPackageDto?> PackagesMap(this List<Domain.UserAgg.UserPackage>?
+            userPackage)
+        {
+            var package = new List<UserPackageDto>();
+            foreach (var item in userPackage)
+            {
+                var model = new UserPackageDto()
+                {
+                    CreationDate = item.CreationDate,
+                    Id = item.Id,
+                    AllowedEmailCount = item.AllowedEmailCount,
+                    AllowedSmsCount = item.AllowedSmsCount,
+                    ExpiryDate = item.ExpiryDate,
+                    IsActive = item.IsActive,
+                    PackageId = item.PackageId,
+                    UserId = item.UserId,
+                    ExpireDate = item.ExpiryDate
+                };
+                package.Add(model);
+            }
+            return package;
         }
         public static UserAvatarDto? MapAvatar(this string id, PlanningContext context)
         {

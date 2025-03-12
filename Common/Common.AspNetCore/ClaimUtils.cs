@@ -17,7 +17,8 @@ public static class ClaimUtils
         if (principal == null)
             throw new ArgumentNullException(nameof(principal));
 
-        return Convert.ToString(principal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        //return Convert.ToString(principal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        return Convert.ToString(principal.FindFirst(ClaimTypes.NameIdentifier)?.Value)!;
     }
     public static string GetUserName(this ClaimsPrincipal principal)
     {

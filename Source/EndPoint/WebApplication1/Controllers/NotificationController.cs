@@ -1,8 +1,14 @@
-﻿using Application.Notification.EmailSender;
+﻿using Application.Notification.Add;
+using Application.Notification.Edit;
+using Application.Notification.EmailSender;
+using Application.Notification.Remove;
 using Application.Notification.SmsSender;
+using Common.Application;
 using Common.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Planning.Api.Model.Notification;
 using Presentation.Facade.Notification;
+using Presentation.Facade.User;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,50 +18,87 @@ namespace Planning.Api.Controllers
     [ApiController]
     public class NotificationController : ApiController
     {
-        public NotificationController(INotificationFacade faaacade)
+        private readonly INotificationFacade _facade;
+        private readonly IUserFacade _userFacade;
+        public NotificationController(INotificationFacade facade, IUserFacade userFacade)
         {
-            _faaacade = faaacade;
+            _facade = facade;
+            _userFacade = userFacade;
         }
 
-        public INotificationFacade _faaacade { get; set; }
-        // GET: api/<NotificationController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<NotificationController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/<NotificationController>
-        [HttpPost]
-        public async Task<ApiResult> Post([FromBody] SendNotificationByEmail command)
+        [HttpPost("SendEmail")]
+        public async Task<ApiResult> SendEmail([FromBody] SendNotificationByEmailCommand command)
         {
-            var result = await _faaacade.SendEmail(command);
+
+
+            var result = await _facade.SendEmail(new SendNotificationByEmailCommand
+            {
+                startTime = command.startTime,
+                EventId = command.EventId,
+                notificationId = command.notificationId,
+                userNames = command.userNames,
+            });
+            return CommandResult(result);
+        }
+        [HttpPost("AddNotification")]
+        public async Task<ApiResult<long>> AddNotification([FromBody] AddNotificationViewModel command)
+        {
+            var user = await _userFacade.GetUserById(User.GetUserIdToString());
+            var package = user.userPackageDto;
+            var activePackage = package.Where(i => i.IsActive == true &&
+                (i.CreationDate.Add(i.ExpiryDate)) < DateTime.Now).FirstOrDefault();
+            //var emailCount = 0;
+            //var smsCount = 0;
+            //foreach (var item in activePackage) 
+            //{
+            //    emailCount += item.AllowedEmailCount;
+            //    smsCount += item.AllowedSmsCount;
+            //}
+            //if (activePackage != null)
+            //{
+                var result = await _facade.AddNotification(new AddNotificationCommand
+                {
+                    IsActive = true,
+                    //AllowedEmailCount = activePackage.AllowedEmailCount,
+                    //AllowedSmsCount = activePackage.AllowedSmsCount,
+                    creatorUserName = user.UserName,
+                    //EventExpiredTime = activePackage.CreationDate.Add(activePackage.ExpiryDate),
+                    EventId = command.EventId,
+                    EventStartTime = command.EventStartTime,
+                    IsSeen = false,
+                    IsSend = false,
+                    NotificationType = command.NotificationType,
+                    SendTime = command.SendTime,
+                    UserNames = command.UserIds
+                });
+                return CommandResult(result);
+            //}
+            //return CommandResult(OperationResult<long>.Error(403));
+           
+        }
+        [HttpPatch("EditNotification")]
+        public async Task<ApiResult> EditNotification([FromBody] EditNotificationCommand command)
+        {
+            var result = await _facade.EditNotification(command);
+            return CommandResult(result);
+        }
+        [HttpDelete("RemoveNotification/EventId={eventId}")]
+        public async Task<ApiResult> RemoveNotification(long eventId)
+        {
+            var result = await _facade.RemoveNotification(new RemoveNotificationCommand()
+            {
+                EventId = eventId,
+                //ScheduleId = scheduleId
+            });
             return CommandResult(result);
         }
         [HttpPost("SendSms")]
         public async Task<ApiResult> SendSms([FromBody] SendNotificationWithSms command)
         {
-            var result = await _faaacade.SendSms(command);
+            var result = await _facade.SendSms(command);
             return CommandResult(result);
-        }
-
-        // PUT api/<NotificationController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<NotificationController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

@@ -3,7 +3,7 @@ using Domain.EventAgg.Enum;
 
 namespace Application.Event.Add
 {
-    public class AddEventCommand : IBaseCommand
+    public class AddEventCommand : IBaseCommand<long>
     {
         public string Title { get; set; }
         public DateTime StartTime { get; set; }
@@ -17,7 +17,7 @@ namespace Application.Event.Add
         public string creatorUserName { get; set; }
 
         public Tagged tag { get; set; }
-        public List<string> userNames { get; set; }
-        public Domain.EventAgg.Enum.Notification notification { get; set; }
+        public List<string>? userNames { get; set; }
+        public Domain.EventAgg.Enum.NotificationEnum NotificationEnum { get; set; }
     }
 }

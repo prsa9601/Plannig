@@ -19,66 +19,66 @@
 //    public IDictionary<PublishStrategy, IMediator> PublishStrategies = new Dictionary<PublishStrategy, IMediator>();
 //    public PublishStrategy DefaultStrategy { get; set; } = PublishStrategy.SyncContinueOnException;
 
-//    public Task Publish<TNotification>(TNotification notification)
+//    public Task Publish<TNotification>(TNotification NotificationEnum)
 //    {
-//        return Publish(notification, DefaultStrategy, default(CancellationToken));
+//        return Publish(NotificationEnum, DefaultStrategy, default(CancellationToken));
 //    }
 
-//    public Task Publish<TNotification>(TNotification notification, PublishStrategy strategy)
+//    public Task Publish<TNotification>(TNotification NotificationEnum, PublishStrategy strategy)
 //    {
-//        return Publish(notification, strategy, default(CancellationToken));
+//        return Publish(NotificationEnum, strategy, default(CancellationToken));
 //    }
 
-//    public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken)
+//    public Task Publish<TNotification>(TNotification NotificationEnum, CancellationToken cancellationToken)
 //    {
-//        return Publish(notification, DefaultStrategy, cancellationToken);
+//        return Publish(NotificationEnum, DefaultStrategy, cancellationToken);
 //    }
 
-//    public Task Publish<TNotification>(TNotification notification, PublishStrategy strategy, CancellationToken cancellationToken)
+//    public Task Publish<TNotification>(TNotification NotificationEnum, PublishStrategy strategy, CancellationToken cancellationToken)
 //    {
 //        if (!PublishStrategies.TryGetValue(strategy, out var mediator))
 //        {
 //            throw new ArgumentException($"Unknown strategy: {strategy}");
 //        }
 
-//        return mediator.Publish(notification, cancellationToken);
+//        return mediator.Publish(NotificationEnum, cancellationToken);
 //    }
 
-//    private Task ParallelWhenAll(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification notification, CancellationToken cancellationToken)
+//    private Task ParallelWhenAll(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification NotificationEnum, CancellationToken cancellationToken)
 //    {
 //        var tasks = new List<Task>();
 
 //        foreach (var handler in handlers)
 //        {
-//            tasks.Add(Task.Run(() => handler(notification, cancellationToken)));
+//            tasks.Add(Task.Run(() => handler(NotificationEnum, cancellationToken)));
 //        }
 
 //        return Task.WhenAll(tasks);
 //    }
 
-//    private Task ParallelWhenAny(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification notification, CancellationToken cancellationToken)
+//    private Task ParallelWhenAny(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification NotificationEnum, CancellationToken cancellationToken)
 //    {
 //        var tasks = new List<Task>();
 
 //        foreach (var handler in handlers)
 //        {
-//            tasks.Add(Task.Run(() => handler(notification, cancellationToken)));
+//            tasks.Add(Task.Run(() => handler(NotificationEnum, cancellationToken)));
 //        }
 
 //        return Task.WhenAny(tasks);
 //    }
 
-//    private Task ParallelNoWait(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification notification, CancellationToken cancellationToken)
+//    private Task ParallelNoWait(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification NotificationEnum, CancellationToken cancellationToken)
 //    {
 //        foreach (var handler in handlers)
 //        {
-//            Task.Run(() => handler(notification, cancellationToken));
+//            Task.Run(() => handler(NotificationEnum, cancellationToken));
 //        }
 
 //        return Task.CompletedTask;
 //    }
 
-//    private async Task AsyncContinueOnException(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification notification, CancellationToken cancellationToken)
+//    private async Task AsyncContinueOnException(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification NotificationEnum, CancellationToken cancellationToken)
 //    {
 //        var tasks = new List<Task>();
 //        var exceptions = new List<Exception>();
@@ -87,7 +87,7 @@
 //        {
 //            try
 //            {
-//                tasks.Add(handler(notification, cancellationToken));
+//                tasks.Add(handler(NotificationEnum, cancellationToken));
 //            }
 //            catch (Exception ex) when (!(ex is OutOfMemoryException || ex is StackOverflowException))
 //            {
@@ -114,15 +114,15 @@
 //        }
 //    }
 
-//    private async Task SyncStopOnException(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification notification, CancellationToken cancellationToken)
+//    private async Task SyncStopOnException(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification NotificationEnum, CancellationToken cancellationToken)
 //    {
 //        foreach (var handler in handlers)
 //        {
-//            await handler(notification, cancellationToken).ConfigureAwait(false);
+//            await handler(NotificationEnum, cancellationToken).ConfigureAwait(false);
 //        }
 //    }
 
-//    private async Task SyncContinueOnException(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification notification, CancellationToken cancellationToken)
+//    private async Task SyncContinueOnException(IEnumerable<Func<INotification, CancellationToken, Task>> handlers, INotification NotificationEnum, CancellationToken cancellationToken)
 //    {
 //        var exceptions = new List<Exception>();
 
@@ -130,7 +130,7 @@
 //        {
 //            try
 //            {
-//                await handler(notification, cancellationToken).ConfigureAwait(false);
+//                await handler(NotificationEnum, cancellationToken).ConfigureAwait(false);
 //            }
 //            catch (AggregateException ex)
 //            {

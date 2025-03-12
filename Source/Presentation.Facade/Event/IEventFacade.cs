@@ -9,8 +9,8 @@ namespace Presentation.Facade.Event
 {
     public interface IEventFacade
     {
-        Task<OperationResult> AddEvent(AddEventCommand command);
-        Task<OperationResult> EditEvent(EditEventCommand command);
+        Task<OperationResult<long>> AddEvent(AddEventCommand command);
+        Task<OperationResult<long>> EditEvent(EditEventCommand command);
         Task<OperationResult> SetDatesEvent(SetDatesEventCommand command);
         Task<OperationResult> DeleteEvent(DeleteEventCommand command);
 

@@ -39,6 +39,11 @@ namespace Infrastructure.Persistent.Ef.UserAgg
                 option.ToTable("userEvents", "user");
                 option.HasIndex(b => b.UserId);
             });
+            builder.OwnsMany(b => b.UserPackages, option => 
+            {
+                option.ToTable("userPackages", "user");
+                option.HasIndex(b => b.UserId);
+            });
             builder.OwnsMany(b => b.friends, option => 
             {
                 option.ToTable("friends", "user");

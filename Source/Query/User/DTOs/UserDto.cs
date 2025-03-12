@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,7 @@ namespace Query.User.DTOs
         public UserAvatarDto avatar { get; set; }
         public List<UserRoleDto> Roles { get; set; } = new List<UserRoleDto>();
         public List<FriendsDto> friends { get; set; }
+        public List<UserPackageDto> userPackageDto { get; set; }
     }
     public class FriendsDto :BaseDto
     {
@@ -42,5 +44,27 @@ namespace Query.User.DTOs
     {
         public string UserId { get; set; }
         public Domain.UserAgg.UserAvatar.Avatar Avatar { get; set; }
+    }
+    public class UserPackageDto : BaseDto
+    {
+        public TimeSpan ExpireDate { get; set; }
+        public long PackageId { get; set; }
+        public string UserId { get; set; }
+        public int AllowedEmailCount { get; set; } = 10;
+        public int AllowedSmsCount { get; set; } = 0;
+        public TimeSpan ExpiryDate { get; set; }
+        public bool IsActive { get; set; }
+    }
+    public class UserSinglePackageDto : BaseDto
+    {
+        //public string UserName { get; set; }
+        //public string PhoneNumber { get; set; }
+        //public string Email { get; set; }
+        public long PackageId { get; set; }
+        public string UserId { get; set; }
+        public int AllowedEmailCount { get; set; } = 10;
+        public int AllowedSmsCount { get; set; } = 0;
+        public TimeSpan ExpiryDate { get; set; }
+        public bool IsActive { get; set; }
     }
 }

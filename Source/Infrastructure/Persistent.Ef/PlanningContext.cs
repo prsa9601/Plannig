@@ -24,6 +24,7 @@ namespace Infrastructure.Persistent.Ef
         public DbSet<Domain.EventAgg.Event> Events { get; set; }
         public DbSet<Domain.SocialMediaAgg.InstagramAgg.Instagram> Instagram { get; set; }
         public DbSet<Domain.SocialMediaAgg.TelegramAgg.Telegram> Telegrams { get; set; }
+        public DbSet<Domain.Notification.Notification> Notifications { get; set; }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             var modifiedEntities = GetModifiedEntities();

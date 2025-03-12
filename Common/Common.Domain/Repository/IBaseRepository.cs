@@ -7,7 +7,8 @@ namespace Common.Domain.Repository
     public interface IBaseRepository<T> where T : BaseEntity
     {
         Task<T?> GetAsync(long id);
-        Task<List<T?>> GetListTrackingAsync();
+        Task<List<T>?> GetListTrackingAsync();
+        Task<List<T>?> GetListByFilterAsync(Expression<Func<T, bool>> expression);
 
         Task<T?> GetTracking(long id);
         Task<T?> GetTrackingWithString(string id);
@@ -25,7 +26,7 @@ namespace Common.Domain.Repository
 
         bool Exists(Expression<Func<T, bool>> expression);
 
-        Task<bool> Delete(long Id);
+        Task<bool> Delete(Expression<Func<T, bool>> expression);
 
         T? Get(long id);
     }

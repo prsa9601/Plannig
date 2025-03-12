@@ -15,8 +15,8 @@ namespace Domain.EventAgg
         public string EventAddress { get; private set; }
 
         public Tagged tag { get; private set; }
-        public List<EventUser> eventUser { get; set; } = new List<EventUser>();
-        public Notification notification { get; private set; }
+        public List<EventUser> eventUser { get; set; } 
+        public NotificationEnum notification { get; private set; }
         //public List<UserEvent> Participants { get; private set; }
 
         public bool AccessNotification { get; set; } = true;
@@ -30,11 +30,11 @@ namespace Domain.EventAgg
             AccessNotification = true;
         }
 
-        public void AddUser(List<string> userNumber)
+        public void AddUser(List<string> userName)
         {
             List<EventUser> users = new List<EventUser>();
 
-            foreach (var item in userNumber)
+            foreach (var item in userName)
             {
                 users.Add(new EventUser(item));
             }
@@ -44,8 +44,14 @@ namespace Domain.EventAgg
             eventUser.Clear();
             eventUser.AddRange(users);
         }
+        public void AddUser(string userName)
+        {
+            var user = new EventUser(userName);
+            user.EventId = Id;
+            eventUser.Add(user);
+        }
 
-        public Event(string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, Tagged tag, Notification notification, bool accessNotification)
+        public Event(string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, Tagged tag, NotificationEnum notification, bool accessNotification)
         {
             Guard(title, startTime, endTime);
 
@@ -63,7 +69,7 @@ namespace Domain.EventAgg
             //Participants = new List<UserEvent>();
             //Participants = new List<EventParticipants>();
         }
-        public Event(string creatorUserName, List<string> userNames, string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, Tagged tag, Notification notification, bool accessNotification)
+        public Event(string creatorUserName, List<string>? userNames, string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, Tagged tag, NotificationEnum notification, bool accessNotification)
         {
             Guard(title, startTime, endTime);
 
@@ -78,7 +84,7 @@ namespace Domain.EventAgg
             AccessNotification = accessNotification;
 
 
-            if (notification != Notification.none || userNames.Count != 0)
+            if (userNames.Count != 0)
             {
                 List<EventUser> users = new List<EventUser>();
 
@@ -123,7 +129,7 @@ namespace Domain.EventAgg
             StartTime = startTime;
             EndTime = endTime;
         }
-        public void Edit(string creatorUserName, List<string> userNumber, string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, bool accessNotification, Tagged tag, Notification notification)
+        public void Edit(string creatorUserName, List<string> userNumber, string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, bool accessNotification, Tagged tag, NotificationEnum notification)
         {
             Guard(title, startTime, endTime);
 
@@ -137,7 +143,7 @@ namespace Domain.EventAgg
             this.notification = notification;
             AccessNotification = accessNotification;
 
-            if (notification != Notification.none || userNumber.Count != 0)
+            if (notification != NotificationEnum.none || userNumber.Count != 0)
             {
                 List<EventUser> users = new List<EventUser>();
 

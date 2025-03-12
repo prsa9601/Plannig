@@ -26,7 +26,7 @@ namespace Planning.Api.Controllers
         // GET: api/<EventController>
         [Authorize]
         [HttpPost]
-        public async Task<ApiResult> Add([FromBody] AddEventCommandViewModel command)
+        public async Task<ApiResult<long>> Add([FromBody] AddEventCommandViewModel command)
         {
             var q = User.GetUserName();
             var qq = User.GetPhoneNumber();
@@ -34,12 +34,14 @@ namespace Planning.Api.Controllers
             {
                 accessNotification = command.accessNotification,
                 creatorUserName = User.GetUserName(),
+                StartTime = command.StartTime,
+                //creatorUserName = "w",
                 Description = command.Description,
                 EndTime = command.EndTime,
                 EventAddress = command.EventAddress,
                 Link = command.Link,
-                notification = command.notification,
-                StartTime = command.StartTime,
+                NotificationEnum = command.NotificationEnum,
+                //StartTime = DateTime.Now.AddSeconds(20),
                 tag = command.tag,
                 Title = command.Title,
                 userNames = command.userNames
@@ -56,23 +58,29 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpPatch]
-        public async Task<ApiResult> Edit([FromBody] EditEventCommandViewModel command)
+        public async Task<ApiResult<long>> Edit([FromBody] EditEventCommandViewModel command)
         {
             var result = await _facade.EditEvent(new EditEventCommand()
             {
                 accessNotification = command.accessNotification,
                 creatorUserName = User.GetUserName(),
+                StartTime = command.StartTime,
+                //creatorUserName = "w",
                 Description = command.Description,
                 EndTime = command.EndTime,
                 EventAddress = command.EventAddress,
                 Link = command.Link,
-                notification = command.notification,
-                StartTime = command.StartTime,
+                NotificationEnum = command.NotificationEnum,
+                //StartTime = DateTime.Now.AddSeconds(5),
                 tag = command.tag,
                 Title = command.Title,
                 Id = command.Id,
                 userNames = command.userNames
             });
+            //if (result.Data == 0)
+            //{
+            //    return CommandResult(result);
+            //}
             return CommandResult(result);
         }
         [Authorize]

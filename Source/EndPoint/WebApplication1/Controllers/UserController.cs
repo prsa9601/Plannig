@@ -53,7 +53,7 @@ namespace Planning.Api.Controllers
                 throw new Exception(ex.Message);
             }
         }
-        [HttpGet("GetByPhoneNumber/{phoneNumber}")]
+        [HttpGet("GetUserByPhoneNumber/{phoneNumber}")]
         public async Task<ApiResult<UserDto?>> GetCurrentByPhoneNumber(string phoneNumber)
         {
             try
@@ -90,7 +90,7 @@ namespace Planning.Api.Controllers
                 throw new Exception(ex.Message);
             }
         }
-        [HttpGet("GetByUserName/{userName}")]
+        [HttpGet("GetUserByUserName/{userName}")]
         public async Task<ApiResult<UserDto?>> GetCurrentByUserName(string userName)
         {
             try

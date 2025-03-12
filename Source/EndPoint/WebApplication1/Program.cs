@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Common.Application.FileUtil.Interfaces;
 using Common.Application.FileUtil.Services;
 using Common.Application;
@@ -17,6 +17,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Planning.Api.Infrastructure.JwtUtil;
 using Planning.Api.Infrastructure;
+using Common.Application.Schedule;
+using Hangfire;
+using AngleSharp;
 
 
 // Add services to the container.
@@ -123,9 +126,20 @@ builder.Services.RegisterDependency(connectionString);
 builder.Services.RegisterApiDependency(builder.Configuration);
 
 CommonBootstrapper.Init(builder.Services);
+
 builder.Services.AddTransient<IFileService, FileService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
+
+
+// افزودن سرویس‌های Hangfire
+builder.Services.AddHangfire(config =>
+    config.UseSqlServerStorage(connectionString));
+// در Startup.cs
+// در Startup.cs
+
+builder.Services.AddHangfireServer(); // افزودن سرور پردازشگر Job
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -137,6 +151,10 @@ var app = builder.Build();
 
 //This
 //app.UseIpRateLimiting();
+
+//// فعال کردن داشبورد Hangfire (اختیاری)
+//app.UseHangfireDashboard();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -145,6 +163,8 @@ app.UseStaticFiles();
 app.UseCors("PlanningApi");
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHangfireDashboard("/dashboard");
 
 //app.UseApiCustomExceptionHandler();
 //app.MapControllers();

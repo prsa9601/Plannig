@@ -1,9 +1,16 @@
 ﻿using Application._Utilities;
+using Application.Event;
 using Application.Event.Add;
+using Application.Notification;
+using Application.NotificationSchedule;
 using Application.Package._Service;
 using Application.Role.Create;
 using Application.User;
 using Application.User._RequestBox;
+using Common.Application.Schedule;
+using Domain.EventAgg.Service;
+using Domain.Notification.NotificationSchedule;
+using Domain.Notification.Service;
 using Domain.PackageAgg.Service;
 using Domain.UserAgg;
 using Domain.UserAgg.Service;
@@ -32,10 +39,16 @@ namespace Config
             //services.AddTransient<IPostDomainService, PostDomainService>();
             // services.AddTransient<IUserService, UserService>();
             //services.AddTransient<ICategoryDomainService, CategoryDomainService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<INotificationScheduleService, NotificationScheduleService>();
             services.AddTransient<IPackageService, PackageService>();
+            services.AddSingleton<EventScheduler>();
+            services.AddSingleton<EventNotificationScheduler>();
 
             services.AddMemoryCache();
+
 
             services.AddValidatorsFromAssembly(typeof(AddEventCommandValidator).Assembly);
 

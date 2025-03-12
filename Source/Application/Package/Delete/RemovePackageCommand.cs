@@ -24,11 +24,11 @@ namespace Application.Package.Delete
             //var result = await _repository.Delete(request.id);
             var package = await _repository.GetTracking(request.id);
 
-            if(package == null)
+            if (package == null)
                 return OperationResult.NotFound();
-            else if(package.Active == true)
+            else if (package.Active == true)
                 return OperationResult.Error("امکان حذف یک پکیج فعال وجود نداره!");
-            await _repository.Delete(package.Id);
+            await _repository.Delete(i => i.Id == request.id);
             await _repository.Save();
             return OperationResult.Success();
         }

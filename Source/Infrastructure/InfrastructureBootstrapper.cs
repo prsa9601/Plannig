@@ -1,4 +1,5 @@
 ﻿using Domain.EventAgg.Repository;
+using Domain.Notification.Repository;
 using Domain.PackageAgg.Repository;
 using Domain.RoleAgg.Repository;
 using Domain.UserAgg;
@@ -15,6 +16,7 @@ using Infrastructure.Persistent.Ef.TelegramAgg;
 using Domain.SocialMediaAgg.InstagramAgg;
 using Domain.SocialMediaAgg.TelegramAgg.Repository;
 using Infrastructure.Persistent.Dapper;
+using Infrastructure.Persistent.Ef.NotificationAgg;
 using Infrastructure.Persistent.Ef.PackageAgg;
 using Infrastructure.Persistent.Ef.Role;
 
@@ -30,6 +32,7 @@ namespace Infrastructure
             services.AddScoped<IUserRepository<Domain.UserAgg.User>, UserRepository<Domain.UserAgg.User>>();
             services.AddScoped<IInstagramRepository, InstagramRepository>();
             services.AddScoped<ITelegramRepository, TelegramRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IRoleRepository<Domain.RoleAgg.Role>, RoleRepository<Domain.RoleAgg.Role>>();
             //services.AddSingleton<IPostRepository, PostRepository>();
 

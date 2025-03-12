@@ -19,12 +19,12 @@ namespace Presentation.Facade.Event
             _mediator = mediator;
         }
 
-        public async Task<OperationResult> AddEvent(AddEventCommand command)
+        public async Task<OperationResult<long>> AddEvent(AddEventCommand command)
         {
             return await _mediator.Send(command);
         }
 
-        public async Task<OperationResult> EditEvent(EditEventCommand command)
+        public async Task<OperationResult<long>> EditEvent(EditEventCommand command)
         {
             return await _mediator.Send(command);
         }

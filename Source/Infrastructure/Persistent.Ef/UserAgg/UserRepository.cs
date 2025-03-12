@@ -17,6 +17,10 @@ namespace Infrastructure.Persistent.Ef.UserAgg
         {
             return await Context.Set<TEntity>().FirstOrDefaultAsync(t => t.Id.Equals(id)); ;
         }
+        public virtual async Task<TEntity?> GetWithStringAsync(string id)
+        {
+            return await Context.Set<TEntity>().FirstOrDefaultAsync(t => t.Id.Equals(id)); ;
+        }
         public async Task<TEntity?> GetTracking(long id)
         {
             return await Context.Set<TEntity>().AsTracking().FirstOrDefaultAsync(t => t.Id.Equals(id));
@@ -46,6 +50,18 @@ namespace Infrastructure.Persistent.Ef.UserAgg
         {
             await Context.Set<TEntity>().AddRangeAsync(entities);
         }
+
+        public async Task<List<TEntity>> GetListAsync(List<string> userNames)
+        {
+            List<TEntity> users = new List<TEntity>();
+            foreach (var item in userNames)
+            { 
+                users.Add( await Context.Set<TEntity>()
+                    .Where(i => i.UserName.Equals(item)).FirstOrDefaultAsync());
+            }
+            return users;
+        }
+
         public void Update(TEntity entity)
         {
             Context.Update(entity);
@@ -57,7 +73,11 @@ namespace Infrastructure.Persistent.Ef.UserAgg
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
         {
             return await Context.Set<TEntity>().AnyAsync(expression);
-        }
+        } 
+        //public async Task<List<TEntity>?> GetListAsync(Expression<Func<TEntity, bool>> expression)
+        //{
+        //    return await Context.Set<TEntity>().Where(expression).ToListAsync();
+        //}
         public bool Exists(Expression<Func<TEntity, bool>> expression)
         {
             return Context.Set<TEntity>().Any(expression);

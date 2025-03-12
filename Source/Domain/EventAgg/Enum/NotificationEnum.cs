@@ -1,6 +1,6 @@
 ﻿namespace Domain.EventAgg.Enum
 {
-    public enum Notification
+    public enum NotificationEnum
     {
         none,
         Email,

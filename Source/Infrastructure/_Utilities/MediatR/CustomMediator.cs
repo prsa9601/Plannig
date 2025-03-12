@@ -11,8 +11,8 @@
 //        _publish = publish;
 //    }
 
-//    protected override Task PublishCore(IEnumerable<Func<INotification, CancellationToken, Task>> allHandlers, INotification notification, CancellationToken cancellationToken)
+//    protected override Task PublishCore(IEnumerable<Func<INotification, CancellationToken, Task>> allHandlers, INotification NotificationEnum, CancellationToken cancellationToken)
 //    {
-//        return _publish(allHandlers, notification, cancellationToken);
+//        return _publish(allHandlers, NotificationEnum, cancellationToken);
 //    }
 //}

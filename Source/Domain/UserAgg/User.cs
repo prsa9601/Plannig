@@ -3,6 +3,7 @@ using Common.Domain.Exceptions;
 using Domain.UserAgg;
 using Domain.UserAgg.Service;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Domain.UserAgg
@@ -30,6 +31,7 @@ namespace Domain.UserAgg
         public List<UserFriends?> friends { get; } = new List<UserFriends?>();
         public List<UserEvent?> userEvents { get; } = new List<UserEvent?>();
         public List<RequestBox?> RequestBox { get; } = new List<RequestBox?>();
+        public List<UserPackage?> UserPackages { get; } = new List<UserPackage?>();
 
 
         public User(string email, string userName, string phoneNumber, string password, IUserService userService)
@@ -47,19 +49,19 @@ namespace Domain.UserAgg
 
         }
 
-        public User(string email, string userName, string phoneNumber, string password)
-        {
-            Avatar = new UserAvatar(0);
-            Avatar.UserId = Id;
-            Password = password;
-            Email = email;
-            UserName = userName;
-            //Family = family;
-            PhoneNumber = phoneNumber;
-            //Password = password;
-            Avatar = new UserAvatar(0);
+        //public User(string email, string userName, string phoneNumber, string password)
+        //{
+        //    Avatar = new UserAvatar(0);
+        //    Avatar.UserId = Id;
+        //    Password = password;
+        //    Email = email;
+        //    UserName = userName;
+        //    //Family = family;
+        //    PhoneNumber = phoneNumber;
+        //    //Password = password;
+        //    Avatar = new UserAvatar(0);
 
-        }
+        //}
 
         //public User( string phoneNumber, IUserService userService)
         //{
@@ -135,6 +137,12 @@ namespace Domain.UserAgg
 
             userEvents.Clear();
             userEvents.AddRange(participants);
+        }
+        public void AddEvent(long eventId)
+        {
+            var userEvent = new UserEvent(eventId);
+            userEvent.UserId = Id;
+            userEvents.Add(userEvent);
         }
         public void AddFriend(List<string> friendsId)
         {
@@ -216,21 +224,21 @@ namespace Domain.UserAgg
         }
         public void AddFriends(string friendId)
         {
-            
-                foreach (var item in friends)
+
+            foreach (var item in friends)
+            {
+                if (item.CurrentUserId == Id && item.UserFriendId == friendId ||
+                    item.CurrentUserId == friendId && item.UserFriendId == Id)
                 {
-                    if (item.CurrentUserId == Id && item.UserFriendId == friendId ||
-                        item.CurrentUserId == friendId && item.UserFriendId == Id)
-                    {
-                        throw new Exception("درخواست غیر مجاز است!");
-                    }
+                    throw new Exception("درخواست غیر مجاز است!");
                 }
-                var friend = new UserFriends(friendId);
+            }
+            var friend = new UserFriends(friendId);
 
-                friend.CurrentUserId = Id;
+            friend.CurrentUserId = Id;
 
 
-                friends.Add(friend);
+            friends.Add(friend);
 
         }
         public void RemoveRequest(string receiverId, string senderId)
@@ -287,6 +295,46 @@ namespace Domain.UserAgg
                     throw new Exception("شما با این نام کاربری ثبت نام کرده اید!");
 
         }
+        public void SetUserPackage(TimeSpan time, long packageId, int AllowedSmsCount,
+            int AllowedEmailCount, string packageTitle)
+        {
+            var package = new UserPackage(packageId, AllowedSmsCount, AllowedEmailCount, time, packageTitle);
+            package.UserId = Id;
+            package.IsActive = true;
+            UserPackages.Add(package);
+        }
+        public void EditUserPackage(long packageId, TimeSpan time, int AllowedSmsCount,
+            int AllowedEmailCount)
+        {
+            var package = UserPackages.Where(i =>
+                i.UserId == Id && i.PackageId == packageId && i.IsActive == true).FirstOrDefault();
+            package.Edit(time, AllowedSmsCount, AllowedEmailCount);
+            if (time.Equals(0))
+            {
+                package.IsActive = false;
+            }
+            UserPackages.Add(package);
+        }
+        public void RemoveUserPackage(string userId)
+        {
+            UserPackages.RemoveAll(i => i.UserId == Id && i.UserId == userId);
+        }
+        public void DeActivePackageForUser(string userId)
+        {
+            try
+            {
+                var package = UserPackages.Where(i =>
+                    i.UserId == Id && i.UserId == userId && i.IsActive == true).FirstOrDefault();
+                package.IsActive = false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
+
     }
 
 }

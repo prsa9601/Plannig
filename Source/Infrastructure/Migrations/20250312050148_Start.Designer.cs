@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PlanningContext))]
-    [Migration("20250203101237_Start")]
+    [Migration("20250312050148_Start")]
     partial class Start
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -73,6 +73,59 @@ namespace Infrastructure.Migrations
                     b.ToTable("Events", "event");
                 });
 
+            modelBuilder.Entity("Domain.Notification.Notification", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AllowedEmailCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllowedSmsCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EventExpiredTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("EventId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("EventStartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSeen")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSend")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NotificationType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ScheduleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SendTime")
+                        .HasColumnType("datetime2");
+
+                    b.PrimitiveCollection<string>("UserNames")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notification", "dbo");
+                });
+
             modelBuilder.Entity("Domain.PackageAgg.Package", b =>
                 {
                     b.Property<long>("Id")
@@ -84,8 +137,17 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int>("AllowedEmailCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllowedSmsCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("ExpiryDate")
+                        .HasColumnType("time");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
@@ -1145,6 +1207,49 @@ namespace Infrastructure.Migrations
                                 .HasForeignKey("UserId");
                         });
 
+                    b.OwnsMany("Domain.UserAgg.UserPackage", "UserPackages", b1 =>
+                        {
+                            b1.Property<string>("UserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<long>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("bigint");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<long>("Id"));
+
+                            b1.Property<int>("AllowedEmailCount")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("AllowedSmsCount")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("CreationDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<TimeSpan>("ExpiryDate")
+                                .HasColumnType("time");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<long>("PackageId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<string>("PackageTitle")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId", "Id");
+
+                            b1.HasIndex("UserId");
+
+                            b1.ToTable("userPackages", "user");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
                     b.OwnsMany("Domain.UserAgg.UserRole", "Roles", b1 =>
                         {
                             b1.Property<string>("UserId")
@@ -1227,6 +1332,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Roles");
 
                     b.Navigation("Tokens");
+
+                    b.Navigation("UserPackages");
 
                     b.Navigation("friends");
 

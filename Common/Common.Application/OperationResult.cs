@@ -26,6 +26,15 @@
                 Title = "NotFound",
                 Data = default(TData),
             };
+        }  
+        public static OperationResult<TData> NotFound(TData data)
+        {
+            return new OperationResult<TData>()
+            {
+                Status = OperationResultStatus.NotFound,
+                Title = "NotFound",
+                Data = data,
+            };
         }
         public static OperationResult<TData> Error(string message = ErrorMessage)
         {
@@ -35,6 +44,16 @@
                 Title = "مشکلی در عملیات رخ داده",
                 Data = default(TData),
                 Message = message
+            };
+        }
+        public static OperationResult<TData> Error(TData data)
+        {
+            return new OperationResult<TData>()
+            {
+                Status = OperationResultStatus.Error,
+                Title = "مشکلی در عملیات رخ داده",
+                Data = data,
+                Message = "خطایی رخ داده است!"
             };
         }
     }

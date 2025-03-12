@@ -22,6 +22,6 @@ namespace Infrastructure.Persistent.Ef.PackageAgg
 
             return false;
         }
-     
+
     }
 }

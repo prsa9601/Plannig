@@ -12,8 +12,12 @@ namespace Domain.PackageAgg
         public string Title { get; private set; }
         public string ImageName { get; private set; }
         public string Link { get; private set; }
-        public bool Active { get; set; } = false;
+        public bool Active { get; set; } = false;  //اینکه تو سایت باشه یا نه
         public int Price { get; private set; }
+        public int AllowedEmailCount { get; private set; }
+        public int AllowedSmsCount { get; private set; }
+        public TimeSpan ExpiryDate { get; set; }
+
         public List<PackageSpecification> Specification { get; set; }
 
         private Package()
@@ -53,7 +57,7 @@ namespace Domain.PackageAgg
 
             Specification = specifications;
         }
-        
+
         public void SetActivePackage()
         {
             Active = true;
@@ -62,6 +66,6 @@ namespace Domain.PackageAgg
         {
             Active = false;
         }
-         
+     
     }
 }

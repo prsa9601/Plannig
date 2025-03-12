@@ -7,6 +7,7 @@ namespace Domain.UserAgg.Repository
     public interface IUserRepository<T> where T : IdentityUser
     {
         Task<T?> GetAsync(long id);
+        Task<T?> GetWithStringAsync(string id);
 
         Task<T?> GetTracking(long id);
         Task<T?> GetTrackingByPhoneNumber(string PhoneNumber);
@@ -17,6 +18,8 @@ namespace Domain.UserAgg.Repository
         void Add(T entity);
 
         Task AddRange(ICollection<T> entities);
+        Task<List<T>> GetListAsync(List<string> userNames);
+        //Task<List<T>?> GetListAsync(Expression<Func<T, bool>> expression);
 
         void Update(T entity);
 

@@ -16,7 +16,7 @@ namespace Planning.Api.Model.Event
 
             public Tagged tag { get; set; }
             public List<string> userNames { get; set; }
-            public Domain.EventAgg.Enum.Notification notification { get; set; }
+            public Domain.EventAgg.Enum.NotificationEnum NotificationEnum { get; set; }
         
     }
 
@@ -35,6 +35,6 @@ namespace Planning.Api.Model.Event
 
         public List<string> userNames { get; set; }
         public Tagged tag { get; set; }
-        public Domain.EventAgg.Enum.Notification notification { get; set; }
+        public Domain.EventAgg.Enum.NotificationEnum NotificationEnum { get; set; }
     }
 }

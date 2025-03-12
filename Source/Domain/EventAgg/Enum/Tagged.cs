@@ -2,8 +2,12 @@
 namespace Domain.EventAgg.Enum
 {
     public enum Tagged
-    {
-        Worked
+    { 
+        Business,
+        Personal,
+        Family,
+        Holiday,
+        ETC
     }
   
 }
