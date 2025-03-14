@@ -79,9 +79,24 @@ namespace Planning.Api.Controllers
            
         }
         [HttpPatch("EditNotification")]
-        public async Task<ApiResult> EditNotification([FromBody] EditNotificationCommand command)
+        public async Task<ApiResult> EditNotification([FromBody] EditNotificationViewModel command)
         {
-            var result = await _facade.EditNotification(command);
+            var result = await _facade.EditNotification(new EditNotificationCommand
+            {
+                // = ,
+                IsActive = true,
+                //AllowedEmailCount = activePackage.AllowedEmailCount,
+                //AllowedSmsCount = activePackage.AllowedSmsCount,
+                //creatorUserName = user.UserName,
+                //EventExpiredTime = activePackage.CreationDate.Add(activePackage.ExpiryDate),
+                EventId = command.EventId,
+                EventStartTime = command.EventStartTime,
+                IsSeen = false,
+                IsSend = false,
+                NotificationType = command.NotificationType,
+                SendTime = command.SendTime,
+                UserNames = command.UserNames
+            });
             return CommandResult(result);
         }
         [HttpDelete("RemoveNotification/EventId={eventId}")]

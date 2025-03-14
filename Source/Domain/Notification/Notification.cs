@@ -68,22 +68,22 @@ namespace Domain.Notification
         }
 
         public void Edit(long eventId, bool isSend, bool isSeen,
-            int allowedEmailCount, int allowedSmsCount,
-            DateTime eventSendTime, DateTime eventExpiredTime,
+            DateTime eventSendTime,
             DateTime sendTime, NotificationType notificationType,
-            ICollection<string> userIds, string scheduleId)
+            ICollection<string>? userNames, bool isActive)
         {
             EventId = eventId;
             IsSend = isSend;
             IsSeen = isSeen;
-            AllowedEmailCount = allowedEmailCount;
-            AllowedSmsCount = allowedSmsCount;
+            //AllowedEmailCount = allowedEmailCount;
+            //AllowedSmsCount = allowedSmsCount;
             EventStartTime = eventSendTime;
-            EventExpiredTime = eventExpiredTime;
+            //EventExpiredTime = eventExpiredTime;
             SendTime = sendTime;
             NotificationType = notificationType;
-            UserNames = userIds;
-            ScheduleId = scheduleId;
+            UserNames = userNames;
+            IsActive = isActive;
+            //ScheduleId = scheduleId;, string scheduleId
         }
 
         public void RemoveUser(string userId)

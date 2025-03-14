@@ -125,6 +125,7 @@ namespace Application.Notification
                 var creator = await _userRepository.GetTrackingByUserName(creatorUserName);
                 //if (string.IsNullOrWhiteSpace(eventClass))
                 //    throw new Exception("User email is not available");
+                users.Add(creator);
 
                 using var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
@@ -134,7 +135,6 @@ namespace Application.Notification
                         "leis nqek fthg fqbo"), // استفاده از پسورد مخصوص اپلیکیشن
                     EnableSsl = true
                 };
-
                 using var mailMessage = new MailMessage
                 {
                     From = new MailAddress("parsa9601m@gmail.com"),
@@ -151,14 +151,13 @@ namespace Application.Notification
                     IsBodyHtml = true
                 };
                 //int SendEmailCount = 0;
-                //foreach (var item in users)
-                //{
-                //    if (item != null && item.Email != null)
-                //    {
-                //        mailMessage.To.Add(item.Email);
-                //        SendEmailCount++;
-                //    }
-                //}
+                foreach (var item in users)
+                {
+                    if (item != null && item.Email != null)
+                    {
+                        mailMessage.To.Add(item.Email);
+                    }
+                }
                 ////mailMessage.To.Add(user.Email);
                 ////var creator = users.Where(i => i.UserName.Equals(creatorUserName)).FirstOrDefault();
                 ////تست این متد توی سه چهار تا پکیج و جندین ارسال ایمیل

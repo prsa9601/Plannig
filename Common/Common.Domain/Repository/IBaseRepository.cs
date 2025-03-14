@@ -9,6 +9,7 @@ namespace Common.Domain.Repository
         Task<T?> GetAsync(long id);
         Task<List<T>?> GetListTrackingAsync();
         Task<List<T>?> GetListByFilterAsync(Expression<Func<T, bool>> expression);
+        Task<T?> GetByFilterAsync(Expression<Func<T, bool>> expression);
 
         Task<T?> GetTracking(long id);
         Task<T?> GetTrackingWithString(string id);

@@ -90,15 +90,15 @@ namespace Application.Notification.Add
                         //}
                     } 
                     await SetChange(SendEmailCount, creator!);
-                    BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
+                   var scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
                         , request.EventId
                     , notification.EventStartTime,
                     notification.SendTime,
-                    eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.EventStartTime);
+                    eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.SendTime);
 
-
+                    notification.ScheduleId = scheduleId;
                 }
-
+                await _repository.Save();
                 return OperationResult<long>.Success(notification.Id);
             }
             catch (InvalidOperationException e)
