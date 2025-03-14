@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Notification.Add;
+using Application.Notification.ChangeDate;
 using Application.Notification.Edit;
 using Application.Notification.EmailSender;
 using Application.Notification.Remove;
@@ -17,6 +18,7 @@ namespace Presentation.Facade.Notification
     {
         Task<OperationResult> SendEmail(SendNotificationByEmailCommand command);
         Task<OperationResult> SendSms(SendNotificationWithSms command);
+        Task<OperationResult> ChangeDate(ChangeDateNotificationCommand command);
         Task<OperationResult<long>> AddNotification(AddNotificationCommand command);
         Task<OperationResult> EditNotification(EditNotificationCommand command);
         Task<OperationResult> RemoveNotification(RemoveNotificationCommand command);
@@ -50,6 +52,11 @@ namespace Presentation.Facade.Notification
         }
 
         public async Task<OperationResult> SendSms(SendNotificationWithSms command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> ChangeDate(ChangeDateNotificationCommand command)
         {
             return await _mediator.Send(command);
         }

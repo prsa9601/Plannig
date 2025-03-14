@@ -55,7 +55,7 @@ namespace Application.Notification.EmailSender
                         Error("شما به این ایونت دسترسی برای ارسال ایمیل ندادید!");
 
                 BackgroundJob.Schedule(() => notification.SendEmail(request.userNames, request.EventId
-                , notification.EventStartTime, notification.EventExpiredTime,
+                , notification.EventStartTime, notification.EventEndTime,
                 notification.IsSend, notification.AllowedEmailCount, notification.IsActive,
                 _service), notification.EventStartTime);
 

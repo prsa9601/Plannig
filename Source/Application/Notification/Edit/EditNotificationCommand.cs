@@ -18,6 +18,7 @@ namespace Application.Notification.Edit
         //public int AllowedEmailCount { get; set; }
         //public int AllowedSmsCount { get; set; }
         public DateTime EventStartTime { get; set; }
+        public  DateTime EventEndTime { get; set; }
         //public DateTime EventExpiredTime { get; set; }
         public DateTime SendTime { get; set; }
         //public string creatorUserName { get; set; }
@@ -50,7 +51,8 @@ namespace Application.Notification.Edit
                     return OperationResult.NotFound();
                 notification.Edit(request.EventId,
                        request.IsSend, request.IsSeen, request.EventStartTime,
-                       request.SendTime, NotificationType.Email, request.UserNames, request.IsActive);
+                       request.SendTime, NotificationType.Email, request.UserNames, 
+                       request.IsActive, request.EventEndTime);
 
                 var eventClass = await _eventRepository.GetTracking(request.EventId);
                 if (eventClass == null)

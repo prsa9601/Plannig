@@ -41,7 +41,7 @@ namespace Domain.Notification
         public int AllowedEmailCount { get; private set; }
         public int AllowedSmsCount { get; private set; }
         public DateTime EventStartTime { get; private set; }
-        public DateTime EventExpiredTime { get; private set; }
+        public DateTime EventEndTime { get; private set; }
         public DateTime SendTime { get; private set; }
 
         public NotificationType NotificationType { get; private set; }
@@ -51,7 +51,7 @@ namespace Domain.Notification
 
         public void Add (long eventId, bool isSend, bool isSeen,
             int allowedEmailCount, int allowedSmsCount,
-            DateTime eventSendTime, DateTime eventExpiredTime,
+            DateTime eventSendTime, DateTime eventEndTime,
             DateTime sendTime, NotificationType notificationType,
             ICollection<string> userIds)
         {
@@ -61,7 +61,7 @@ namespace Domain.Notification
             AllowedEmailCount = allowedEmailCount;
             AllowedSmsCount = allowedSmsCount;
             EventStartTime = eventSendTime;
-            EventExpiredTime = eventExpiredTime;
+            EventEndTime = eventEndTime;
             SendTime = sendTime;
             NotificationType = notificationType;
             UserNames = userIds;
@@ -70,7 +70,7 @@ namespace Domain.Notification
         public void Edit(long eventId, bool isSend, bool isSeen,
             DateTime eventSendTime,
             DateTime sendTime, NotificationType notificationType,
-            ICollection<string>? userNames, bool isActive)
+            ICollection<string>? userNames, bool isActive, DateTime endTime)
         {
             EventId = eventId;
             IsSend = isSend;
@@ -78,11 +78,24 @@ namespace Domain.Notification
             //AllowedEmailCount = allowedEmailCount;
             //AllowedSmsCount = allowedSmsCount;
             EventStartTime = eventSendTime;
+            EventEndTime = endTime;
             //EventExpiredTime = eventExpiredTime;
             SendTime = sendTime;
             NotificationType = notificationType;
             UserNames = userNames;
             IsActive = isActive;
+            //ScheduleId = scheduleId;, string scheduleId
+        }
+        public void ChangeDate(DateTime eventStartTime,
+            DateTime sendTime, DateTime endTime)
+        {
+            
+            //AllowedEmailCount = allowedEmailCount;
+            //AllowedSmsCount = allowedSmsCount;
+            EventStartTime = eventStartTime;
+            EventEndTime = endTime;
+            //EventExpiredTime = eventExpiredTime;
+            SendTime = sendTime; 
             //ScheduleId = scheduleId;, string scheduleId
         }
 

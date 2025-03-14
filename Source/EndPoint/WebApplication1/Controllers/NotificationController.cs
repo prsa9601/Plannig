@@ -1,4 +1,5 @@
 ﻿using Application.Notification.Add;
+using Application.Notification.ChangeDate;
 using Application.Notification.Edit;
 using Application.Notification.EmailSender;
 using Application.Notification.Remove;
@@ -85,6 +86,7 @@ namespace Planning.Api.Controllers
             {
                 // = ,
                 IsActive = true,
+                EventEndTime = command.EventEndTime,
                 //AllowedEmailCount = activePackage.AllowedEmailCount,
                 //AllowedSmsCount = activePackage.AllowedSmsCount,
                 //creatorUserName = user.UserName,
@@ -96,6 +98,18 @@ namespace Planning.Api.Controllers
                 NotificationType = command.NotificationType,
                 SendTime = command.SendTime,
                 UserNames = command.UserNames
+            });
+            return CommandResult(result);
+        }
+        [HttpPatch("ChangeDateNotification")]
+        public async Task<ApiResult> ChangeDateNotification([FromBody] ChangeDateNotificationCommand command)
+        {
+            var result = await _facade.ChangeDate(new ChangeDateNotificationCommand
+            {
+                EventId = command.EventId,
+                SendTime = command.SendTime,
+                StartTime = command.StartTime,
+                EndTime = command.EndTime,
             });
             return CommandResult(result);
         }
