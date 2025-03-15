@@ -31,15 +31,21 @@ namespace Planning.Api.Controllers
         [HttpPost]
         public async Task<ApiResult> Add([FromForm] CreatePackageViewModel command)
         {
+            //if (TimeSpan.TryParse(command.ExpiryTime, out TimeSpan expiryTime))
+
             var result = await _facade.Add(new AddPackageCommand()
             {
                 Title = command.Title,
                 Link = command.Link,
+                AllowedSmsCount = command.AllowedSmsCount,
+                AllowedEmailCount = command.AllowedEmailCount,
+                ExpiryTime = command.ExpiryTime,
                 Picture = command.Picture,
                 Price = command.Price,
                 Specifications = command.GetSpecification(),
             });
             return CommandResult(result);
+
         }
         [Authorize]
         [HttpPost("SetActivePackage")]
@@ -47,7 +53,7 @@ namespace Planning.Api.Controllers
         {
             var result = await _facade.SetActivePackage(new SetActivePackageCommand()
             {
-               Id = command.Id
+                Id = command.Id
             });
             return CommandResult(result);
         }
@@ -57,25 +63,28 @@ namespace Planning.Api.Controllers
         {
             var result = await _facade.RemoveActivePackage(new RemoveActivePackageCommand()
             {
-               Id = command.Id
+                Id = command.Id
             });
             return CommandResult(result);
         }
         [Authorize]
         [HttpPatch]
-        public async Task<ApiResult> Edit([FromForm] EditPackageCommand command)
+        public async Task<ApiResult> Edit([FromForm] EditPackageViewModel command)
         {
             var result = await _facade.Edit(new EditPackageCommand()
             {
-                Id = command.Id,
+                Id = command.packageId,
+                AllowedEmailCount = command.AllowedEmailCount,
+                AllowedSmsCount = command.AllowedSmsCount,
+                ExpiryTime = command.ExpiryTime,
                 Title = command.Title,
                 Link = command.Link,
                 Picture = command.Picture,
                 Price = command.Price,
-                Specifications = command.Specifications,
+                Specifications = command.GetSpecification(),
             });
             return CommandResult(result);
-        } 
+        }
         [Authorize]
         [HttpDelete("{Id}")]
         public async Task<ApiResult> Remove(long Id)
@@ -85,7 +94,7 @@ namespace Planning.Api.Controllers
         }
         [HttpGet("GetById")]
         [Authorize]
-        public async Task<ApiResult<PackageDto?>> GetPackage([FromQuery]long id)
+        public async Task<ApiResult<PackageDto?>> GetPackage([FromQuery] long id)
         {
             var result = await _facade.GetPackage(id);
             return QueryResult(result);
@@ -97,6 +106,6 @@ namespace Planning.Api.Controllers
             var result = await _facade.GetListPackages();
             return QueryResult(result);
         }
-       
+
     }
 }

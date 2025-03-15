@@ -40,7 +40,7 @@ namespace Application.User._UserPackage.DeActivePackage
                 if (packageUser == null)
                     return OperationResult.NotFound();
 
-                DateTime expireDate = packageUser.CreationDate + packageUser.ExpiryDate;
+                DateTime expireDate = packageUser.ExpiryDate;
                 BackgroundJob.Schedule<IUserService>(service =>
                 service.DeActiveUserPackage(request.userId),
                    expireDate );

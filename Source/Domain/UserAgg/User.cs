@@ -295,7 +295,7 @@ namespace Domain.UserAgg
                     throw new Exception("شما با این نام کاربری ثبت نام کرده اید!");
 
         }
-        public void SetUserPackage(TimeSpan time, long packageId, int AllowedSmsCount,
+        public void SetUserPackage(DateTime time, long packageId, int AllowedSmsCount,
             int AllowedEmailCount, string packageTitle)
         {
             var package = new UserPackage(packageId, AllowedSmsCount, AllowedEmailCount, time, packageTitle);
@@ -303,7 +303,7 @@ namespace Domain.UserAgg
             package.IsActive = true;
             UserPackages.Add(package);
         }
-        public void EditUserPackage(long packageId, TimeSpan time, int AllowedSmsCount,
+        public void EditUserPackage(long packageId, DateTime time, int AllowedSmsCount,
             int AllowedEmailCount)
         {
             var package = UserPackages.Where(i =>

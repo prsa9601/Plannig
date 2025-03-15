@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PlanningContext))]
-    [Migration("20250312204102_Start")]
+    [Migration("20250315214057_Start")]
     partial class Start
     {
         /// <inheritdoc />
@@ -90,7 +90,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EventExpiredTime")
+                    b.Property<DateTime>("EventEndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("EventId")
@@ -146,8 +146,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("ExpiryDate")
-                        .HasColumnType("time");
+                    b.Property<int>("ExpiryDate")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
@@ -1227,8 +1227,8 @@ namespace Infrastructure.Migrations
                             b1.Property<DateTime>("CreationDate")
                                 .HasColumnType("datetime2");
 
-                            b1.Property<TimeSpan>("ExpiryDate")
-                                .HasColumnType("time");
+                            b1.Property<DateTime>("ExpiryDate")
+                                .HasColumnType("datetime2");
 
                             b1.Property<bool>("IsActive")
                                 .HasColumnType("bit");

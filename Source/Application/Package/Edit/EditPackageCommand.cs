@@ -5,6 +5,7 @@ using Domain.PackageAgg;
 using Domain.PackageAgg.Repository;
 using Domain.PackageAgg.Service;
 using Microsoft.AspNetCore.Http;
+using static Domain.PackageAgg.Package;
 
 namespace Application.Package.Edit
 {
@@ -14,6 +15,9 @@ namespace Application.Package.Edit
         public string Title { get; set; }
         public int Price { get; set; }
         public long Id { get; set; }
+        public ExpiryTime ExpiryTime { get; set; }
+        public int AllowedEmailCount { get; set; }
+        public int AllowedSmsCount { get; set; }
         public IFormFile? Picture { get; set; }
         public Dictionary<string, string> Specifications { get; set; }
 
@@ -39,10 +43,9 @@ namespace Application.Package.Edit
 
 
 
-
-
-
             var package = await _repository.GetTracking(request.Id);
+            if (package == null)
+                return OperationResult.NotFound();
             var oldAvatar = package.ImageName;
             if (request.Picture != null)
             {
@@ -54,7 +57,7 @@ namespace Application.Package.Edit
 
             }
 
-            package.Edit(request.Price, request.Title, request.Link, _service);
+            package.Edit(request.ExpiryTime, request.AllowedSmsCount, request.AllowedEmailCount, request.Price, request.Title, request.Link, _service);
 
             var specifications = new List<PackageSpecification>();
             request.Specifications.ToList().ForEach(specification =>

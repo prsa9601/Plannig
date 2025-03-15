@@ -7,7 +7,7 @@ using Domain.UserAgg;
 
 namespace Domain.PackageAgg
 {
-    public class Package : BaseEntity
+    public partial class Package : BaseEntity
     {
         public string Title { get; private set; }
         public string ImageName { get; private set; }
@@ -16,7 +16,7 @@ namespace Domain.PackageAgg
         public int Price { get; private set; }
         public int AllowedEmailCount { get; private set; }
         public int AllowedSmsCount { get; private set; }
-        public TimeSpan ExpiryDate { get; set; }
+        public ExpiryTime ExpiryDate { get; set; }
 
         public List<PackageSpecification> Specification { get; set; }
 
@@ -24,20 +24,26 @@ namespace Domain.PackageAgg
         {
 
         }
-        public Package(int price, string title, string imageName, string link, IPackageService _service)
+        public Package(ExpiryTime expiryTime, int allowedSmsCount, int allowedEmailCount, int price, string title, string imageName, string link, IPackageService _service)
         {
             Guard(title, _service);
             Title = title;
             ImageName = imageName;
             Link = link;
             Price = price;
+            AllowedEmailCount = allowedSmsCount;
+            AllowedSmsCount = allowedEmailCount;
+            ExpiryDate = expiryTime;
         }
 
-        public void Edit(int price, string title, string link, IPackageService _service)
+        public void Edit(ExpiryTime expiryTime, int allowedSmsCount, int allowedEmailCount, int price, string title, string link, IPackageService _service)
         {
             Title = title;
             Link = link;
             Price = price;
+            AllowedEmailCount = allowedSmsCount;
+            AllowedSmsCount = allowedEmailCount;
+            ExpiryDate = expiryTime;
         }
 
         public void SetImage(string imageName)

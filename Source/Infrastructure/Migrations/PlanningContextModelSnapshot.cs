@@ -143,8 +143,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("ExpiryDate")
-                        .HasColumnType("time");
+                    b.Property<int>("ExpiryDate")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
@@ -1224,8 +1224,8 @@ namespace Infrastructure.Migrations
                             b1.Property<DateTime>("CreationDate")
                                 .HasColumnType("datetime2");
 
-                            b1.Property<TimeSpan>("ExpiryDate")
-                                .HasColumnType("time");
+                            b1.Property<DateTime>("ExpiryDate")
+                                .HasColumnType("datetime2");
 
                             b1.Property<bool>("IsActive")
                                 .HasColumnType("bit");

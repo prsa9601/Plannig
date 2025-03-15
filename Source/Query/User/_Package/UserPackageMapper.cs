@@ -38,7 +38,7 @@ namespace Query.User._Package
                     Id = item.Id,
                     PackageId = item.PackageId,
                     UserId = item.UserId,
-                    ExpireDate = item.ExpiryDate
+                    //ExpireDate = item.ExpiryDate
                 };
                 userPackages.Add(model);
             }

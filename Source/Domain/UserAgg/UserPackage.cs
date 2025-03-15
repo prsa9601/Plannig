@@ -4,7 +4,7 @@ namespace Domain.UserAgg
 {
     public class UserPackage : BaseEntity
     {
-        public UserPackage(long packageId, int allowedSmsCount, int allowedEmailCount, TimeSpan expiryDate, string packageTitle)
+        public UserPackage(long packageId, int allowedSmsCount, int allowedEmailCount, DateTime expiryDate, string packageTitle)
         {
             PackageId = packageId;
             AllowedSmsCount = allowedSmsCount;
@@ -18,10 +18,10 @@ namespace Domain.UserAgg
         public string UserId { get; set; }
         public int AllowedEmailCount { get; set; } = 10;
         public int AllowedSmsCount { get; set; } = 0;
-        public TimeSpan ExpiryDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
         public bool IsActive { get; set; }
 
-        public void Edit(TimeSpan expireDate, int allowedSmsCount, int allowedEmailCount)
+        public void Edit(DateTime expireDate, int allowedSmsCount, int allowedEmailCount)
         {
             ExpiryDate = expireDate;
             AllowedSmsCount = allowedSmsCount;

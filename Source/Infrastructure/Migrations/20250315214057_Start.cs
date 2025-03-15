@@ -132,7 +132,7 @@ namespace Infrastructure.Migrations
                     AllowedEmailCount = table.Column<int>(type: "int", nullable: false),
                     AllowedSmsCount = table.Column<int>(type: "int", nullable: false),
                     EventStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EventExpiredTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EventEndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SendTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NotificationType = table.Column<int>(type: "int", nullable: false),
                     UserNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -157,7 +157,7 @@ namespace Infrastructure.Migrations
                     Price = table.Column<int>(type: "int", nullable: false),
                     AllowedEmailCount = table.Column<int>(type: "int", nullable: false),
                     AllowedSmsCount = table.Column<int>(type: "int", nullable: false),
-                    ExpiryDate = table.Column<TimeSpan>(type: "time", nullable: false),
+                    ExpiryDate = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -493,7 +493,7 @@ namespace Infrastructure.Migrations
                     PackageTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AllowedEmailCount = table.Column<int>(type: "int", nullable: false),
                     AllowedSmsCount = table.Column<int>(type: "int", nullable: false),
-                    ExpiryDate = table.Column<TimeSpan>(type: "time", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

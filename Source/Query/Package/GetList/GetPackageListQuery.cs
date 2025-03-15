@@ -19,9 +19,9 @@ namespace Query.Package.GetList
 
         public async Task<List<PackageDto?>> Handle(GetPackageListQuery request, CancellationToken cancellationToken)
         {
-            var result = await _context.Packages.
+            return await _context.Packages.
                 Select(i=>i.Map()).ToListAsync();
-            return result;
+            //return result;
         }
     }
 }

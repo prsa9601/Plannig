@@ -116,7 +116,7 @@ namespace Application.Notification.Add
         {
 
             var creatorPackages = creator.UserPackages.Where(i =>
-            i.CreationDate + i.ExpiryDate > DateTime.Now).OrderBy(i => i.CreationDate)
+              i.ExpiryDate > DateTime.Now).OrderBy(i => i.CreationDate)
                 .FirstOrDefault();
 
             if (creatorPackages == null)
@@ -126,7 +126,7 @@ namespace Application.Notification.Add
                 SendEmailCount -= creatorPackages.AllowedEmailCount;
                 creatorPackages.AllowedEmailCount = 0;
                 creatorPackages = creator.UserPackages.Where(i =>
-                        i.CreationDate + i.ExpiryDate > DateTime.Now).OrderBy(i => i.CreationDate)
+                        i.ExpiryDate > DateTime.Now).OrderBy(i => i.CreationDate)
                     .Skip(i).Take(1)
                     .FirstOrDefault();
                 if (creatorPackages == null && SendEmailCount >= 10)

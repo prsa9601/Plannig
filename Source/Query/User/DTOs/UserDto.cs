@@ -47,12 +47,12 @@ namespace Query.User.DTOs
     }
     public class UserPackageDto : BaseDto
     {
-        public TimeSpan ExpireDate { get; set; }
+        //public TimeSpan ExpireDate { get; set; }
         public long PackageId { get; set; }
         public string UserId { get; set; }
         public int AllowedEmailCount { get; set; } = 10;
         public int AllowedSmsCount { get; set; } = 0;
-        public TimeSpan ExpiryDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
         public bool IsActive { get; set; }
     }
     public class UserSinglePackageDto : BaseDto
@@ -64,7 +64,7 @@ namespace Query.User.DTOs
         public string UserId { get; set; }
         public int AllowedEmailCount { get; set; } = 10;
         public int AllowedSmsCount { get; set; } = 0;
-        public TimeSpan ExpiryDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
         public bool IsActive { get; set; }
     }
 }

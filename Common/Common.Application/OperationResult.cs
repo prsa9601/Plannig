@@ -127,6 +127,7 @@
 
     public enum OperationResultStatus
     {
+        BadRequest = 400,
         Error = 10,
         Success = 200,
         NotFound = 404

@@ -1,4 +1,5 @@
 ﻿using Common.Query;
+using static Domain.PackageAgg.Package;
 
 namespace Query.Package.DTOs
 {
@@ -8,6 +9,9 @@ namespace Query.Package.DTOs
         public string ImageName { get; set; }
         public string Link { get; set; }
         public int Price { get; set; }
+        public ExpiryTime ExpiryTime { get; set; }
+        public int AllowedEmailCount { get; set; }
+        public int AllowedSmsCount { get; set; }
         public List<PackageSpecificationDto> Specification { get; set; }
         public bool Active { get; set; } = false;
 

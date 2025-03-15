@@ -49,7 +49,7 @@ namespace Planning.Api.Controllers
             var user = await _userFacade.GetUserById(User.GetUserIdToString());
             var package = user.userPackageDto;
             var activePackage = package.Where(i => i.IsActive == true &&
-                (i.CreationDate.Add(i.ExpiryDate)) < DateTime.Now).FirstOrDefault();
+                (i.ExpiryDate) < DateTime.Now).FirstOrDefault();
             //var emailCount = 0;
             //var smsCount = 0;
             //foreach (var item in activePackage) 

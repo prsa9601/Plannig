@@ -7,6 +7,7 @@ using Domain.PackageAgg.Repository;
 using Domain.PackageAgg.Service;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using static Domain.PackageAgg.Package;
 
 namespace Application.Package.Add
 {
@@ -15,6 +16,9 @@ namespace Application.Package.Add
         public string Link { get; set; }
         public string Title { get; set; }
         public int Price { get; set; }
+        public ExpiryTime ExpiryTime { get; set; }
+        public int AllowedEmailCount { get; set; }
+        public int AllowedSmsCount { get; set; }
         public IFormFile Picture { get; set; }
         public Dictionary<string, string> Specifications { get; set; }
 
@@ -37,9 +41,10 @@ namespace Application.Package.Add
             var imageName = await _fileService
                 .SaveFileAndGenerateName(request.Picture, Directories.PackageImages);
 
-            var package = new Domain.PackageAgg.Package(request.Price, request.Title, imageName, request.Link, _service); 
+            var package = new Domain.PackageAgg.Package(request.ExpiryTime, request.AllowedSmsCount, 
+                request.AllowedEmailCount, request.Price, request.Title, imageName, request.Link, _service); 
             _repository.Add(package);
-
+            //_repository.SaveChange();
             var specifications = new List<PackageSpecification>();
             request.Specifications.ToList().ForEach(specification =>
             {

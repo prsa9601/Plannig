@@ -75,7 +75,7 @@ namespace Query.User
                     IsActive = item.IsActive,
                     PackageId = item.PackageId,
                     UserId = item.UserId,
-                    ExpireDate = item.ExpiryDate
+                    //ExpireDate = item.ExpiryDate
                 };
                 package.Add(model);
             }
