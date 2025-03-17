@@ -90,6 +90,30 @@ namespace Planning.Api.Controllers
                 throw new Exception(ex.Message);
             }
         }
+        [HttpGet("GetUsersForAdmin")]
+        [Authorize]
+        public async Task<ApiResult<UserFilterResultForAdmin>> GetUsersForAdmin([FromQuery] UserFilterParamForAdmin param)
+        {
+            try
+            {
+                var result = await _facade.GetUsersForAdmin(new UserFilterParamForAdmin()
+                {
+                    PageId = param.PageId,
+                    UserName = param.UserName,
+                    Take = param.Take,
+                    Email = param.Email,
+                    Family = param.Family,
+                    Name = param.Name,
+                    PhoneNumber = param.PhoneNumber,
+                    ActivePackage = param.ActivePackage,
+                });
+                return QueryResult(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         [HttpGet("GetUserByUserName/{userName}")]
         public async Task<ApiResult<UserDto?>> GetCurrentByUserName(string userName)
         {

@@ -19,6 +19,7 @@ using Query.User.GetByPhoneNumber;
 using Query.User.GetByUserName;
 using Query.User.GetCurrentUser;
 using Query.User.SearchUser;
+using Query.User.UserFilterForAdmin;
 using Query.User.UserTokens.GetByJwtToken;
 
 namespace Presentation.Facade.User
@@ -152,6 +153,11 @@ namespace Presentation.Facade.User
 
             //await _cache.RemoveAsync(CacheKeys.UserToken(result.Data));
             return OperationResult.Success();
+        }
+
+        public async Task<UserFilterResultForAdmin> GetUsersForAdmin(UserFilterParamForAdmin param)
+        {
+            return await _mediator.Send(new GetUserFilterForAdminQuery(param));
         }
 
         //public async Task<UserDto?> GetUserById(long Id)

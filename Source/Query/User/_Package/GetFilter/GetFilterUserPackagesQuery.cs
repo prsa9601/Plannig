@@ -42,6 +42,10 @@ namespace Query.User._Package.GetFilter
             {
                 result = result.Where(i => i.PhoneNumber == @param.phoneNumber);
             }
+            if (@param.ActivePackages)
+            {
+                result = result.Where(i => i.UserPackages.Any(x => x.ExpiryDate > DateTime.Now));
+            }
             if (@param.packageId > 0)
             {
                 result = result.Where(i => i.UserPackages.Any(
@@ -95,13 +99,13 @@ namespace Query.User._Package.GetFilter
                 //case SearchUserPackage.BestSeller:
                 //    break;
                 default:
-                        break;
+                    break;
             }
 
             var skip = (@param.PageId - 1) * @param.Take;
             var model = new UsersPackagesFilterResult()
             {
-                Data = await result.Skip(skip).Take(@param.Take).Select(s =>s.UsersPackagesMap()!)
+                Data = await result.Skip(skip).Take(@param.Take).Select(s => s.UsersPackagesMap()!)
                     .ToListAsync(cancellationToken),
                 FilterParams = @param
             };

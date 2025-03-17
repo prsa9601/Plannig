@@ -26,7 +26,7 @@ namespace Query.User
             return model;
         }
         public static UserFilterData? Map(this Domain.UserAgg.User?
-            user,string CurrentUserId, PlanningContext context)
+            user, string CurrentUserId, PlanningContext context)
         {
             var model = new UserFilterData()
             {
@@ -81,6 +81,71 @@ namespace Query.User
             }
             return package;
         }
+        public static List<UserPackageDto?> PackagesMap(this List<Domain.UserAgg.UserPackage>?
+            userPackage, bool ActivePackage)
+        {
+            var package = new List<UserPackageDto>();
+            if (ActivePackage)
+            {
+                userPackage = userPackage.Where(i => i.ExpiryDate > DateTime.Now).ToList();
+                foreach (var item in userPackage)
+                {
+                    var model = new UserPackageDto()
+                    {
+                        CreationDate = item.CreationDate,
+                        Id = item.Id,
+                        AllowedEmailCount = item.AllowedEmailCount,
+                        AllowedSmsCount = item.AllowedSmsCount,
+                        ExpiryDate = item.ExpiryDate,
+                        IsActive = item.IsActive,
+                        PackageId = item.PackageId,
+                        UserId = item.UserId,
+                        //ExpireDate = item.ExpiryDate
+                    };
+                    package.Add(model);
+                }
+                return package;
+            }
+            else
+            {
+                userPackage = userPackage.Where(i => i.ExpiryDate > DateTime.Now).ToList();
+                foreach (var item in userPackage)
+                {
+                    var model = new UserPackageDto()
+                    {
+                        CreationDate = item.CreationDate,
+                        Id = item.Id,
+                        AllowedEmailCount = item.AllowedEmailCount,
+                        AllowedSmsCount = item.AllowedSmsCount,
+                        ExpiryDate = item.ExpiryDate,
+                        IsActive = item.IsActive,
+                        PackageId = item.PackageId,
+                        UserId = item.UserId,
+                        //ExpireDate = item.ExpiryDate
+                    };
+                    package.Add(model);
+                }
+                return package;
+            }
+            userPackage = userPackage.Where(i => i.ExpiryDate > DateTime.Now).ToList();
+            foreach (var item in userPackage)
+            {
+                var model = new UserPackageDto()
+                {
+                    CreationDate = item.CreationDate,
+                    Id = item.Id,
+                    AllowedEmailCount = item.AllowedEmailCount,
+                    AllowedSmsCount = item.AllowedSmsCount,
+                    ExpiryDate = item.ExpiryDate,
+                    IsActive = item.IsActive,
+                    PackageId = item.PackageId,
+                    UserId = item.UserId,
+                    //ExpireDate = item.ExpiryDate
+                };
+                package.Add(model);
+            }
+            return package;
+        }
         public static UserAvatarDto? MapAvatar(this string id, PlanningContext context)
         {
             var avatar = context.Users.Where(i => i.Id == id).Select(i => i.Avatar).FirstOrDefault();
@@ -108,6 +173,22 @@ namespace Query.User
 
             userDto.Roles = roles;
             return userDto;
+        }
+        public static UserFilterDataForAdmin MapForAdmin(this Domain.UserAgg.User? user, PlanningContext context, bool ActivePackage)
+        {
+
+            return new UserFilterDataForAdmin()
+            {
+                Id = user.Id,
+                avatar = MapAvatar(user.Id, context)!,
+                CreationDate = user.CreationDate,
+                Email = user.Email,
+                UserName = user.UserName,
+                Family = user.Family,
+                Name = user.Name,
+                PhoneNumber = user.PhoneNumber,
+                userPackages = PackagesMap(user.UserPackages!, ActivePackage)!,
+            };
         }
     }
 }

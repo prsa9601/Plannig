@@ -12,6 +12,7 @@ namespace Query.User._Package.UsersPackagesDTOs
     {
         public long? packageId { get; set; }
         public string? packageTitle { get; set; }
+        public bool ActivePackages { get; set; }
         public string? phoneNumber { get; set; }
         public SearchUserPackage search { get; set; } = SearchUserPackage.None;
         public string? userName { get; set; }

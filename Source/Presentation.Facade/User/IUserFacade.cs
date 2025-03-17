@@ -28,6 +28,7 @@ namespace Presentation.Facade.User
 
         Task<UserFilterResult> SearchUser(UserFilterParam param);
         Task<UserDto?> GetUserById(string userId);
+        Task<UserFilterResultForAdmin> GetUsersForAdmin(UserFilterParamForAdmin param);
         Task<UserDto?> GetCurrentUser(string Id);
         Task<UserDto?> GetUserByPhoneNumber(string phoneNumber);
         Task<UserDto?> GetUserByUserName(string userName); 
