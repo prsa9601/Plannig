@@ -92,7 +92,9 @@ namespace Application.Notification.Add
                     var setChangeResult = await SetChange(SendEmailCount, creator!);
                     if (setChangeResult != OperationResult.Success())
                     {
+                        notification.DisabledActive();
                         eventClass.DisableAccessNotification();
+                        await _repository.Save();
                         return OperationResult<long>.Error(setChangeResult.Message);
                     }
                    var scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()

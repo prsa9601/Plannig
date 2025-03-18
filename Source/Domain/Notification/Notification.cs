@@ -103,7 +103,14 @@ namespace Domain.Notification
         {
             UserNames.Remove(userId);
         }
-
+        public void DisabledActive()
+        {
+            IsActive = false;
+        }
+        public void EnabledActive()
+        {
+            IsActive = true;
+        }
         public void AddUser(ICollection<string> userIds)
         {
             UserNames.Clear();

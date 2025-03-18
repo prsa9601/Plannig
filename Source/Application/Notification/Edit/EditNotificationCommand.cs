@@ -92,7 +92,9 @@ namespace Application.Notification.Edit
                     var setChangeResult = await SetChange(SendEmailCount, creator!);
                     if (setChangeResult != OperationResult.Success())
                     {
+                        notification.DisabledActive();
                         eventClass.DisableAccessNotification();
+                        await _repository.Save();
                         return OperationResult.Error(setChangeResult.Message);
                     }
 
