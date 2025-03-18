@@ -40,7 +40,7 @@ namespace Planning.Api.Controllers
                 EndTime = command.EndTime,
                 EventAddress = command.EventAddress,
                 Link = command.Link,
-                NotificationEnum = command.NotificationEnum,
+                NotificationEnum = command.notification,
                 //StartTime = DateTime.Now.AddSeconds(20),
                 tag = command.tag,
                 Title = command.Title,

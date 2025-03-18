@@ -26,7 +26,10 @@ namespace Infrastructure.Persistent.Ef.UserAgg
             return await Context.Set<TEntity>().AsTracking().FirstOrDefaultAsync(t => t.Id.Equals(id));
 
         }
-
+        public async Task<TEntity?> GetByFilterAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return await Context.Set<TEntity>().AsTracking().FirstOrDefaultAsync(expression);
+        }
         public async Task<TEntity?> GetTrackingByUserName(string UserName)
         {
             return await Context.Set<TEntity>().AsTracking().FirstOrDefaultAsync(t => t.UserName.Equals(UserName));

@@ -37,14 +37,14 @@ namespace Application.Notification.Remove
                   deleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
                 }
                 await _repository.Save();
-                if (result && deleteScheduleResult)
-                    return OperationResult.Success("نوتیفیکیشن با موفقیت حذف شد.");
-                else if (result && !deleteScheduleResult)
-                    _logger.LogError("نوتیفیکیشن از هنگفایر حذف نشد!");
-                else if (!result && deleteScheduleResult)
+                //if (result && deleteScheduleResult)
+                //    return OperationResult.Success("نوتیفیکیشن با موفقیت حذف شد.");
+                //else if (result && !deleteScheduleResult)
+                //    _logger.LogError("نوتیفیکیشن از هنگفایر حذف نشد!");
+                if (!result && deleteScheduleResult)
                     _logger.LogError("نوتیفیکیشن از دیتابیس حذف نشد!");
 
-                return OperationResult.Error();
+                return OperationResult.Success();
             }
             catch (Exception e)
             {

@@ -24,7 +24,7 @@ namespace Application.Notification.Edit
         //public string creatorUserName { get; set; }
         //public string ScheduleId { get; set; }
 
-        public NotificationType NotificationType { get; set; } = NotificationType.Email;
+        public NotificationType NotificationType { get; set; } 
         public ICollection<string> UserNames { get; set; }
     }
     internal class EditNotificationCommandHandler : IBaseCommandHandler<EditNotificationCommand>
@@ -59,18 +59,18 @@ namespace Application.Notification.Edit
                 {
                     return OperationResult.NotFound();
                 }
-                else if (!eventClass.AccessNotification)
-                {
-                    BackgroundJob.Delete(notification.ScheduleId);
-                    return OperationResult.
-                        Error("شما به این ایونت دسترسی برای ارسال نوتیفیکیشن ندادید!");
-                }
-                else if (notification.NotificationType != NotificationType.Email)
-                {
-                    BackgroundJob.Delete(notification.ScheduleId);
-                    return OperationResult.
-                        Error("شما به این ایونت دسترسی برای ارسال ایمیل ندادید!");
-                }
+                //else if (!eventClass.AccessNotification)
+                //{
+                //    BackgroundJob.Delete(notification.ScheduleId);
+                //    return OperationResult.
+                //        Error("شما به این ایونت دسترسی برای ارسال نوتیفیکیشن ندادید!");
+                //}
+                //else if (notification.NotificationType != NotificationType.Email)
+                //{
+                //    BackgroundJob.Delete(notification.ScheduleId);
+                //    return OperationResult.
+                //        Error("شما به این ایونت دسترسی برای ارسال ایمیل ندادید!");
+                //}
 
                 bool DeleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
                 await _repository.Save();
@@ -79,42 +79,22 @@ namespace Application.Notification.Edit
                                                  && notification.NotificationType == NotificationType.Email &&
                                                  notification.AllowedEmailCount >= 0)
                 {
-                    //notification.SendEmailForEvent(request.UserNames.ToList()
-                    //    , request.EventId
-                    //    , request.EventStartTime, request.EventExpiredTime,
-                    //    request.IsSend, request.AllowedEmailCount, request.IsActive
-                    //    , eventClass.eventUser.Select(i => i.CreatorUserName).FirstOrDefault());
-                    //if (DeleteScheduleResult)
-                    //{
-                    //    string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
-                    //        , request.EventId
-                    //        , request.EventStartTime,
-                    //        request.SendTime,
-                    //        eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), DateTime.Now.AddMinutes(1));
-
-                    //    notification.ScheduleId = scheduleId;
-                    //    await _repository.Save();
-                    //}
-                    //else
-                    //{
-                    //    for (int i = 0; i < 5; i++)
-                    //    {
-                    //        DeleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
-                    //        if (DeleteScheduleResult) 
-                    //        {
-                    //            string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
-                    //                 , request.EventId
-                    //                 , request.EventStartTime,
-                    //                 request.SendTime,
-                    //                 eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), DateTime.Now.AddMinutes(1));
-
-                    //            notification.ScheduleId = scheduleId;
-                    //            await _repository.Save();
-                    //            break;
-                    //        }
-                    //    }
-                    //    return OperationResult.NotFound("ScheduleId یافت نشد!");  
-                    //}
+                    var creator = await _userRepository.GetByFilterAsync(i=>i.UserName.Equals(eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()));
+                    int SendEmailCount = 0;
+                    foreach (var item in request.UserNames)
+                    {
+                        //if (item != null && item.Email != null)
+                        //{
+                        //    mailMessage.To.Add(item.Email);
+                        SendEmailCount++;
+                        //}
+                    }
+                    var setChangeResult = await SetChange(SendEmailCount, creator!);
+                    if (setChangeResult != OperationResult.Success())
+                    {
+                        eventClass.DisableAccessNotification();
+                        return OperationResult.Error(setChangeResult.Message);
+                    }
 
                     string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
                                       , request.EventId
@@ -147,7 +127,7 @@ namespace Application.Notification.Edit
         }
 
     
-       internal async Task SetChange(int SendEmailCount,
+       internal async Task<OperationResult> SetChange(int SendEmailCount,
       Domain.UserAgg.User creator)
         {
 
@@ -156,7 +136,7 @@ namespace Application.Notification.Edit
                 .FirstOrDefault();
 
             if (creatorPackages == null)
-                throw new Exception("کاربر عزیز شما پکیج فعالی ندارید!");
+                return OperationResult.Error("کاربر عزیز شما پکیج فعالی ندارید!");
             for (int i = 1; creatorPackages.AllowedEmailCount - SendEmailCount <= -10; i++)
             {
                 SendEmailCount -= creatorPackages.AllowedEmailCount;
@@ -170,13 +150,13 @@ namespace Application.Notification.Edit
                     int CountResult = await DeActiveLatestEventEmail(creator, SendEmailCount);
                     if (CountResult <= 0)
                     {
-                        throw new Exception(
+                        return OperationResult.Error(
                         "تعداد درخواست ها برای ارسال ایمیل بیش تر از حد مجاز مصرفی شما است " +
                         "، ما نوتیفیکیشن آخرین ایونت شما از نظر تایمی رو غیرفعال کردیم بعد" +
                         " از شارژ حساب خود می توانید به صورت دستی نوتیفیکیشن ایونت خود را فعال کنید !");
                     }
                     else
-                        throw new Exception(
+                        return OperationResult.Error(
                             "تعداد درخواست ها برای ارسال ایمیل بیش تر از حد مجاز مصرفی شما است");
 
                 }
@@ -190,6 +170,7 @@ namespace Application.Notification.Edit
 
             creatorPackages.AllowedEmailCount -= SendEmailCount;
             await _userRepository.Save();
+            return OperationResult.Success();
         }
 
         private async Task<int> DeActiveLatestEventEmail(Domain.UserAgg.User userCreator,
@@ -244,3 +225,39 @@ namespace Application.Notification.Edit
         }
     }
 }
+//notification.SendEmailForEvent(request.UserNames.ToList()
+                    //    , request.EventId
+                    //    , request.EventStartTime, request.EventExpiredTime,
+                    //    request.IsSend, request.AllowedEmailCount, request.IsActive
+                    //    , eventClass.eventUser.Select(i => i.CreatorUserName).FirstOrDefault());
+                    //if (DeleteScheduleResult)
+                    //{
+                    //    string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
+                    //        , request.EventId
+                    //        , request.EventStartTime,
+                    //        request.SendTime,
+                    //        eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), DateTime.Now.AddMinutes(1));
+
+                    //    notification.ScheduleId = scheduleId;
+                    //    await _repository.Save();
+                    //}
+                    //else
+                    //{
+                    //    for (int i = 0; i < 5; i++)
+                    //    {
+                    //        DeleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
+                    //        if (DeleteScheduleResult) 
+                    //        {
+                    //            string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
+                    //                 , request.EventId
+                    //                 , request.EventStartTime,
+                    //                 request.SendTime,
+                    //                 eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), DateTime.Now.AddMinutes(1));
+
+                    //            notification.ScheduleId = scheduleId;
+                    //            await _repository.Save();
+                    //            break;
+                    //        }
+                    //    }
+                    //    return OperationResult.NotFound("ScheduleId یافت نشد!");  
+                    //}

@@ -13,6 +13,7 @@ namespace Domain.UserAgg.Repository
         Task<T?> GetTrackingByPhoneNumber(string PhoneNumber);
         Task<T?> GetTrackingByUserName(string UserName);
         Task<T?> GetTrackingWithString(string id);
+        Task<T?> GetByFilterAsync(Expression<Func<T, bool>> expression);
 
         Task AddAsync(T entity);
         void Add(T entity);

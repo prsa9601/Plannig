@@ -26,7 +26,7 @@ namespace Application.Notification.Add
         public string creatorUserName { get; set; }
         //public string ScheduleId { get; set; }
 
-        public NotificationType NotificationType { get; set; } = NotificationType.Email;
+        public NotificationType NotificationType { get; set; }
         public ICollection<string> UserNames { get; set; }
     }
     internal class AddNotificationCommandHandler : IBaseCommandHandler<AddNotificationCommand, long>
@@ -91,7 +91,10 @@ namespace Application.Notification.Add
                     } 
                     var setChangeResult = await SetChange(SendEmailCount, creator!);
                     if (setChangeResult != OperationResult.Success())
+                    {
                         eventClass.DisableAccessNotification();
+                        return OperationResult<long>.Error(setChangeResult.Message);
+                    }
                    var scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
                         , request.EventId
                     , notification.EventStartTime,

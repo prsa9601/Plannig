@@ -182,7 +182,7 @@ namespace Domain.Notification
         }
 
     }
-
+    [Flags]
     public enum NotificationType
     {
         None,

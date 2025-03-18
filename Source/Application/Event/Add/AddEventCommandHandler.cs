@@ -26,7 +26,7 @@ namespace Application.Event.Add
         {
             var Event = new Domain.EventAgg.Event(request.creatorUserName, request.userNames,
                 request.Title, request.StartTime, request.EndTime, request.Description,
-                request.Link, request.EventAddress, request.tag, NotificationEnum.Email,
+                request.Link, request.EventAddress, request.tag, request.NotificationEnum,
                 request.accessNotification);
 
             await _repository.AddAsync(Event);
