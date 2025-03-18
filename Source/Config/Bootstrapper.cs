@@ -2,6 +2,7 @@
 using Application.Event;
 using Application.Event.Add;
 using Application.Notification;
+using Application.Notification.Remove;
 using Application.NotificationSchedule;
 using Application.Package._Service;
 using Application.Role.Create;
@@ -19,6 +20,7 @@ using Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Presentation.Facade;
 using Query.Event.GetById;
 
@@ -49,6 +51,11 @@ namespace Config
 
             services.AddMemoryCache();
 
+
+            services.AddLogging(); // اضافه کردن سرویس‌های لاگینگ
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<RemoveNotificationCommandHandler>>();
+            services.AddSingleton(typeof(ILogger), logger);
 
             services.AddValidatorsFromAssembly(typeof(AddEventCommandValidator).Assembly);
 

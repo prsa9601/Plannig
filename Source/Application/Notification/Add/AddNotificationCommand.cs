@@ -89,7 +89,9 @@ namespace Application.Notification.Add
                             SendEmailCount++;
                         //}
                     } 
-                    await SetChange(SendEmailCount, creator!);
+                    var setChangeResult = await SetChange(SendEmailCount, creator!);
+                    if (setChangeResult != OperationResult.Success())
+                        eventClass.DisableAccessNotification();
                    var scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(request.UserNames.ToList()
                         , request.EventId
                     , notification.EventStartTime,
@@ -111,7 +113,7 @@ namespace Application.Notification.Add
             }
         }
     
-      internal async Task SetChange(int SendEmailCount,
+      internal async Task<OperationResult> SetChange(int SendEmailCount,
       Domain.UserAgg.User creator)
         {
 
@@ -120,7 +122,7 @@ namespace Application.Notification.Add
                 .FirstOrDefault();
 
             if (creatorPackages == null)
-                throw new Exception("کاربر عزیز شما پکیج فعالی ندارید!");
+                return OperationResult.Error("کاربر عزیز شما پکیج فعالی ندارید!");
             for (int i = 1; creatorPackages.AllowedEmailCount - SendEmailCount <= -10; i++)
             {
                 SendEmailCount -= creatorPackages.AllowedEmailCount;
@@ -134,13 +136,13 @@ namespace Application.Notification.Add
                     int CountResult = await DeActiveLatestEventEmail(creator, SendEmailCount);
                     if (CountResult <= 0)
                     {
-                        throw new Exception(
+                        return OperationResult.Error(
                         "تعداد درخواست ها برای ارسال ایمیل بیش تر از حد مجاز مصرفی شما است " +
                         "، ما نوتیفیکیشن آخرین ایونت شما از نظر تایمی رو غیرفعال کردیم بعد" +
                         " از شارژ حساب خود می توانید به صورت دستی نوتیفیکیشن ایونت خود را فعال کنید !");
                     }
                     else
-                        throw new Exception(
+                        return OperationResult.Error(
                             "تعداد درخواست ها برای ارسال ایمیل بیش تر از حد مجاز مصرفی شما است");
 
                 }
@@ -154,6 +156,7 @@ namespace Application.Notification.Add
 
             creatorPackages.AllowedEmailCount -= SendEmailCount;
             await _userRepository.Save();
+            return OperationResult.Success();
         }
 
         private async Task<int> DeActiveLatestEventEmail(Domain.UserAgg.User userCreator,

@@ -1,5 +1,7 @@
 ﻿using Common.Application;
 using Domain.Notification.Repository;
+using Hangfire;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Notification.Remove
 {
@@ -8,25 +10,41 @@ namespace Application.Notification.Remove
         //public string ScheduleId { get; set; }
         public long  EventId { get; set; }
     }
-    internal class RemoveNotificationCommandHandler : IBaseCommandHandler<RemoveNotificationCommand>
+    public class RemoveNotificationCommandHandler : IBaseCommandHandler<RemoveNotificationCommand>
     {
         private readonly INotificationRepository _repository;
+        private readonly ILogger _logger;
 
-        public RemoveNotificationCommandHandler(INotificationRepository repository)
+        public RemoveNotificationCommandHandler(INotificationRepository repository, ILogger logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<OperationResult> Handle(RemoveNotificationCommand request, CancellationToken cancellationToken)
         {
             try
             {
+                var notification = await _repository.GetAsync(request.EventId);
                 var result = await _repository.Delete(i => i.EventId == request.EventId);
                 //return (result) ? OperationResult.Success() : OperationResult.NotFound();
                 if (!result)
                     return OperationResult.NotFound();
+                bool deleteScheduleResult = false;
+                if (result)
+                {
+
+                  deleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
+                }
                 await _repository.Save();
-                return OperationResult.Success("نوتیفیکیشن با موفقیت حذف شد.");
+                if (result && deleteScheduleResult)
+                    return OperationResult.Success("نوتیفیکیشن با موفقیت حذف شد.");
+                else if (result && !deleteScheduleResult)
+                    _logger.LogError("نوتیفیکیشن از هنگفایر حذف نشد!");
+                else if (!result && deleteScheduleResult)
+                    _logger.LogError("نوتیفیکیشن از دیتابیس حذف نشد!");
+
+                return OperationResult.Error();
             }
             catch (Exception e)
             {

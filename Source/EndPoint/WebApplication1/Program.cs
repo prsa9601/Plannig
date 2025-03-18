@@ -136,7 +136,6 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddHangfire(config =>
     config.UseSqlServerStorage(connectionString));
 // در Startup.cs
-// در Startup.cs
 
 builder.Services.AddHangfireServer(); // افزودن سرور پردازشگر Job
 

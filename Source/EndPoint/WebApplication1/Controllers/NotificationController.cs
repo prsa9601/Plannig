@@ -113,7 +113,7 @@ namespace Planning.Api.Controllers
             });
             return CommandResult(result);
         }
-        [HttpDelete("RemoveNotification/EventId={eventId}")]
+        [HttpDelete("RemoveNotification/{eventId}")]
         public async Task<ApiResult> RemoveNotification(long eventId)
         {
             var result = await _facade.RemoveNotification(new RemoveNotificationCommand()
