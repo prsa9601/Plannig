@@ -12,6 +12,7 @@ using Application.User.Logout;
 using Application.User.AddToken;
 using Application.User.RemoveToken;
 using Query.User._Friend.DTOs;
+using Application.User.SetRole;
 
 namespace Presentation.Facade.User
 {
@@ -24,6 +25,8 @@ namespace Presentation.Facade.User
         Task<OperationResult> LogoutUser(LogoutUserCommand command);
         Task<OperationResult> Delete(DeleteUserCommand command);
         Task<OperationResult> AddFriend(AddFriendsUserCommand command);
+        Task<OperationResult> SetRole(SetUserRoleCommand command);
+
         Task<OperationResult> RemoveFriend(RemoveFriendUserCommand command);
 
         Task<UserFilterResult> SearchUser(UserFilterParam param);

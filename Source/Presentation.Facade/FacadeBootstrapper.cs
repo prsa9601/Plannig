@@ -4,6 +4,7 @@ using Presentation.Facade.Event;
 using Presentation.Facade.Instagram;
 using Presentation.Facade.Notification;
 using Presentation.Facade.Package;
+using Presentation.Facade.Role;
 using Presentation.Facade.Telegram;
 using Presentation.Facade.User;
 using Presentation.Facade.User.Friend;
@@ -22,6 +23,7 @@ namespace Presentation.Facade
             services.AddScoped<IUserFacade, UserFacade>();
             services.AddScoped<ITelegramFacade, TelegramFacade>();
             services.AddScoped<IPackageFacade, PackageFacade>();
+            services.AddScoped<IRoleFacade, RoleFacade>();
             services.AddScoped<IInstagramFacade, InstagramFacade>();
             services.AddScoped<IRequestFacade, RequestFacade>();
             services.AddScoped<IFriendFacade, FriendFacade>();

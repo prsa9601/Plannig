@@ -12,6 +12,7 @@ using Presentation.Facade.User;
 using Query.User.DTOs;
 using System.Security.Claims;
 using Planning.Api.Model;
+using Application.User.SetRole;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -90,6 +91,12 @@ namespace Planning.Api.Controllers
                 throw new Exception(ex.Message);
             }
         }
+        [HttpPatch("setRole")]
+        public async Task<ApiResult> SetRole(SetUserRoleCommand command)
+        {
+            var result = await _facade.SetRole(command);
+            return CommandResult(result);
+        }
         [HttpGet("GetUsersForAdmin")]
         [Authorize]
         public async Task<ApiResult<UserFilterResultForAdmin>> GetUsersForAdmin([FromQuery] UserFilterParamForAdmin param)
@@ -133,7 +140,13 @@ namespace Planning.Api.Controllers
             }
         }
 
-
+        [HttpGet("GetById/{Id}")]
+        [Authorize]
+        public async Task<ApiResult<UserDto?>> GetUserById(string Id)
+        {
+            var result = await _facade.GetUserById(Id);
+            return QueryResult(result);
+        }
         //[HttpGet("{id}")]
         //public string Get(int id)
         //{

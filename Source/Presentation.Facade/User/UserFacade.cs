@@ -8,6 +8,7 @@ using Application.User.Logout;
 using Application.User.Register;
 using Application.User.RemoveToken;
 using Application.User.SetEvent;
+using Application.User.SetRole;
 using Common.Application;
 using Common.Application.SecurityUtil;
 using Common.Domain.ValueObjects;
@@ -62,7 +63,10 @@ namespace Presentation.Facade.User
         //}
 
 
-
+        public async Task<OperationResult> SetRole(SetUserRoleCommand command)
+        {
+            return await _mediator.Send(command);
+        }
 
 
         //public async Task<UserDto?> GetUserByPhoneNumber(string phoneNumber)

@@ -8,7 +8,7 @@ namespace Query.Role.DTOs
     {
         //public string? Id { get; set; }
         public DateTime CreationDate { get; set; }
-        public string? Title { get; set; }
+        //public string? Title { get; set; }
         public List<Permission> Permissions { get; set; } = new List<Permission>();
     }
 }

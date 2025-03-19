@@ -25,6 +25,7 @@ namespace Query.User.DTOs
         public List<UserRoleDto> Roles { get; set; } = new List<UserRoleDto>();
         public List<FriendsDto> friends { get; set; }
         public List<UserPackageDto> userPackageDto { get; set; }
+
     }
     public class FriendsDto :BaseDto
     {
