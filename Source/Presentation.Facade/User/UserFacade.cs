@@ -1,6 +1,9 @@
 ﻿using Application.User._Friend.Add;
 using Application.User._Friend.Remove;
 using Application.User.AddToken;
+using Application.User.ChangeActivityUserStatus;
+using Application.User.ChangeEmailConfirmedStatus;
+using Application.User.ChangePhoneNumberConfirmedStatus;
 using Application.User.Delete;
 using Application.User.Edit;
 using Application.User.Login;
@@ -162,6 +165,21 @@ namespace Presentation.Facade.User
         public async Task<UserFilterResultForAdmin> GetUsersForAdmin(UserFilterParamForAdmin param)
         {
             return await _mediator.Send(new GetUserFilterForAdminQuery(param));
+        }
+
+        public async Task<OperationResult> ChangeActivityStatusUser(ChangeActivityUserStatusCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> ChangeEmailConfirmedUserStatus(ChangeEmailConfirmedUserStatusCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> ChangePhoneNumberConfirmedStatus(ChangePhoneNumberConfirmedStatusCommand command)
+        {
+            return await _mediator.Send(command);
         }
 
         //public async Task<UserDto?> GetUserById(long Id)

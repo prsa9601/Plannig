@@ -22,6 +22,7 @@ namespace Domain.UserAgg
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
+        public bool IsActive { get; set; }
 
         public UserAvatar Avatar { get; set; }
 
@@ -72,6 +73,18 @@ namespace Domain.UserAgg
         //    CreationDate = DateTime.Now;
 
         //}
+        public void ChangeActivityStatus()
+        {
+            IsActive = true ? IsActive = false : IsActive = true;
+        }  
+        public void ChangeEmailConfirmedStatus()
+        {
+            IsActive = true ? IsActive = false : IsActive = true;
+        } 
+        public void ChangePhoneNumberConfirmedStatus()
+        {
+            IsActive = true ? IsActive = false : IsActive = true;
+        }
         public void SetRoles(List<UserRole> roles)
         {
             roles.ForEach(f => f.UserId = Id);

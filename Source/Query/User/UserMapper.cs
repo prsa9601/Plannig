@@ -186,6 +186,9 @@ namespace Query.User
                 UserName = user.UserName,
                 Family = user.Family,
                 Name = user.Name,
+                IsActive = user.IsActive,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                EmailConfirmed = user.EmailConfirmed,
                 PhoneNumber = user.PhoneNumber,
                 userPackages = PackagesMap(user.UserPackages!, ActivePackage)!,
             };

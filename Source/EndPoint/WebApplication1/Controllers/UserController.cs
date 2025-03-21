@@ -13,6 +13,9 @@ using Query.User.DTOs;
 using System.Security.Claims;
 using Planning.Api.Model;
 using Application.User.SetRole;
+using Application.User.ChangeActivityUserStatus;
+using Application.User.ChangeEmailConfirmedStatus;
+using Application.User.ChangePhoneNumberConfirmedStatus;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -158,6 +161,71 @@ namespace Planning.Api.Controllers
         public async Task<ApiResult> SetEvent([FromBody] List<long> EventId)
         {
             var result = await _facade.SetEvent(new SetUserEventCommand(EventId, User.GetUserIdToString()));
+            return CommandResult(result);
+        }
+
+        [Authorize]
+        [HttpPost("ChangeActivityStatusForAdmin")]
+        public async Task<ApiResult> ChangeActivityStatusForAdmin
+            (ChangeActivityUserStatusCommand command)
+        {
+            var result = await _facade.ChangeActivityStatusUser
+                (new ChangeActivityUserStatusCommand { UserId = command.UserId });
+            return CommandResult(result);
+        }
+        [Authorize]
+        [HttpPost("ChangeEmailConfirmedStatusForAdmin")]
+        public async Task<ApiResult> ChangeEmailConfirmedStatusForAdmin
+            (ChangeEmailConfirmedUserStatusCommand command)
+        {
+            var result = await _facade.ChangeEmailConfirmedUserStatus
+                (new ChangeEmailConfirmedUserStatusCommand { UserId = command.UserId });
+            return CommandResult(result);
+        }
+        
+        [Authorize]
+        [HttpPost("ChangePhoneNumberConfirmedStatusForAdmin")]
+        public async Task<ApiResult> ChangePhoneNumberConfirmedStatusForAdmin
+            (ChangePhoneNumberConfirmedStatusCommand command)
+        {
+            var result = await _facade.ChangePhoneNumberConfirmedStatus
+                (new ChangePhoneNumberConfirmedStatusCommand { UserId = command.UserId });
+            return CommandResult(result);
+        }
+
+        
+        [Authorize]
+        [HttpPost("ChangeActivityStatus")]
+        public async Task<ApiResult> ChangeActivityStatus()
+        {
+            var result = await _facade.ChangeActivityStatusUser
+                (new ChangeActivityUserStatusCommand 
+                {
+                    UserId = User.GetUserIdToString()
+                });
+            return CommandResult(result);
+        }
+        [Authorize]
+        [HttpPost("ChangeEmailConfirmedStatus")]
+        public async Task<ApiResult> ChangeEmailConfirmedStatus()
+        {
+            var result = await _facade.ChangeEmailConfirmedUserStatus
+                (new ChangeEmailConfirmedUserStatusCommand 
+                {
+                    UserId = User.GetUserIdToString() 
+                });
+            return CommandResult(result);
+        }
+        
+        [Authorize]
+        [HttpPost("ChangePhoneNumberConfirmedStatus")]
+        public async Task<ApiResult> ChangePhoneNumberConfirmedStatus()
+        {
+            var result = await _facade.ChangePhoneNumberConfirmedStatus
+                (new ChangePhoneNumberConfirmedStatusCommand 
+                {
+                    UserId = User.GetUserIdToString() 
+                });
             return CommandResult(result);
         }
 

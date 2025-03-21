@@ -13,6 +13,9 @@ using Application.User.AddToken;
 using Application.User.RemoveToken;
 using Query.User._Friend.DTOs;
 using Application.User.SetRole;
+using Application.User.ChangeActivityUserStatus;
+using Application.User.ChangeEmailConfirmedStatus;
+using Application.User.ChangePhoneNumberConfirmedStatus;
 
 namespace Presentation.Facade.User
 {
@@ -26,6 +29,9 @@ namespace Presentation.Facade.User
         Task<OperationResult> Delete(DeleteUserCommand command);
         Task<OperationResult> AddFriend(AddFriendsUserCommand command);
         Task<OperationResult> SetRole(SetUserRoleCommand command);
+        Task<OperationResult> ChangeActivityStatusUser(ChangeActivityUserStatusCommand command);
+        Task<OperationResult> ChangeEmailConfirmedUserStatus(ChangeEmailConfirmedUserStatusCommand command);
+        Task<OperationResult> ChangePhoneNumberConfirmedStatus(ChangePhoneNumberConfirmedStatusCommand command);
 
         Task<OperationResult> RemoveFriend(RemoveFriendUserCommand command);
 
