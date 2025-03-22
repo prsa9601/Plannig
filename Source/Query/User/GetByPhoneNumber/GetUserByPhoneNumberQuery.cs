@@ -20,7 +20,7 @@ namespace Query.User.GetByPhoneNumber
         public async Task<UserDto?> Handle(GetUserByPhoneNumberQuery request, CancellationToken cancellationToken)
         {
             var model = await _context.Users.FirstOrDefaultAsync(i => i.PhoneNumber == request.phoneNumber);
-            return model.Map(_context);
+            return await model.Map(_context)!.SetUserRoleTitles(_context);
         }
     }
 }

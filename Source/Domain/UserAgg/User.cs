@@ -75,15 +75,24 @@ namespace Domain.UserAgg
         //}
         public void ChangeActivityStatus()
         {
-            IsActive = true ? IsActive = false : IsActive = true;
+            if(IsActive)
+                IsActive = false;
+            else
+                IsActive = true;
         }  
         public void ChangeEmailConfirmedStatus()
         {
-            IsActive = true ? IsActive = false : IsActive = true;
+            if (EmailConfirmed)
+                EmailConfirmed = false;
+            else
+                EmailConfirmed = true;
         } 
         public void ChangePhoneNumberConfirmedStatus()
         {
-            IsActive = true ? IsActive = false : IsActive = true;
+            if (PhoneNumberConfirmed)
+                PhoneNumberConfirmed = false;
+            else
+                PhoneNumberConfirmed = true;
         }
         public void SetRoles(List<UserRole> roles)
         {

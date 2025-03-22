@@ -18,6 +18,11 @@ namespace Query.User
                 Family = user.Family,
                 friends = user.friends.FriendsMap(context)!,
                 Id = user.Id,
+                Roles=user.Roles.Select(i=>new UserRoleDto
+                {
+                    RoleId = i.RoleId,
+                    RoleName = "",
+                }).ToList(),
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
                 avatar = user.Id.MapAvatar(context)!,

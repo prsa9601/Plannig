@@ -4,12 +4,12 @@ namespace Domain.UserAgg;
 
 public class UserRole : BaseEntity
 {
-    public UserRole(string roleName)
+    public UserRole(string roleId)
     {
-        RoleName = roleName;
+        RoleId = roleId;
     }
     public string UserId { get; set; }
     //public string RoleId { get; set; }
-    public string RoleName { get; set; }
+    public string RoleId { get; set; }
 
 }

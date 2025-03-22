@@ -20,7 +20,7 @@ namespace Query.User.GetByUserName
         public async Task<UserDto?> Handle(GetUserByUserNameQuery request, CancellationToken cancellationToken)
         {
             var model = await _context.Users.FirstOrDefaultAsync(i => i.UserName == request.userName);
-            return model.Map(_context);
+            return await model.Map(_context)!.SetUserRoleTitles(_context);
         }
     }
 }

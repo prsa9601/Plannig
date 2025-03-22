@@ -7,10 +7,10 @@ using System.Security.Claims;
 
 namespace Query.User.GetCurrentUser
 {
-    public record class GetCurrentUserQuery(string Id) : IQuery<UserDto>;
+    public record class GetCurrentUserQuery(string Id) : IQuery<UserDto?>;
     
     
-    public class GetUserCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, UserDto>
+    public class GetUserCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, UserDto?>
     {
         private readonly PlanningContext _context;
         private readonly UserManager<Domain.UserAgg.User> _userManager;
@@ -21,12 +21,12 @@ namespace Query.User.GetCurrentUser
             _userManager = userManager;
         }
 
-        public async Task<UserDto> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
+        public async Task<UserDto?> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
         {
             //var model = await _context.Users.FirstOrDefaultAsync(i => i..Id.ToString() == request.Id);
             var model = await _userManager.Users.FirstOrDefaultAsync(i => i.Id == request.Id);
 
-            return model.Map(_context);
+            return await model.Map(_context)!.SetUserRoleTitles(_context)!;
         }
     }
 }
