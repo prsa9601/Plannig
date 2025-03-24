@@ -8,6 +8,7 @@ namespace Application.User.ChangeActivityUserStatus
     public class ChangeActivityUserStatusCommand : IBaseCommand
     {
         public required string UserId { get; set; }
+        public bool IsActive { get; set; }
     }
     internal class ChangeActivityUserStatusCommandHandler : IBaseCommandHandler<ChangeActivityUserStatusCommand>
     {
@@ -24,7 +25,7 @@ namespace Application.User.ChangeActivityUserStatus
             if (user == null)
                 return OperationResult.NotFound();
 
-            user.ChangeActivityStatus();
+            user.ChangeActivityStatus(request.IsActive);
             await _repository.Save();
             return OperationResult.Success();
         }

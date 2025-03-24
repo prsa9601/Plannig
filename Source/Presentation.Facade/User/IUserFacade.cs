@@ -16,6 +16,7 @@ using Application.User.SetRole;
 using Application.User.ChangeActivityUserStatus;
 using Application.User.ChangeEmailConfirmedStatus;
 using Application.User.ChangePhoneNumberConfirmedStatus;
+using Application.User.EditForAdmin;
 
 namespace Presentation.Facade.User
 {
@@ -23,6 +24,7 @@ namespace Presentation.Facade.User
     {
         Task<OperationResult> RegisterUser(RegisterUserCommand command);
         Task<OperationResult> EditUser(EditUserCommand command);
+        Task<OperationResult> EditUserForAdmin(EditUserForAdminCommand command);
         Task<OperationResult> SetEvent(SetUserEventCommand command);
         Task<OperationResult> LoginUser(UserLoginCommand command);
         Task<OperationResult> LogoutUser(LogoutUserCommand command);

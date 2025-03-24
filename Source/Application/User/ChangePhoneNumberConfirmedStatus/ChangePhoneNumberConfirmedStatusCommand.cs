@@ -11,6 +11,7 @@ namespace Application.User.ChangePhoneNumberConfirmedStatus
     public class ChangePhoneNumberConfirmedStatusCommand : IBaseCommand
     {
         public required string UserId { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
     }
     internal class ChangePhoneNumberConfirmedStatusCommandHandler : IBaseCommandHandler<ChangePhoneNumberConfirmedStatusCommand>
     {
@@ -27,7 +28,7 @@ namespace Application.User.ChangePhoneNumberConfirmedStatus
             if (user == null)
                 return OperationResult.NotFound();
 
-            user.ChangePhoneNumberConfirmedStatus();
+            user.ChangePhoneNumberConfirmedStatus(request.PhoneNumberConfirmed);
             await _repository.Save();
             return OperationResult.Success();
         }

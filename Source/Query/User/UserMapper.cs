@@ -16,6 +16,9 @@ namespace Query.User
                 Email = user.Email,
                 CreationDate = user.CreationDate,
                 Family = user.Family,
+                IsActive = user.IsActive,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                EmailConfirmed = user.EmailConfirmed,
                 friends = user.friends.FriendsMap(context)!,
                 Id = user.Id,
                 Roles=user.Roles.Select(i=>new UserRoleDto

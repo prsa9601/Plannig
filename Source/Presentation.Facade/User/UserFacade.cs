@@ -6,6 +6,7 @@ using Application.User.ChangeEmailConfirmedStatus;
 using Application.User.ChangePhoneNumberConfirmedStatus;
 using Application.User.Delete;
 using Application.User.Edit;
+using Application.User.EditForAdmin;
 using Application.User.Login;
 using Application.User.Logout;
 using Application.User.Register;
@@ -178,6 +179,11 @@ namespace Presentation.Facade.User
         }
 
         public async Task<OperationResult> ChangePhoneNumberConfirmedStatus(ChangePhoneNumberConfirmedStatusCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> EditUserForAdmin(EditUserForAdminCommand command)
         {
             return await _mediator.Send(command);
         }

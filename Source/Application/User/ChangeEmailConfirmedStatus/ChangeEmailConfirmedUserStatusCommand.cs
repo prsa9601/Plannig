@@ -12,6 +12,7 @@ namespace Application.User.ChangeEmailConfirmedStatus
     public class ChangeEmailConfirmedUserStatusCommand : IBaseCommand
     {
         public required String UserId { get; set; }
+        public bool EmailConfirmed { get; set; }
     }
     internal class ChangeEmailConfirmedUserStatusCommandHandler : IBaseCommandHandler<ChangeEmailConfirmedUserStatusCommand>
     {
@@ -28,7 +29,7 @@ namespace Application.User.ChangeEmailConfirmedStatus
             if (user == null)
                 return OperationResult.NotFound();
 
-            user.ChangeEmailConfirmedStatus();
+            user.ChangeEmailConfirmedStatus(request.EmailConfirmed);
             await _repository.Save();
             return OperationResult.Success();
         }

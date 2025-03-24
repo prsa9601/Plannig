@@ -16,6 +16,7 @@ using Application.User.SetRole;
 using Application.User.ChangeActivityUserStatus;
 using Application.User.ChangeEmailConfirmedStatus;
 using Application.User.ChangePhoneNumberConfirmedStatus;
+using Application.User.EditForAdmin;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -170,7 +171,11 @@ namespace Planning.Api.Controllers
             (ChangeActivityUserStatusCommand command)
         {
             var result = await _facade.ChangeActivityStatusUser
-                (new ChangeActivityUserStatusCommand { UserId = command.UserId });
+                (new ChangeActivityUserStatusCommand
+                {
+                    UserId = command.UserId,
+                    IsActive = command.IsActive
+                });
             return CommandResult(result);
         }
         [Authorize]
@@ -179,27 +184,35 @@ namespace Planning.Api.Controllers
             (ChangeEmailConfirmedUserStatusCommand command)
         {
             var result = await _facade.ChangeEmailConfirmedUserStatus
-                (new ChangeEmailConfirmedUserStatusCommand { UserId = command.UserId });
+                (new ChangeEmailConfirmedUserStatusCommand
+                {
+                    UserId = command.UserId,
+                    EmailConfirmed = command.EmailConfirmed
+                });
             return CommandResult(result);
         }
-        
+
         [Authorize]
         [HttpPost("ChangePhoneNumberConfirmedStatusForAdmin")]
         public async Task<ApiResult> ChangePhoneNumberConfirmedStatusForAdmin
             (ChangePhoneNumberConfirmedStatusCommand command)
         {
             var result = await _facade.ChangePhoneNumberConfirmedStatus
-                (new ChangePhoneNumberConfirmedStatusCommand { UserId = command.UserId });
+                (new ChangePhoneNumberConfirmedStatusCommand
+                {
+                    UserId = command.UserId,
+                    PhoneNumberConfirmed = command.PhoneNumberConfirmed
+                });
             return CommandResult(result);
         }
 
-        
+
         [Authorize]
         [HttpPost("ChangeActivityStatus")]
         public async Task<ApiResult> ChangeActivityStatus()
         {
             var result = await _facade.ChangeActivityStatusUser
-                (new ChangeActivityUserStatusCommand 
+                (new ChangeActivityUserStatusCommand
                 {
                     UserId = User.GetUserIdToString()
                 });
@@ -210,21 +223,21 @@ namespace Planning.Api.Controllers
         public async Task<ApiResult> ChangeEmailConfirmedStatus()
         {
             var result = await _facade.ChangeEmailConfirmedUserStatus
-                (new ChangeEmailConfirmedUserStatusCommand 
+                (new ChangeEmailConfirmedUserStatusCommand
                 {
-                    UserId = User.GetUserIdToString() 
+                    UserId = User.GetUserIdToString()
                 });
             return CommandResult(result);
         }
-        
+
         [Authorize]
         [HttpPost("ChangePhoneNumberConfirmedStatus")]
         public async Task<ApiResult> ChangePhoneNumberConfirmedStatus()
         {
             var result = await _facade.ChangePhoneNumberConfirmedStatus
-                (new ChangePhoneNumberConfirmedStatusCommand 
+                (new ChangePhoneNumberConfirmedStatusCommand
                 {
-                    UserId = User.GetUserIdToString() 
+                    UserId = User.GetUserIdToString()
                 });
             return CommandResult(result);
         }
@@ -262,6 +275,23 @@ namespace Planning.Api.Controllers
                 userName = command.userName,
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber
+            });
+            return CommandResult(result);
+        }
+        [Authorize]
+        [HttpPut("EditUserForAdmin")]
+        public async Task<ApiResult> EditForAdmin([FromBody] EditUserForAdminCommand command)
+        {
+            //var id = User.GetUserIdToString();
+            var result = await _facade.EditUserForAdmin(new EditUserForAdminCommand()
+            {
+                Id = command.Id,
+                Name = command.Name,
+                Family = command.Family,
+                userName = command.userName,
+                Email = command.Email,
+                PhoneNumber = command.PhoneNumber,
+                IsActive = command.IsActive
             });
             return CommandResult(result);
         }

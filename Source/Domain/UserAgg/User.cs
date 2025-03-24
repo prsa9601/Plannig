@@ -73,26 +73,17 @@ namespace Domain.UserAgg
         //    CreationDate = DateTime.Now;
 
         //}
-        public void ChangeActivityStatus()
+        public void ChangeActivityStatus(bool isActive)
         {
-            if(IsActive)
-                IsActive = false;
-            else
-                IsActive = true;
+           IsActive = isActive;
         }  
-        public void ChangeEmailConfirmedStatus()
+        public void ChangeEmailConfirmedStatus(bool emailConfirmed)
         {
-            if (EmailConfirmed)
-                EmailConfirmed = false;
-            else
-                EmailConfirmed = true;
+            EmailConfirmed = emailConfirmed;
         } 
-        public void ChangePhoneNumberConfirmedStatus()
+        public void ChangePhoneNumberConfirmedStatus(bool phoneNumberConfirmed)
         {
-            if (PhoneNumberConfirmed)
-                PhoneNumberConfirmed = false;
-            else
-                PhoneNumberConfirmed = true;
+            PhoneNumberConfirmed = phoneNumberConfirmed;
         }
         public void SetRoles(List<UserRole> roles)
         {
