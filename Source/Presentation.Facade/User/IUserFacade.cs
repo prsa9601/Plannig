@@ -17,6 +17,7 @@ using Application.User.ChangeActivityUserStatus;
 using Application.User.ChangeEmailConfirmedStatus;
 using Application.User.ChangePhoneNumberConfirmedStatus;
 using Application.User.EditForAdmin;
+using Application.User.SetAvatar;
 
 namespace Presentation.Facade.User
 {
@@ -29,6 +30,7 @@ namespace Presentation.Facade.User
         Task<OperationResult> LoginUser(UserLoginCommand command);
         Task<OperationResult> LogoutUser(LogoutUserCommand command);
         Task<OperationResult> Delete(DeleteUserCommand command);
+        Task<OperationResult> SetAvatar(SetAvatarCommand command);
         Task<OperationResult> AddFriend(AddFriendsUserCommand command);
         Task<OperationResult> SetRole(SetUserRoleCommand command);
         Task<OperationResult> ChangeActivityStatusUser(ChangeActivityUserStatusCommand command);

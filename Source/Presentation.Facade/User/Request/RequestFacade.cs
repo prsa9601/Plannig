@@ -1,5 +1,6 @@
 ﻿using Application.User._RequestBox.Add;
 using Application.User._RequestBox.Remove;
+using Application.User._RequestBox.RemoveRequestForSender;
 using Common.Application;
 using MediatR;
 using Query.User._RequestBox.DTOs;
@@ -39,6 +40,11 @@ namespace Presentation.Facade.User.Request
         }
 
         public async Task<OperationResult> RemoveRequest(RemoveRequestFriendCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> RemoveRequestForSender(RemoveRequestForSenderCommand command)
         {
             return await _mediator.Send(command);
         }

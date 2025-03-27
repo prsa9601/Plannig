@@ -1,5 +1,6 @@
 ﻿using Application.User._RequestBox.Add;
 using Application.User._RequestBox.Remove;
+using Application.User._RequestBox.RemoveRequestForSender;
 using Common.AspNetCore;
 using Dapper;
 using Microsoft.AspNet.Identity;
@@ -40,6 +41,17 @@ namespace Planning.Api.Controllers
         public async Task<ApiResult> Remove([FromQuery] string FriendUserName)
         {
             var result = await _facade.RemoveRequest(new RemoveRequestFriendCommand()
+            {
+                userName = User.Identity.Name,
+                userNameFriend = FriendUserName
+            });
+            return CommandResult(result);
+        }
+        [Authorize]
+        [HttpDelete("RemoveRequestForSender")]
+        public async Task<ApiResult> RemoveRequestForSender([FromQuery] string FriendUserName)
+        {
+            var result = await _facade.RemoveRequestForSender(new RemoveRequestForSenderCommand()
             {
                 userName = User.Identity.Name,
                 userNameFriend = FriendUserName

@@ -1,4 +1,7 @@
-﻿namespace Planning.Api.Model
+﻿using Common.Application;
+using Domain.UserAgg;
+
+namespace Planning.Api.Model
 {
     public class UserViewModel
     {
@@ -11,4 +14,5 @@
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
     }
+
 }

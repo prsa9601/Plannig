@@ -17,6 +17,7 @@ using Application.User.ChangeActivityUserStatus;
 using Application.User.ChangeEmailConfirmedStatus;
 using Application.User.ChangePhoneNumberConfirmedStatus;
 using Application.User.EditForAdmin;
+using Application.User.SetAvatar;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -300,6 +301,17 @@ namespace Planning.Api.Controllers
         public async Task<ApiResult> Delete(string id)
         {
             var result = await _facade.Delete(new Application.User.Delete.DeleteUserCommand() { Id = id });
+            return CommandResult(result);
+        }
+        [HttpPatch("SetAvatar")]
+        public async Task<ApiResult> SetAvatar(SetAvatarCommand command)
+        {
+           
+            var result = await _facade.SetAvatar(new Application.User.SetAvatar.SetAvatarCommand()
+            {
+                Avatar = command.Avatar,
+                UserName = command.UserName
+            });
             return CommandResult(result);
         }
 

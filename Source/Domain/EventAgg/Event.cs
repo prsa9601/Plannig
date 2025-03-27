@@ -107,7 +107,7 @@ namespace Domain.EventAgg
             {
                 users.Add(new EventUser(item));
             }
-            //users.Add(new EventUser(creatorUserName));
+            users.Add(new EventUser(creatorUserName));
             users.ForEach(f => f.EventId = Id);
             users.ForEach(f => f.CreatorUserName = creatorUserName);
             //eventUser.Clear();
@@ -152,6 +152,7 @@ namespace Domain.EventAgg
                 {
                     users.Add(new EventUser(item));
                 }
+                    users.Add(new EventUser(creatorUserName));
                 users.ForEach(f => f.EventId = Id);
                 users.ForEach(i => i.CreatorUserName = creatorUserName);
                 //eventUser.Clear();
