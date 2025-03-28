@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.PackageAgg;
 using Query.Package.DTOs;
+using Query.User.DTOs;
 
 namespace Query.Package
 {

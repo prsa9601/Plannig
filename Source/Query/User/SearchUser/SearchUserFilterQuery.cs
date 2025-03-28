@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common.Application;
-using Common.Query;
+﻿using Common.Query;
 using Infrastructure.Persistent.Ef;
 using Microsoft.EntityFrameworkCore;
 using Query.User.DTOs;

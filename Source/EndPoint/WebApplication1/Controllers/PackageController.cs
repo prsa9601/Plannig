@@ -106,6 +106,23 @@ namespace Planning.Api.Controllers
             var result = await _facade.GetListPackages();
             return QueryResult(result);
         }
+        [Authorize]
+        [HttpGet("GetListActiveByUserId")]
+        public async Task<ApiResult<List<PackageDto>?>> GetPackagesActiveByUserId()
+        {
+            var result = await _facade.
+                GetListPackagesActiveByUserId(User.GetUserIdToString());
+            return QueryResult(result);
+        }
+        
+        [Authorize]
+        [HttpGet("GetPackagesByUserId/{UserId}")]
+        public async Task<ApiResult<List<PackageDto>?>> GetPackagesByUserId(string UserId)
+        {
+            var result = await _facade.
+                GetPackagesByUserId(UserId);
+            return QueryResult(result);
+        }
 
     }
 }

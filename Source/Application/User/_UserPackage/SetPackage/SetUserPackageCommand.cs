@@ -1,4 +1,5 @@
 ﻿using Common.Application;
+using Domain.PackageAgg.Repository;
 using Domain.UserAgg;
 using Domain.UserAgg.Repository;
 using Hangfire;
@@ -9,24 +10,33 @@ namespace Application.User._UserPackage.SetPackage
     public class SetUserPackageCommand : IBaseCommand
     {
         public long packageId { get; set; }
-        public string packageTitle { get; set; }
-        public ExpiryTime expireTime { get; set; }
-        public int AllowedSmsCount { get; set; }
-        public int AllowedEmailCount { get; set; }
+        //public string packageTitle { get; set; }
+        //public ExpiryTime expireTime { get; set; }
+        //public int AllowedSmsCount { get; set; }
+        //public int AllowedEmailCount { get; set; }
         public string userId { get; set; }
     }
     internal class SetUserPackageCommandHandler : IBaseCommandHandler<SetUserPackageCommand>
     {
         private readonly IUserRepository<Domain.UserAgg.User> _repository;
+        private readonly IPackageRepository _packageRepository;
 
-        public SetUserPackageCommandHandler(IUserRepository<Domain.UserAgg.User> repository)
+        public SetUserPackageCommandHandler(IUserRepository<Domain.UserAgg.User> repository, IPackageRepository packageRepository)
         {
             _repository = repository;
+            _packageRepository = packageRepository;
         }
 
         public async Task<OperationResult> Handle(SetUserPackageCommand request, CancellationToken cancellationToken)
         {
-            DateTime expiryDate = request.expireTime switch
+            var user = await _repository.GetTrackingWithString(request.userId);
+            if (user == null)
+                return OperationResult.NotFound("کاربر یافت نشد.");
+            var package = await _packageRepository.GetTracking(request.packageId);
+            if (package == null)
+                return OperationResult.NotFound("پکیج یافت نشد.");
+
+            DateTime expiryDate = package.ExpiryDate switch
             {
                 ExpiryTime.روزانه => DateTime.Now.AddDays(1),
                 ExpiryTime.ماهانه => DateTime.Now.AddMonths(1),
@@ -35,12 +45,10 @@ namespace Application.User._UserPackage.SetPackage
                 ExpiryTime.یک_ساله => DateTime.Now.AddYears(1),
                 _ => throw new ArgumentException("Invalid expiry time")
             };
-            var user = await _repository.GetTrackingWithString(request.userId);
-            if (user == null)
-                return OperationResult.NotFound("کاربر یافت نشد.");
+        
             user.SetUserPackage
             (expiryDate, request.packageId
-                , request.AllowedSmsCount, request.AllowedEmailCount, request.packageTitle);
+                , package.AllowedSmsCount, package.AllowedEmailCount, package.Title);
             await _repository.Save();
             return OperationResult.Success();
         }

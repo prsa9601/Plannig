@@ -10,6 +10,8 @@ using MediatR;
 using Query.Package.DTOs;
 using Query.Package.GetById;
 using Query.Package.GetList;
+using Query.Package.GetListActivePackageByUserId;
+using Query.Package.GetPackagesByUserId;
 
 namespace Presentation.Facade.Package
 {
@@ -65,6 +67,14 @@ namespace Presentation.Facade.Package
         public async Task<OperationResult> SetActivePackage(SetActivePackageCommand command)
         {
             return await _mediator.Send(command);
+        }
+        public async Task<List<PackageDto>?> GetPackagesByUserId(string UserId)
+        {
+            return await _mediator.Send(new GetPackagesByUserIdQuery() { Id = UserId });
+        }
+        public async Task<List<PackageDto>?> GetListPackagesActiveByUserId(string id)
+        {
+            return await _mediator.Send(new GetListActivePackageUserIdQuery(){Id = id});
         }
     }
 }

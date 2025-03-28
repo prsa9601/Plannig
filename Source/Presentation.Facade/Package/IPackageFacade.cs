@@ -21,6 +21,8 @@ namespace Presentation.Facade.Package
         Task<OperationResult> RemoveActivePackage(RemoveActivePackageCommand command);
 
         Task<List<PackageDto?>> GetListPackages();
+        Task<List<PackageDto>?> GetListPackagesActiveByUserId(string Id);
+        Task<List<PackageDto>?> GetPackagesByUserId(string UserId);
         Task<PackageDto?> GetPackage(long id);
 
     }
