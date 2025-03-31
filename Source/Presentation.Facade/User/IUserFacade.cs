@@ -18,12 +18,16 @@ using Application.User.ChangeEmailConfirmedStatus;
 using Application.User.ChangePhoneNumberConfirmedStatus;
 using Application.User.EditForAdmin;
 using Application.User.SetAvatar;
+using Application.User.SendVerificationEmailToken;
+using Application.User.VerificationEmail;
 
 namespace Presentation.Facade.User
 {
     public interface IUserFacade
     {
         Task<OperationResult> RegisterUser(RegisterUserCommand command);
+        Task<OperationResult> SendVerificationEmailToken(SendVerificationEmailCodeCommand command);
+        Task<OperationResult> VerificationEmail(VerificationEmailCommand command);
         Task<OperationResult> EditUser(EditUserCommand command);
         Task<OperationResult> EditUserForAdmin(EditUserForAdminCommand command);
         Task<OperationResult> SetEvent(SetUserEventCommand command);

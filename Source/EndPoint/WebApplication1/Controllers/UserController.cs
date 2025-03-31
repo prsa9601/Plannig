@@ -18,6 +18,8 @@ using Application.User.ChangeEmailConfirmedStatus;
 using Application.User.ChangePhoneNumberConfirmedStatus;
 using Application.User.EditForAdmin;
 using Application.User.SetAvatar;
+using Application.User.VerificationEmail;
+using Application.User.SendVerificationEmailToken;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -166,6 +168,7 @@ namespace Planning.Api.Controllers
             return CommandResult(result);
         }
 
+
         [Authorize]
         [HttpPost("ChangeActivityStatusForAdmin")]
         public async Task<ApiResult> ChangeActivityStatusForAdmin
@@ -306,7 +309,7 @@ namespace Planning.Api.Controllers
         [HttpPatch("SetAvatar")]
         public async Task<ApiResult> SetAvatar(SetAvatarCommand command)
         {
-           
+
             var result = await _facade.SetAvatar(new Application.User.SetAvatar.SetAvatarCommand()
             {
                 Avatar = command.Avatar,
@@ -314,6 +317,7 @@ namespace Planning.Api.Controllers
             });
             return CommandResult(result);
         }
+
 
     }
 }

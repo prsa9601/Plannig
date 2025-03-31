@@ -61,5 +61,11 @@ namespace Planning.Api.Controllers
         {
             return QueryResult(await _facade.GetFilterUsersPackages(param));
         }
+        [Authorize]
+        [HttpGet("GetFilterPackageUserByUserId")]
+        public async Task<ApiResult<UsersPackagesByUserIdFilterResult?>> GetFilterUserPackagesByUserId([FromQuery]UsersPackagesByUserIdFilterParam param)
+        {
+            return QueryResult(await _facade.GetFilterUsersPackagesByUserId(param));
+        }
     }
 }

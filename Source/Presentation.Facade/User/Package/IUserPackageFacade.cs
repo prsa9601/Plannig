@@ -8,6 +8,7 @@ using Query.User._Package;
 using Query.User._Package.GetById;
 using Query.User._Package.GetCurrentUser;
 using Query.User._Package.GetFilter;
+using Query.User._Package.GetFilterByUserId;
 using Query.User._Package.UsersPackagesDTOs;
 using Query.User.DTOs;
 
@@ -22,6 +23,8 @@ namespace Presentation.Facade.User.Package
         Task<UsersSinglePackagesDto?> GetByIdUsersPackages(string userId, long packageId);
         Task<UsersPackagesFilterResult?> GetFilterUsersPackages(
          UsersPackagesFilterParam param);
+        Task<UsersPackagesByUserIdFilterResult?> GetFilterUsersPackagesByUserId(
+         UsersPackagesByUserIdFilterParam param);
     }
 
     internal class UserPackageFacade : IUserPackageFacade
@@ -67,6 +70,11 @@ namespace Presentation.Facade.User.Package
                 packageId = packageId,
                 userId = userId
             });
+        }
+
+        public async Task<UsersPackagesByUserIdFilterResult?> GetFilterUsersPackagesByUserId(UsersPackagesByUserIdFilterParam param)
+        {
+            return await _mediator.Send(new GetFilterUserPackagesByUserIdQuery(param));
         }
     }
 }

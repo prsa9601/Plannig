@@ -1,14 +1,9 @@
 ﻿using Common.Query;
+using Domain.PackageAgg;
 using Domain.UserAgg;
 using Infrastructure.Persistent.Ef;
 using Microsoft.EntityFrameworkCore;
 using Query.User._Package.UsersPackagesDTOs;
-using Query.User.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Query.User._Package.GetFilter
 {
@@ -33,30 +28,7 @@ namespace Query.User._Package.GetFilter
             var @param = request.FilterParams;
             var result = _context.Users.Select(i => i).AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(@param.userName))
-            {
-                result = result.Where(i => i.UserName.Contains(@param.userName));
-            }
-
-            if (!string.IsNullOrWhiteSpace(@param.phoneNumber))
-            {
-                result = result.Where(i => i.PhoneNumber == @param.phoneNumber);
-            }
-            if (@param.ActivePackages)
-            {
-                result = result.Where(i => i.UserPackages.Any(x => x.ExpiryDate > DateTime.Now));
-            }
-            if (@param.packageId > 0)
-            {
-                result = result.Where(i => i.UserPackages.Any(
-                    i => i.PackageId == @param.packageId));
-            }
-
-            if (!string.IsNullOrWhiteSpace(@param.packageTitle))
-            {
-                result = result.Where(i => i.UserPackages.Any(
-                    i => i.PackageTitle.Contains(@param.packageTitle)));
-            }
+       
             //if (@param.packageId>0)
             //{
             //    var listUsers = new List<Domain.UserAgg.User>();
@@ -90,11 +62,66 @@ namespace Query.User._Package.GetFilter
             //    result = listUsers.AsQueryable();
             //}
 
+
+            List<UsersPackagesFilterDataDto> userResult = new List<UsersPackagesFilterDataDto>();
+            foreach (var item in await result.ToListAsync())
+            {
+                foreach (var item2 in item.UserPackages)
+                {
+                    var userPackageModel = new UsersPackagesFilterDataDto
+                    {
+                        CreationDate = item2!.CreationDate,
+                        UserId = item.Id,
+                        Email = item.Email,
+                        UserName = item.UserName!,
+                        PhoneNumber = item.PhoneNumber,
+                        userPackages = new DTOs.UserPackageDto
+                        {
+                            AllowedEmailCount = item2.AllowedEmailCount,
+                            AllowedSmsCount = item2.AllowedSmsCount,
+                            IsActive = item2.IsActive,
+                            CreationDate = item2.CreationDate,
+                            ExpiryDate = item2.ExpiryDate,
+                            Id = item2.Id,
+                            PackageId = item2.PackageId,
+                            UserId = item2.UserId,
+                        }
+                    };
+                    userResult.Add(userPackageModel);
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(@param.userName))
+            {
+                userResult = userResult.AsQueryable().Where(i => i.UserName.Contains(@param.userName)).ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(@param.phoneNumber))
+            {
+                userResult = userResult.AsQueryable().Where(i => i.PhoneNumber.Contains(@param.phoneNumber)).ToList();
+            }
+            if (@param?.FilterStartTime != DateTime.MinValue)
+            {
+                userResult = userResult.AsQueryable().Where(i => i.CreationDate >= @param!.FilterStartTime).ToList();
+            }
+            if (@param?.FilterEndTime != DateTime.MaxValue && @param?.FilterEndTime != DateTime.MinValue)
+            {
+                userResult = userResult.AsQueryable().Where(i => i.CreationDate <= @param!.FilterEndTime).ToList();
+            }
+            if (@param!.ActivePackages == true)
+            {
+                userResult = userResult.AsQueryable().Where(i => i.userPackages.ExpiryDate > DateTime.Now).ToList();
+            }
+            //if (@param.packageId > 0)
+            //{
+            //    result = result.Where(i => i.UserPackages.Any(
+            //        i => i.PackageId == @param.packageId));
+            //}
+
             switch (param.search)
             {
                 case SearchUserPackage.Latest:
-                    result = result.OrderByDescending(
-                        i => i.UserPackages.OrderByDescending(x => x.CreationDate));
+                    userResult = userResult.AsQueryable().OrderByDescending(
+                        (x => x.CreationDate)).ToList();
                     break;
                 //case SearchUserPackage.BestSeller:
                 //    break;
@@ -105,11 +132,11 @@ namespace Query.User._Package.GetFilter
             var skip = (@param.PageId - 1) * @param.Take;
             var model = new UsersPackagesFilterResult()
             {
-                Data = await result.Skip(skip).Take(@param.Take).Select(s => s.UsersPackagesMap()!)
-                    .ToListAsync(cancellationToken),
+                Data = userResult.Skip(skip).Take(@param.Take).Select(s => s)
+                    .ToList(),
                 FilterParams = @param
             };
-            model.GeneratePaging(result, @param.Take, @param.PageId);
+            model.GeneratePaging(userResult.AsQueryable(), @param.Take, @param.PageId);
             return model;
         }
     }

@@ -11,9 +11,11 @@ using Application.User.Login;
 using Application.User.Logout;
 using Application.User.Register;
 using Application.User.RemoveToken;
+using Application.User.SendVerificationEmailToken;
 using Application.User.SetAvatar;
 using Application.User.SetEvent;
 using Application.User.SetRole;
+using Application.User.VerificationEmail;
 using Common.Application;
 using Common.Application.SecurityUtil;
 using Common.Domain.ValueObjects;
@@ -190,6 +192,16 @@ namespace Presentation.Facade.User
         }
 
         public async Task<OperationResult> SetAvatar(SetAvatarCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> SendVerificationEmailToken(SendVerificationEmailCodeCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> VerificationEmail(VerificationEmailCommand command)
         {
             return await _mediator.Send(command);
         }

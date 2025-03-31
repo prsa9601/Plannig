@@ -4,4 +4,8 @@
     {
         public string? Token { get; set; }
     }
+    public class VerificationEmailViewModel
+    {
+        public string token { get; set; }
+    }
 }

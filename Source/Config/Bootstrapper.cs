@@ -1,4 +1,5 @@
-﻿using Application._Utilities;
+﻿using AngleSharp;
+using Application._Utilities;
 using Application.Event;
 using Application.Event.Add;
 using Application.Notification;
@@ -8,6 +9,7 @@ using Application.Package._Service;
 using Application.Role.Create;
 using Application.User;
 using Application.User._RequestBox;
+using Application.User.SendVerificationEmailToken;
 using Common.Application.Schedule;
 using Domain.EventAgg.Service;
 using Domain.Notification.NotificationSchedule;
@@ -23,6 +25,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Presentation.Facade;
 using Query.Event.GetById;
+using StackExchange.Redis;
 
 namespace Config
 {
@@ -51,8 +54,7 @@ namespace Config
 
             services.AddMemoryCache();
 
-
-            services.AddLogging(); // اضافه کردن سرویس‌های لاگینگ
+             services.AddLogging(); // اضافه کردن سرویس‌های لاگینگ
             var serviceProvider = services.BuildServiceProvider();
             var logger = serviceProvider.GetService<ILogger<RemoveNotificationCommandHandler>>();
             services.AddSingleton(typeof(ILogger), logger);

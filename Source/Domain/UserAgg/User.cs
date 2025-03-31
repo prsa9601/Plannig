@@ -24,6 +24,9 @@ namespace Domain.UserAgg
         public string Email { get; set; }
         public bool IsActive { get; set; }
 
+        //public string? EmailConfirmedToken { get; set; }
+        //public string? PhoneNumberConfirmedToken { get; set; }
+
         public UserAvatar Avatar { get; set; }
 
         public List<UserRole?> Roles { get; } = new List<UserRole?>();
@@ -49,7 +52,14 @@ namespace Domain.UserAgg
             Avatar = new UserAvatar(0);
 
         }
-
+        //private void SetEmailConfirmedToken(string emailConfirmedToken)
+        //{
+        //    EmailConfirmedToken = emailConfirmedToken;
+        //}
+        //private void SetPhoneNumberConfirmedToken(string phoneNumberConfirmedToken)
+        //{
+        //    PhoneNumberConfirmedToken = phoneNumberConfirmedToken;
+        //}
         //public User(string email, string userName, string phoneNumber, string password)
         //{
         //    Avatar = new UserAvatar(0);

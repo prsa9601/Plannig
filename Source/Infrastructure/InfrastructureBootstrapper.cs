@@ -63,6 +63,7 @@ namespace Infrastructure
                 // Stores Options
                 //options.Stores.MaxLengthForKeys = 10;
                 //options.Stores.ProtectPersonalData = false;
+                options.Tokens.EmailConfirmationTokenProvider = "Default";
                 options.Lockout.AllowedForNewUsers = false;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
                 options.Lockout.MaxFailedAccessAttempts = 3;
@@ -74,7 +75,7 @@ namespace Infrastructure
                 //options.ClaimsIdentity.EmailClaimType = "ClaimTypes.Email";
                 //options.ClaimsIdentity.UserNameClaimType = "ClaimTypes.MobilePhone";
             })
-             .AddEntityFrameworkStores<PlanningContext>();
+             .AddEntityFrameworkStores<PlanningContext>().AddDefaultTokenProviders();
             //.AddDefaultTokenProviders();
             //.AddErrorDescriber<PersianIdentityErrors>();
 

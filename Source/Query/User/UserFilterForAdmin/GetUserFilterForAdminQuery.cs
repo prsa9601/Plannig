@@ -31,19 +31,19 @@ namespace Query.User.UserFilterForAdmin
             var result = _context.Users.AsQueryable();
             if (!string.IsNullOrWhiteSpace(param.UserName))
             {
-                result = result.Where(i => i.UserName == param.UserName);
+                result = result.Where(i => i.UserName.Contains(param.UserName));
             }
             if (!string.IsNullOrWhiteSpace(param.Name))
             {
-                result = result.Where(i => i.Name == param.Name);
+                result = result.Where(i => i.Name.Contains(param.Name));
             }
             if (!string.IsNullOrWhiteSpace(param.Family))
             {
-                result = result.Where(result => result.Family == param.Family);
+                result = result.Where(result => result.Family!.Contains(param.Family));
             }
             if (!string.IsNullOrWhiteSpace(param.PhoneNumber))
             {
-                result = result.Where(i => i.Name.Contains(param.PhoneNumber));
+                result = result.Where(i => i.PhoneNumber.Contains(param.PhoneNumber));
             }
             if (!string.IsNullOrWhiteSpace(param.Email))
             {

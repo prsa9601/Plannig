@@ -21,6 +21,8 @@ using Microsoft.EntityFrameworkCore;
 using User = Domain.UserAgg.User;
 using Application.User.RemoveToken;
 using Microsoft.AspNetCore.Authentication;
+using Application.User.SendVerificationEmailToken;
+using Application.User.VerificationEmail;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -185,5 +187,30 @@ namespace Planning.Api.Controllers
                 //RefreshToken = refreshToken
             });
         }
+        #region VerificationEmail
+
+        [Authorize]
+        [HttpGet("SendVerificationEmailToken")]
+        public async Task<ApiResult> SendVerificationEmailToken()
+        {
+            var result = await _facade.SendVerificationEmailToken(new SendVerificationEmailCodeCommand
+            {
+                UserId = User.GetUserIdToString()
+            });
+            return CommandResult(result)!;
+        }
+
+        [Authorize]
+        [HttpPost("VerificationEmail")]
+        public async Task<ApiResult> VerificationEmail(VerificationEmailViewModel command)
+        {
+            var result = await _facade.VerificationEmail(new VerificationEmailCommand
+            {
+                UserId = User.GetUserIdToString(),
+                VerificationEmailToken = command.token
+            });
+            return CommandResult(result);
+        }
+        #endregion
     }
 }
