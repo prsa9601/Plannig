@@ -20,4 +20,8 @@ namespace Planning.Api.Model.Notification
         public DateTime EventStartTime { get; set; }
         public List<string> UserNames { get; set; }
     }
+    public class MarkAsReadNotificationViewModel()
+    {
+        public long NotificationId { get; set; }
+    }
 }

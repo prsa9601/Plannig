@@ -7,6 +7,7 @@ using Application.Notification.Add;
 using Application.Notification.ChangeDate;
 using Application.Notification.Edit;
 using Application.Notification.EmailSender;
+using Application.Notification.Mark;
 using Application.Notification.Remove;
 using Application.Notification.SmsSender;
 using Common.Application;
@@ -22,6 +23,7 @@ namespace Presentation.Facade.Notification
     {
         Task<OperationResult> SendEmail(SendNotificationByEmailCommand command);
         Task<OperationResult> SendSms(SendNotificationWithSms command);
+        Task<OperationResult> MarkNotificationAsRead(MarkNotificationAsReadCommand command);
         Task<OperationResult> ChangeDate(ChangeDateNotificationCommand command);
         Task<OperationResult<long>> AddNotification(AddNotificationCommand command);
         Task<OperationResult> EditNotification(EditNotificationCommand command);
@@ -80,6 +82,11 @@ namespace Presentation.Facade.Notification
                 NotificationId = NotificationId,
                 UserName = UserName
             });
+        }
+
+        public async Task<OperationResult> MarkNotificationAsRead(MarkNotificationAsReadCommand command)
+        {
+            return await _mediator.Send(command);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Application.Event.Add
         public async Task<OperationResult<long>> Handle(AddEventCommand request, CancellationToken cancellationToken)
         {
             var Event = new Domain.EventAgg.Event(request.creatorUserName, request.userNames,
-                request.Title, request.StartTime, request.EndTime, request.Description.SanitizeText(),
+                request.Title, request.StartTime, request.EndTime, request.Description,
                 request.Link, request.EventAddress, request.tag, request.NotificationEnum,
                 request.accessNotification);
 

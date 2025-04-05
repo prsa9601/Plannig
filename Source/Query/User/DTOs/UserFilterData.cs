@@ -25,12 +25,12 @@ namespace Query.User.DTOs
 
     public class UserFilterParam : BaseFilterParam
     {
-        public string UserName { get; set; } = string.Empty;
+        public string? UserName { get; set; } = string.Empty;
         public required string CurrentUserId { get; set; }
     }
     public class UserFilterParamViewModel : BaseFilterParam
     {
-        public string UserName { get; set; } = string.Empty;
+        public string? UserName { get; set; } = string.Empty;
         public required string CurrentUserId { get; set; }
     }
     public class UserFilterResult : BaseFilter<UserFilterData, UserFilterParam>

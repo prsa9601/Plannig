@@ -108,6 +108,10 @@ namespace Domain.Notification
         {
             IsActive = false;
         }
+        public void MarkAsSeen()
+        {
+            IsSeen = true;
+        }
         public void EnabledActive()
         {
             IsActive = true;

@@ -54,7 +54,7 @@ namespace Query.User._Friend.DTOs
 
     public class SearchFriendForEventFilterParam : BaseFilterParam
     {
-        public string UserName { get; set; } = string.Empty;
+        public string? UserName { get; set; } = string.Empty;
         public string CurrentUserId { get; set; } = string.Empty;
     }
     public class SearchFriendForEventFilterResult : BaseFilter<SearchFriendForEventData, SearchFriendForEventFilterParam>

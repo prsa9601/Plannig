@@ -41,9 +41,14 @@ namespace Application.Event.Edit
 
         public async Task<OperationResult<long>> Handle(EditEventCommand request, CancellationToken cancellationToken)
         {
+            
             var Event = await _repository.GetTracking(request.Id);
             if (Event == null)
                 return OperationResult<long>.NotFound(0);
+            if (!Event.EventUser.Any(i => i.CreatorUserName.Equals(request.creatorUserName)))
+            {
+                return OperationResult<long>.Error("فقط سازنده میتواند ایونترا تغییر دهد!");
+            }
             var creator = await _userRepository.GetTrackingByUserName(request.creatorUserName);
             List<Domain.UserAgg.User>? users = new List<Domain.UserAgg.User>();
             List<string>? usersEmail = new List<string>();
@@ -58,7 +63,7 @@ namespace Application.Event.Edit
             //var oldEvent = Event;
             Event.Edit(request.creatorUserName, request.userNames,
                 request.Title, request.StartTime, request.EndTime, 
-                request.Description.SanitizeText(), request.Link, request.EventAddress,
+                request.Description, request.Link, request.EventAddress,
                 request.accessNotification, request.tag, request.NotificationEnum);
             //Event.AddUser(request.userNames);
             await _repository.Save();

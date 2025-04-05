@@ -150,5 +150,16 @@ namespace Planning.Api.Controllers
             var result = await _facade.GetByIdNotificationsCurrentUser(User.GetUserName(), NotificationId);
             return QueryResult(result);
         }
+        [Authorize]
+        [HttpPatch("MarkNotificationAsRead")]
+        public async Task<ApiResult> MarkNotificationAsRead(MarkAsReadNotificationViewModel command)
+        {
+            var result = await _facade.MarkNotificationAsRead(new Application.Notification.Mark.MarkNotificationAsReadCommand
+            {
+                NotificationId = command.NotificationId,
+                UserName = User.GetUserName()
+            });
+            return CommandResult(result);
+        }
     }
 }

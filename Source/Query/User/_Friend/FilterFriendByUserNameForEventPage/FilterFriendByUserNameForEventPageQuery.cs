@@ -32,15 +32,16 @@ namespace Query.User._Friend.FilterFriendByUserNameForEventPage
             var currentUser = requests.Where(i => i.Id.Equals(@param.CurrentUserId)).FirstOrDefault();
             //  var Friends = currentUser.friends.Select(i => i.CurrentUserId || i.UserFriendId).ToList();
             var userFriend = new List<SearchFriendForEventData>();
-            if (!string.IsNullOrWhiteSpace(@param.CurrentUserId) && !string.IsNullOrWhiteSpace(@param.UserName))
+            if (!string.IsNullOrWhiteSpace(@param.CurrentUserId) )
             {
+                //&& !string.IsNullOrWhiteSpace(@param.UserName)
                 foreach (var item in currentUser.friends)
                 {
-                    requests = requests.Where(i => i.Id.Equals(item.CurrentUserId) || i.Id.Equals(item.UserFriendId)).ToList();
+                    var user = requests.Where(i => i.Id.Equals(item.CurrentUserId) || i.Id.Equals(item.UserFriendId)).ToList();
                     //Task.Delay();
                     if (requests.Count() != 0)
                     {
-                        foreach (var item1 in requests)
+                        foreach (var item1 in user)
                         {
                             var searchData = new SearchFriendForEventData()
                             {
