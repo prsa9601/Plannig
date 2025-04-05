@@ -11,6 +11,10 @@ using Application.Notification.Remove;
 using Application.Notification.SmsSender;
 using Common.Application;
 using MediatR;
+using Query.Notification.DTOs;
+using Query.Notification.GetById;
+using Query.Notification.GetList;
+using Query.User._Package.GetFilterByUserId;
 
 namespace Presentation.Facade.Notification
 {
@@ -22,6 +26,9 @@ namespace Presentation.Facade.Notification
         Task<OperationResult<long>> AddNotification(AddNotificationCommand command);
         Task<OperationResult> EditNotification(EditNotificationCommand command);
         Task<OperationResult> RemoveNotification(RemoveNotificationCommand command);
+
+        Task<NotificationFilterResult?> GetFilterNotificationsCurrentUser(NotificationFilterParam param);
+        Task<NotificationDto?> GetByIdNotificationsCurrentUser(string UserName, long NotificationId);
 
     }
     public class NotificationFacade : INotificationFacade
@@ -59,6 +66,20 @@ namespace Presentation.Facade.Notification
         public async Task<OperationResult> ChangeDate(ChangeDateNotificationCommand command)
         {
             return await _mediator.Send(command);
+        }
+
+        public async Task<NotificationFilterResult?> GetFilterNotificationsCurrentUser(NotificationFilterParam param)
+        {
+            return await _mediator.Send(new GetListFilterNotificationByCurrentUserIdQuery(param));
+        }
+
+        public async Task<NotificationDto?> GetByIdNotificationsCurrentUser(string UserName, long NotificationId)
+        {
+            return await _mediator.Send(new GetNotificationByIdQuery
+            {
+                NotificationId = NotificationId,
+                UserName = UserName
+            });
         }
     }
 }

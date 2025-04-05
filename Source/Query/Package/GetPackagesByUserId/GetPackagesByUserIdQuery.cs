@@ -35,7 +35,7 @@ namespace Query.Package.GetPackagesByUserId
                 packages.Add(await _context.Packages.Where(i => i.Id == item.Id).FirstOrDefaultAsync());
 
             }
-            return packages.Select(i => i.Map()).ToList();
+            return packages.Select(i => i.Map()).ToList()!;
         }
     }
 }

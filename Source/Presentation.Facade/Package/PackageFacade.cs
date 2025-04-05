@@ -72,7 +72,7 @@ namespace Presentation.Facade.Package
         {
             return await _mediator.Send(new GetPackagesByUserIdQuery() { Id = UserId });
         }
-        public async Task<List<PackageDto>?> GetListPackagesActiveByUserId(string id)
+        public async Task<List<PackageDtoForUserProfile?>> GetListPackagesActiveByUserId(string id)
         {
             return await _mediator.Send(new GetListActivePackageUserIdQuery(){Id = id});
         }

@@ -11,6 +11,7 @@ using Application.User.Login;
 using Application.User.Logout;
 using Application.User.Register;
 using Application.User.RemoveToken;
+using Application.User.SendEmailForForgotPassword;
 using Application.User.SendVerificationEmailToken;
 using Application.User.SetAvatar;
 using Application.User.SetEvent;
@@ -204,6 +205,16 @@ namespace Presentation.Facade.User
         public async Task<OperationResult> VerificationEmail(VerificationEmailCommand command)
         {
             return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> SendEmailForForgotPassword(SendEmailForForgotPasswordCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> VerifiedEmailForgotPassword(VerifiedEmailForgotPasswordCommand command)
+        {
+            return await _mediator.Send(command);   
         }
 
         //public async Task<UserDto?> GetUserById(long Id)

@@ -31,17 +31,19 @@ namespace Application.Notification.Remove
                 if (!result)
                     return OperationResult.NotFound();
                 bool deleteScheduleResult = false;
+                var DeleteScheduleResult = false;
                 if (result)
                 {
 
                   deleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
+                  DeleteScheduleResult = BackgroundJob.Delete(notification.NotificationScheduleId);
                 }
                 await _repository.Save();
                 //if (result && deleteScheduleResult)
                 //    return OperationResult.Success("نوتیفیکیشن با موفقیت حذف شد.");
                 //else if (result && !deleteScheduleResult)
                 //    _logger.LogError("نوتیفیکیشن از هنگفایر حذف نشد!");
-                if (!result && deleteScheduleResult)
+                if (!result || !deleteScheduleResult || !DeleteScheduleResult)
                     _logger.LogError("نوتیفیکیشن از دیتابیس حذف نشد!");
 
                 return OperationResult.Success();

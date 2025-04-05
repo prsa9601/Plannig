@@ -11,8 +11,10 @@ namespace Query.Package
 {
     public static class PackageMapper
     {
-        public static PackageDto Map(this Domain.PackageAgg.Package model)
+        public static PackageDto? Map(this Domain.PackageAgg.Package? model)
         {
+            if (model == null)
+                return null;
             return new PackageDto()
             {
                 Price = model.Price,
@@ -25,7 +27,7 @@ namespace Query.Package
                 ImageName = model.ImageName,
                 Link = model.Link,
                 Active = model.Active,
-                Specification = model.Specification.MapSpecification()
+                Specification = model.Specification.MapSpecification()!
             };
         }
 

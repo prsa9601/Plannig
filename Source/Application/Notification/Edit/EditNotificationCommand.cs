@@ -21,7 +21,7 @@ namespace Application.Notification.Edit
         public  DateTime EventEndTime { get; set; }
         //public DateTime EventExpiredTime { get; set; }
         public DateTime SendTime { get; set; }
-        //public string creatorUserName { get; set; }
+        public string creatorUserName { get; set; }
         //public string ScheduleId { get; set; }
 
         public NotificationType NotificationType { get; set; } 
@@ -46,6 +46,8 @@ namespace Application.Notification.Edit
         {
             try
             {
+                request.UserNames.Add(request.creatorUserName);
+
                 var notification = await _repository.GetByFilterAsync(i => i.EventId.Equals(request.EventId));
                 if (notification == null)
                     return OperationResult.NotFound();
@@ -73,6 +75,8 @@ namespace Application.Notification.Edit
                 //}
 
                 bool DeleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
+                bool DeleteNotificationScheduleResult = BackgroundJob.
+                    Delete(notification.NotificationScheduleId);
                 await _repository.Save();
 
                 if (notification.IsSend == false && notification.IsActive == true
@@ -89,6 +93,9 @@ namespace Application.Notification.Edit
                         SendEmailCount++;
                         //}
                     }
+                    var NotificationScheduleId = BackgroundJob.Schedule(() => _service.SendNotification(notification.Id), request.SendTime);
+
+                    notification.NotificationScheduleId = NotificationScheduleId;
                     var setChangeResult = await SetChange(SendEmailCount, creator!);
                     if (setChangeResult != OperationResult.Success())
                     {
@@ -105,6 +112,9 @@ namespace Application.Notification.Edit
                                       eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.SendTime);
 
                     notification.ScheduleId = scheduleId;
+                    //var scheduleid =
+                        BackgroundJob.Schedule(() => _service.SendNotification(notification.Id), request.SendTime);
+
                     await _repository.Save();
                     //jobId For Schedule
                     //BackgroundJob.ContinueJobWith<INotificationService>(

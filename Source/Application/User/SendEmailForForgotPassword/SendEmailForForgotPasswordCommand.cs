@@ -1,41 +1,41 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Common.Application;
+using Common.Application.SecurityUtil;
+using Domain.UserAgg.Repository;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mail;
 using System.Net;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Identity;
-using Common.Application;
-using MediatR;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json;
-using StackExchange.Redis;
-using System.Formats.Asn1;
-using Common.Application.SecurityUtil;
-using AngleSharp.Dom;
-using Newtonsoft.Json.Linq;
 
-namespace Application.User.SendVerificationEmailToken
+namespace Application.User.SendEmailForForgotPassword
 {
-    public class SendVerificationEmailCodeCommand : IBaseCommand
+    public class SendEmailForForgotPasswordCommand : IBaseCommand
     {
-        public string? UserId { get; set; }
+        public required string Email { get; set; }
     }
-    public class SendVerificationEmailCodeCommandHandler : IBaseCommandHandler<SendVerificationEmailCodeCommand>
+    internal class SendEmailForForgotPasswordCommandHandler : IBaseCommandHandler<SendEmailForForgotPasswordCommand>
     {
-        private readonly IMemoryCache _cache;
+        private readonly IUserRepository<Domain.UserAgg.User> _repository;
         private readonly UserManager<Domain.UserAgg.User> _userManager;
+        private readonly IMemoryCache _cache;
 
-        public SendVerificationEmailCodeCommandHandler(UserManager<Domain.UserAgg.User> manager,
-            IMemoryCache cache)
+        public SendEmailForForgotPasswordCommandHandler(IUserRepository<Domain.UserAgg.User> repository, IMemoryCache cache, UserManager<Domain.UserAgg.User> userManager)
         {
-            _userManager = manager;
+            _repository = repository;
             _cache = cache;
+            _userManager = userManager;
         }
 
-        public async Task<OperationResult> Handle(SendVerificationEmailCodeCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(SendEmailForForgotPasswordCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId!);
+            var user = await _repository.GetByFilterAsync(i=>i.Email.Equals(request.Email!));
             if (user == null)
-                return OperationResult.NotFound();
+                return OperationResult.NotFound("کاربری با همچین مشخصاتی یافت نشد!");
 
 
             var verificationEmailToken = GenerateSecureRandomCode(37);
@@ -45,7 +45,7 @@ namespace Application.User.SendVerificationEmailToken
 
 
 
-            _cache.Set($"VerificationEmailToken-{Sha256Hasher.Hash(user.UserName)}", verificationEmailToken, TimeSpan.FromMinutes(3));
+            _cache.Set($"ForgotPassword-{Sha256Hasher.Hash(user.UserName)}", verificationEmailToken, TimeSpan.FromMinutes(3));
             using var smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
@@ -66,7 +66,7 @@ namespace Application.User.SendVerificationEmailToken
                     "parham1234122@gmail.com",
                     "parham09332294129@gmail.com"
                 },
-                Subject = "تایید ایمیل",
+                Subject = "بازیابی رمز عبور",
                 Body = $@"
 <html dir='rtl' lang='fa'>
 <head>
@@ -150,7 +150,7 @@ namespace Application.User.SendVerificationEmailToken
             <p>،سلام کاربر گرامی</p>
             <p>از ثبت‌نام شما سپاسگزاریم! برای تکمیل فرایند ثبت‌نام و فعال‌سازی حساب کاربری خود، لطفاً روی دکمه زیر کلیک کنید:</p>
 
-           <a href='https://localhost:5250/auth/VerifyEmail?token={verificationEmailToken}' class='btn'>تأیید ایمیل</a>
+           <a href='https://localhost:5250/auth/ForgotPassword?token={verificationEmailToken}&email={request.Email}' class='btn'>تأیید ایمیل</a>
             <p>توجه: این لینک فقط تا مدت محدودی معتبر است. لطفاً هرچه سریع‌تر اقدام کنید.</p>
             <p>در صورت دریافت این ایمیل به اشتباه، نیازی به انجام هیچ کاری نیست.</p>
         </div>
@@ -170,7 +170,7 @@ namespace Application.User.SendVerificationEmailToken
             await smtpClient.SendMailAsync(mailMessage); // استفاده از نسخه Async
                                                          //await _schedule.ScheduleEvent((startTime-sendTime),"",)
 
-            return OperationResult.Success();
+            return OperationResult.Success(verificationEmailToken);
         }
         public string GenerateSecureRandomCode(int length)
         {
@@ -185,17 +185,3 @@ namespace Application.User.SendVerificationEmailToken
     }
 }
 
-
-//using (ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost:5009"))
-//{
-//    IDatabase db = redis.GetDatabase();
-//    // عملیات‌های Redis خود را اینجا انجام دهید
-
-//    // سریال‌سازی به JSON
-//    string userJson = JsonConvert.SerializeObject(verificationEmailToken);
-
-//    // ذخیره در Redis
-//    db.StringSet($"KeyForMe:{Common.Application.
-//        SecurityUtil.Sha256Hasher.Hash(user.UserName)}",
-//        verificationEmailToken,TimeSpan.FromMinutes(3));
-//}           

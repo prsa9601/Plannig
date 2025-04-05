@@ -1,5 +1,6 @@
 ﻿using Common.Application;
 using Common.Application.Schedule;
+using Common.Application.SecurityUtil;
 using Common.Application.Validation;
 using Domain.EventAgg.Enum;
 using Domain.EventAgg.Repository;
@@ -57,7 +58,7 @@ namespace Application.Event.Edit
             //var oldEvent = Event;
             Event.Edit(request.creatorUserName, request.userNames,
                 request.Title, request.StartTime, request.EndTime, 
-                request.Description, request.Link, request.EventAddress,
+                request.Description.SanitizeText(), request.Link, request.EventAddress,
                 request.accessNotification, request.tag, request.NotificationEnum);
             //Event.AddUser(request.userNames);
             await _repository.Save();

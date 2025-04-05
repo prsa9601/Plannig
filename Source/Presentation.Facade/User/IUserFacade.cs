@@ -20,6 +20,7 @@ using Application.User.EditForAdmin;
 using Application.User.SetAvatar;
 using Application.User.SendVerificationEmailToken;
 using Application.User.VerificationEmail;
+using Application.User.SendEmailForForgotPassword;
 
 namespace Presentation.Facade.User
 {
@@ -40,6 +41,8 @@ namespace Presentation.Facade.User
         Task<OperationResult> ChangeActivityStatusUser(ChangeActivityUserStatusCommand command);
         Task<OperationResult> ChangeEmailConfirmedUserStatus(ChangeEmailConfirmedUserStatusCommand command);
         Task<OperationResult> ChangePhoneNumberConfirmedStatus(ChangePhoneNumberConfirmedStatusCommand command);
+        Task<OperationResult> SendEmailForForgotPassword(SendEmailForForgotPasswordCommand command);
+        Task<OperationResult> VerifiedEmailForgotPassword(VerifiedEmailForgotPasswordCommand command);
 
         Task<OperationResult> RemoveFriend(RemoveFriendUserCommand command);
 

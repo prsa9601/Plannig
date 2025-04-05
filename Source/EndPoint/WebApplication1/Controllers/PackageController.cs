@@ -107,8 +107,8 @@ namespace Planning.Api.Controllers
             return QueryResult(result);
         }
         [Authorize]
-        [HttpGet("GetListActiveByUserId")]
-        public async Task<ApiResult<List<PackageDto>?>> GetPackagesActiveByUserId()
+        [HttpGet("GetListActiveForCurrentUser")]
+        public async Task<ApiResult<List<PackageDtoForUserProfile?>>> GetListActiveForCurrentUser()
         {
             var result = await _facade.
                 GetListPackagesActiveByUserId(User.GetUserIdToString());

@@ -57,15 +57,21 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpGet("GetFilterPackageUser")]
-        public async Task<ApiResult<UsersPackagesFilterResult?>> GetFilterUserPackages([FromQuery]UsersPackagesFilterParam param)
+        public async Task<ApiResult<UsersPackagesFilterResult?>> GetFilterUserPackages([FromQuery] UsersPackagesFilterParam param)
         {
             return QueryResult(await _facade.GetFilterUsersPackages(param));
         }
         [Authorize]
         [HttpGet("GetFilterPackageUserByUserId")]
-        public async Task<ApiResult<UsersPackagesByUserIdFilterResult?>> GetFilterUserPackagesByUserId([FromQuery]UsersPackagesByUserIdFilterParam param)
+        public async Task<ApiResult<UsersPackagesByUserIdFilterResult?>> GetFilterUserPackagesByUserId([FromQuery] UsersPackagesByUserIdFilterParam param)
         {
             return QueryResult(await _facade.GetFilterUsersPackagesByUserId(param));
+        }
+        [Authorize]
+        [HttpGet("GetUserPackageByUserPackageId")]
+        public async Task<ApiResult<UserPackageDto?>> GetUserPackageByUserPackageId(long Id)
+        {
+            return QueryResult(await _facade.GetUserPackageByEventId(Id, User.GetUserIdToString()));
         }
     }
 }

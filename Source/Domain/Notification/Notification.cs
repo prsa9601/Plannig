@@ -35,6 +35,7 @@ namespace Domain.Notification
         }
         public long? EventId { get; private set; }
         public string ScheduleId { get; set; } = "";
+        public string NotificationScheduleId { get; set; } = "";
         public bool IsSend { get; private set; }
         public bool IsActive { get; private set; } //برای وقتی که تایم پکیج تموم شد
         public bool IsSeen { get; private set; }
@@ -110,6 +111,10 @@ namespace Domain.Notification
         public void EnabledActive()
         {
             IsActive = true;
+        }
+        public void ActiveSend()
+        {
+            IsSend = true;
         }
         public void AddUser(ICollection<string> userIds)
         {

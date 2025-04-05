@@ -49,27 +49,70 @@ namespace Application.Notification.ChangeDate
                 {
                     return OperationResult.NotFound();
                 }
-                else if (!eventClass.AccessNotification)
-                {
-                    BackgroundJob.Delete(notification.ScheduleId);
-                    return OperationResult.
-                        Error("شما به این ایونت دسترسی برای ارسال نوتیفیکیشن ندادید!");
-                }
-                else if (notification.NotificationType != NotificationType.Email)
-                {
-                    BackgroundJob.Delete(notification.ScheduleId);
-                    return OperationResult.
-                        Error("شما به این ایونت دسترسی برای ارسال ایمیل ندادید!");
-                }
+                //else if (!eventClass.AccessNotification)
+                //{
+                //    BackgroundJob.Delete(notification.ScheduleId);
+                //    BackgroundJob.Delete(notification.NotificationScheduleId);
+                //    return OperationResult.
+                //        Error("شما به این ایونت دسترسی برای ارسال نوتیفیکیشن ندادید!");
+                //}
+                //else if (notification.NotificationType != NotificationType.Email)
+                //{
+                //    BackgroundJob.Delete(notification.ScheduleId);
+                //    BackgroundJob.Delete(notification.NotificationScheduleId);
+                //    return OperationResult.
+                //        Error("شما به این ایونت دسترسی برای ارسال ایمیل ندادید!");
+                //}
 
                 bool DeleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
+                BackgroundJob.Delete(notification.NotificationScheduleId);
+
+                    var NotificationScheduleId =  BackgroundJob.Schedule(() => _service.SendNotification(notification.Id), request.SendTime);
+                    notification.NotificationScheduleId = NotificationScheduleId;
                 await _repository.Save();
 
                 if (notification.IsSend == false && notification.IsActive == true
                                                  && notification.NotificationType == NotificationType.Email &&
                                                  notification.AllowedEmailCount >= 0)
                 {
-                    //notification.SendEmailForEvent(request.UserNames.ToList()
+            
+                    notification.NotificationScheduleId = NotificationScheduleId;
+                    string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(notification.UserNames.ToList()
+                                      , request.EventId
+                                      , request.StartTime,
+                                      notification.SendTime,
+                                      eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.SendTime);
+
+                    notification.ScheduleId = scheduleId;
+                    //var scheduleid =
+                        //BackgroundJob.Schedule(() => notification.EnabledActiveAsync(), request.SendTime);
+                  
+
+                    await _repository.Save();
+                    //jobId For Schedule
+                    //BackgroundJob.ContinueJobWith<INotificationService>(
+                    // jobId,
+                    // () =>  _repository.Save(),
+                    // JobContinuationOptions.OnAnyFinishedState);
+
+                }
+
+                return OperationResult.Success("نوتیفیکیشن با موفقیت ویرایش شد.");
+            }
+            catch (InvalidOperationException e)
+            {
+                return OperationResult.Error(e.Message);
+            }
+            catch (Exception e)
+            {
+                return OperationResult.Error(e.Message);
+                //throw new Exception(e.Message);
+            }
+
+        }
+    }
+}
+        //notification.SendEmailForEvent(request.UserNames.ToList()
                     //    , request.EventId
                     //    , request.EventStartTime, request.EventExpiredTime,
                     //    request.IsSend, request.AllowedEmailCount, request.IsActive
@@ -105,35 +148,3 @@ namespace Application.Notification.ChangeDate
                     //    }
                     //    return OperationResult.NotFound("ScheduleId یافت نشد!");  
                     //}
-
-                    string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(notification.UserNames.ToList()
-                                      , request.EventId
-                                      , request.StartTime,
-                                      notification.SendTime,
-                                      eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.SendTime);
-
-                    notification.ScheduleId = scheduleId;
-                    await _repository.Save();
-                    //jobId For Schedule
-                    //BackgroundJob.ContinueJobWith<INotificationService>(
-                    // jobId,
-                    // () =>  _repository.Save(),
-                    // JobContinuationOptions.OnAnyFinishedState);
-
-                }
-
-                return OperationResult.Success("نوتیفیکیشن با موفقیت ویرایش شد.");
-            }
-            catch (InvalidOperationException e)
-            {
-                return OperationResult.Error(e.Message);
-            }
-            catch (Exception e)
-            {
-                return OperationResult.Error(e.Message);
-                //throw new Exception(e.Message);
-            }
-
-        }
-    }
-}

@@ -40,6 +40,13 @@ namespace Application.Notification
             _eventRepository = eventRepository;
         }
 
+        public async Task SendNotification(long NotificationId)
+        {
+            var notification = await _repository.GetTracking(NotificationId);
+            notification!.ActiveSend();
+            await _repository.Save();
+        }
+
         public async Task SendEmail(List<string> userIds, long eventId, DateTime startTime, DateTime sendTime)
         {
             try

@@ -50,6 +50,7 @@ namespace Application.Notification.Add
         {
             try
             {
+                request.UserNames.Add(request.creatorUserName);
                 var notification = new Domain.Notification.Notification(request.EventId,
                        request.IsSend, request.IsSeen, request.EventStartTime,
                        request.SendTime, NotificationType.Email, request.UserNames, request.IsActive
@@ -61,15 +62,17 @@ namespace Application.Notification.Add
                 if (eventClass == null)
                     return OperationResult<long>.NotFound();
 
-                else if (!eventClass.AccessNotification)
-                    return OperationResult<long>.
-                        Error("شما به این ایونت دسترسی برای ارسال نوتیفیکیشن ندادید!");
+                //else if (!eventClass.AccessNotification)
+                //    return OperationResult<long>.
+                //        Error("شما به این ایونت دسترسی برای ارسال نوتیفیکیشن ندادید!");
 
-                else if (notification.NotificationType != NotificationType.Email)
-                    return OperationResult<long>.
-                        Error("شما به این ایونت دسترسی برای ارسال ایمیل ندادید!");
-
+                //else if (notification.NotificationType != NotificationType.Email)
+                //    return OperationResult<long>.
+                //        Error("شما به این ایونت دسترسی برای ارسال ایمیل ندادید!");
                 await _repository.Save();
+               var NotificationScheduleId =
+                    BackgroundJob.Schedule(() => _service.SendNotification(notification.Id), request.SendTime);
+                notification.NotificationScheduleId = NotificationScheduleId;
                 if (notification.IsSend == false && notification.IsActive == true
                     && notification.NotificationType == NotificationType.Email &&
                     notification.AllowedEmailCount >= 0)
@@ -105,6 +108,9 @@ namespace Application.Notification.Add
 
                     notification.ScheduleId = scheduleId;
                 }
+                //var scheduleid =
+                    //BackgroundJob.Schedule(() => notification.EnabledActiveAsync(), request.SendTime);
+
                 await _repository.Save();
                 return OperationResult<long>.Success(notification.Id);
             }

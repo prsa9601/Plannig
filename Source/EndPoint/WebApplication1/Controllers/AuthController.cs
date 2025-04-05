@@ -23,6 +23,7 @@ using Application.User.RemoveToken;
 using Microsoft.AspNetCore.Authentication;
 using Application.User.SendVerificationEmailToken;
 using Application.User.VerificationEmail;
+using Application.User.SendEmailForForgotPassword;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -187,6 +188,20 @@ namespace Planning.Api.Controllers
                 //RefreshToken = refreshToken
             });
         }
+        #region ForgotPassword
+        [HttpPost("SendEmailForForgotPassword")]
+        public async Task<ApiResult> SendEmailForForgotPassword(SendEmailForForgotPasswordCommand command)
+        {
+            var result = await _facade.SendEmailForForgotPassword(command);
+            return CommandResult(result);
+        }
+        [HttpPost("VerifiedEmailForgotPassword")]
+        public async Task<ApiResult> VerifiedEmailForgotPassword(VerifiedEmailForgotPasswordCommand command)
+        {
+            var result = await _facade.VerifiedEmailForgotPassword(command);
+            return CommandResult(result);
+        }
+        #endregion
         #region VerificationEmail
 
         [Authorize]

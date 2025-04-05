@@ -6,10 +6,12 @@ using Application.Notification.Remove;
 using Application.Notification.SmsSender;
 using Common.Application;
 using Common.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Planning.Api.Model.Notification;
 using Presentation.Facade.Notification;
 using Presentation.Facade.User;
+using Query.Notification.DTOs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -59,25 +61,25 @@ namespace Planning.Api.Controllers
             //}
             //if (activePackage != null)
             //{
-                var result = await _facade.AddNotification(new AddNotificationCommand
-                {
-                    IsActive = true,
-                    //AllowedEmailCount = activePackage.AllowedEmailCount,
-                    //AllowedSmsCount = activePackage.AllowedSmsCount,
-                    creatorUserName = user.UserName,
-                    //EventExpiredTime = activePackage.CreationDate.Add(activePackage.ExpiryDate),
-                    EventId = command.EventId,
-                    EventStartTime = command.EventStartTime,
-                    IsSeen = false,
-                    IsSend = false,
-                    NotificationType = command.NotificationType,
-                    SendTime = command.SendTime,
-                    UserNames = command.UserIds
-                });
-                return CommandResult(result);
+            var result = await _facade.AddNotification(new AddNotificationCommand
+            {
+                IsActive = true,
+                //AllowedEmailCount = activePackage.AllowedEmailCount,
+                //AllowedSmsCount = activePackage.AllowedSmsCount,
+                creatorUserName = user.UserName,
+                //EventExpiredTime = activePackage.CreationDate.Add(activePackage.ExpiryDate),
+                EventId = command.EventId,
+                EventStartTime = command.EventStartTime,
+                IsSeen = false,
+                IsSend = false,
+                NotificationType = command.NotificationType,
+                SendTime = command.SendTime,
+                UserNames = command.UserIds
+            });
+            return CommandResult(result);
             //}
             //return CommandResult(OperationResult<long>.Error(403));
-           
+
         }
         [HttpPatch("EditNotification")]
         public async Task<ApiResult> EditNotification([FromBody] EditNotificationViewModel command)
@@ -89,7 +91,7 @@ namespace Planning.Api.Controllers
                 EventEndTime = command.EventEndTime,
                 //AllowedEmailCount = activePackage.AllowedEmailCount,
                 //AllowedSmsCount = activePackage.AllowedSmsCount,
-                //creatorUserName = user.UserName,
+                creatorUserName = User.GetUserName(),
                 //EventExpiredTime = activePackage.CreationDate.Add(activePackage.ExpiryDate),
                 EventId = command.EventId,
                 EventStartTime = command.EventStartTime,
@@ -128,6 +130,25 @@ namespace Planning.Api.Controllers
         {
             var result = await _facade.SendSms(command);
             return CommandResult(result);
+        }
+        [Authorize]
+        [HttpGet("GetFilterNotificationsCurrentUser")]
+        public async Task<ApiResult<NotificationFilterResult?>> GetFilterNotificationsCurrentUser([FromQuery] NotificationFilterParamViewModel param)
+        {
+            var result = await _facade.GetFilterNotificationsCurrentUser(new Query.Notification.DTOs.NotificationFilterParam
+            {
+                UserName = User.GetUserName(),
+                PageId = param.PageId,
+                Take = param.Take
+            });
+            return QueryResult(result);
+        }
+        [Authorize]
+        [HttpGet("GetByIdNotificationsCurrentUser&NotificationId={NotificationId}")]
+        public async Task<ApiResult<NotificationDto?>> GetByIdNotificationsCurrentUser(long NotificationId)
+        {
+            var result = await _facade.GetByIdNotificationsCurrentUser(User.GetUserName(), NotificationId);
+            return QueryResult(result);
         }
     }
 }

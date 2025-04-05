@@ -44,7 +44,24 @@ namespace Query.User._Package
             }
             return userPackages;
         }
-        public static UsersSinglePackagesDto? UsersSinglePackagesMap(this Domain.UserAgg.User? user, 
+        public static UserPackageDto? UserPackageMap(this Domain.UserAgg.UserPackage? package, Domain.PackageAgg.Package packageDomain)
+        {
+            return new UserPackageDto
+            {
+                AllowedEmailCount = package!.AllowedEmailCount,
+                AllowedSmsCount = package.AllowedSmsCount,
+                IsActive = package.IsActive,
+                CreationDate = package.CreationDate,
+                ExpiryDate = package.ExpiryDate,
+                Id = package.Id,
+                PackageId = package.PackageId,
+                UserId = package.UserId,
+                Title = package.PackageTitle,
+                Price = packageDomain.Price 
+                //ExpireDate = item.ExpiryDate
+            };
+        }
+        public static UsersSinglePackagesDto? UsersSinglePackagesMap(this Domain.UserAgg.User? user,
             string userId, long packageId)
         {
             var model = new UsersSinglePackagesDto
@@ -62,18 +79,18 @@ namespace Query.User._Package
         }
         public static UserSinglePackageDto? UserPackageSingleMap(this Domain.UserAgg.UserPackage? package)
         {
-                var model = new UserSinglePackageDto
-                {
-                    AllowedEmailCount = package.AllowedEmailCount,
-                    AllowedSmsCount = package.AllowedSmsCount,
-                    IsActive = package.IsActive,
-                    CreationDate = package.CreationDate,
-                    ExpiryDate = package.ExpiryDate,
-                    Id = package.Id,
-                    PackageId = package.PackageId,
-                    UserId = package.UserId,
-                 
-                };
+            var model = new UserSinglePackageDto
+            {
+                AllowedEmailCount = package.AllowedEmailCount,
+                AllowedSmsCount = package.AllowedSmsCount,
+                IsActive = package.IsActive,
+                CreationDate = package.CreationDate,
+                ExpiryDate = package.ExpiryDate,
+                Id = package.Id,
+                PackageId = package.PackageId,
+                UserId = package.UserId,
+
+            };
             return model;
         }
     }

@@ -5,6 +5,7 @@ using Application.User._UserPackage.SetPackage;
 using Common.Application;
 using MediatR;
 using Query.User._Package;
+using Query.User._Package.GetByEventId;
 using Query.User._Package.GetById;
 using Query.User._Package.GetCurrentUser;
 using Query.User._Package.GetFilter;
@@ -21,6 +22,7 @@ namespace Presentation.Facade.User.Package
         Task<OperationResult> DeActiveUserPackage(DeActiveUserPackageCommand command);
         Task<List<UserPackageDto>?> GetPackagesCurrentUser(string userId);
         Task<UsersSinglePackagesDto?> GetByIdUsersPackages(string userId, long packageId);
+        Task<UserPackageDto?> GetUserPackageByEventId(long Id, string UserId);
         Task<UsersPackagesFilterResult?> GetFilterUsersPackages(
          UsersPackagesFilterParam param);
         Task<UsersPackagesByUserIdFilterResult?> GetFilterUsersPackagesByUserId(
@@ -75,6 +77,15 @@ namespace Presentation.Facade.User.Package
         public async Task<UsersPackagesByUserIdFilterResult?> GetFilterUsersPackagesByUserId(UsersPackagesByUserIdFilterParam param)
         {
             return await _mediator.Send(new GetFilterUserPackagesByUserIdQuery(param));
+        }
+
+        public async Task<UserPackageDto?> GetUserPackageByEventId(long Id, string UserId)
+        {
+            return await _mediator.Send(new GetUserPackageByUserPackageIdQuery
+            {
+                Id = Id,
+                UserId = UserId
+            });
         }
     }
 }

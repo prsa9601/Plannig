@@ -14,6 +14,8 @@ namespace Domain.Notification.Service
 
         Task SendEmailForEvent(List<string> userIds, 
             long eventId, DateTime startTime, DateTime sendTime, string creatorUserName);
+        
+        Task SendNotification(long NotificationId);
 
         Task SendSms(List<string> userIds, long eventId,
             DateTime startTime, DateTime sendTime);

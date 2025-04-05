@@ -1,5 +1,6 @@
 ﻿using Common.Application;
 using Common.Application.Schedule;
+using Common.Application.SecurityUtil;
 using Domain.EventAgg.Enum;
 using Domain.EventAgg.Repository;
 using Domain.EventAgg.Service;
@@ -25,7 +26,7 @@ namespace Application.Event.Add
         public async Task<OperationResult<long>> Handle(AddEventCommand request, CancellationToken cancellationToken)
         {
             var Event = new Domain.EventAgg.Event(request.creatorUserName, request.userNames,
-                request.Title, request.StartTime, request.EndTime, request.Description,
+                request.Title, request.StartTime, request.EndTime, request.Description.SanitizeText(),
                 request.Link, request.EventAddress, request.tag, request.NotificationEnum,
                 request.accessNotification);
 
@@ -54,11 +55,19 @@ namespace Application.Event.Add
                     }
                 }
             }
-            //var Event = new Domain.EventAgg.Event(request.userNames, request.Title, DateTime.Parse(request.StartTime), DateTime.Parse(request.EndTime),request.Description, request.Link, request.EventAddress, request.tag,request.NotificationEnum,request.accessNotification);
+
+           await _repository.Save();
+     
+
+            return OperationResult<long>.Success(Event.Id);
+        }
+    }
+}
+     //var Event = new Domain.EventAgg.Event(request.userNames, request.Title, DateTime.Parse(request.StartTime), DateTime.Parse(request.EndTime),request.Description, request.Link, request.EventAddress, request.tag,request.NotificationEnum,request.accessNotification);
             //_repository.Add(Event);
             // await _service.Schedule("411f8274-5ee7-4bcc-8d43-e5214aa79aa7","aaaaaaaaaaa",DateTime.Now.AddSeconds(5), cancellationToken);
-            await _repository.Save();
-            //var Event2 = await _repository.FindEvent(request.Title, request.StartTime, request.EndTime, request.Description, request.Link, request.EventAddress, request.tag, request.NotificationEnum, request.accessNotification);
+        
+//var Event2 = await _repository.FindEvent(request.Title, request.StartTime, request.EndTime, request.Description, request.Link, request.EventAddress, request.tag, request.NotificationEnum, request.accessNotification);
             //Event.AddUser(request.userNames);
             // await _repository.Save();
             //if (request.accessNotification == true)
@@ -67,8 +76,3 @@ namespace Application.Event.Add
             //        creator.Email, Event.Id, Event.Description, Event.Title,
             //        usersEmail);
             //}
-
-            return OperationResult<long>.Success(Event.Id);
-        }
-    }
-}
