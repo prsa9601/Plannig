@@ -1,6 +1,8 @@
 ﻿using Common.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Domain.BlogAgg;
+using Domain.CommentAgg;
 //using Infrastructure._Utilities.MediatR;
 
 namespace Infrastructure.Persistent.Ef
@@ -20,7 +22,9 @@ namespace Infrastructure.Persistent.Ef
 
         //public DbSet<Domain.UserAgg.User> Users { get; set; }
         public DbSet<Domain.PackageAgg.Package> Packages { get; set; }
-     
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Domain.CategoryAgg.Category> Categories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Domain.EventAgg.Event> Events { get; set; }
         public DbSet<Domain.SocialMediaAgg.InstagramAgg.Instagram> Instagram { get; set; }
         public DbSet<Domain.SocialMediaAgg.TelegramAgg.Telegram> Telegrams { get; set; }

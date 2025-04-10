@@ -29,6 +29,8 @@ namespace Common.Domain.Repository
         bool Exists(Expression<Func<T, bool>> expression);
 
         Task<bool> Delete(Expression<Func<T, bool>> expression);
+        Task<bool> DeleteOneEntity(Expression<Func<T, bool>> expression);
+        Task<bool> DeleteAsync(T entity);
 
         T? Get(long id);
     }

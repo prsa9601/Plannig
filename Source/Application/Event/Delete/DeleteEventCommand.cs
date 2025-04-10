@@ -9,11 +9,12 @@ using Common.Application.Schedule;
 
 namespace Application.Event.Delete
 {
-    public class DeleteEventCommand : IBaseCommand
+    public class DeleteEventCommand : IBaseCommand<long>
     {
         public long Id { get; set; }
+        public string UserName { get; set; }
     }
-    public class DeleteEventCommandHandler : IBaseCommandHandler<DeleteEventCommand>
+    public class DeleteEventCommandHandler : IBaseCommandHandler<DeleteEventCommand, long>
     {
         private readonly IEventRepository _repository;
         private readonly EventScheduler _schedule;
@@ -24,14 +25,30 @@ namespace Application.Event.Delete
             _schedule = schedule;
         }
 
-        public async Task<OperationResult> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<long>> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
         {
-            bool result = await _repository.Delete(i => i.Id == request.Id);
+            var Event = await _repository.GetTracking(request.Id);
+            if (Event == null)
+                return OperationResult<long>.NotFound();
+
+            var eventUser = Event.EventUser.FirstOrDefault
+                (i => i.CreatorUserName.Equals(request.UserName));
+            if (eventUser == null)
+            {
+
+                Event.RemoveUserAsFromEvent(request.UserName);
+                await _repository.Save();
+                return OperationResult<long>.Success(0);
+
+            }
+            bool result = await _repository.DeleteAsync(Event);
             if (!result)
-                return OperationResult.Error("مشکلی در حذف پیش آمده!");
+            {
+                return OperationResult<long>.Error("ایونت با موفقیت انجام نشد!");
+            }
             _schedule.DeleteEvent(request.Id);
             await _repository.Save();
-            return OperationResult.Success();
+            return OperationResult<long>.Success(Event.Id);
         }
     }
 }

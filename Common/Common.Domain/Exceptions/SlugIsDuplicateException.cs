@@ -15,5 +15,6 @@ namespace Common.Domain.Exceptions
         public SlugIsDuplicateException(string message) : base(message)
         {
         }
+        //base($"{message} تکراری هست")
     }
 }

@@ -19,6 +19,14 @@ using Infrastructure.Persistent.Dapper;
 using Infrastructure.Persistent.Ef.NotificationAgg;
 using Infrastructure.Persistent.Ef.PackageAgg;
 using Infrastructure.Persistent.Ef.Role;
+using Application.Category;
+using Domain.CategoryAgg.Service;
+using Domain.CommentAgg.Repository;
+using Infrastructure.Persistent.Ef.CommentAgg;
+using Domain.CategoryAgg.Repository;
+using Infrastructure.Persistent.Ef.CategoryAgg;
+using Infrastructure.Persistent.Ef.BlogAgg;
+using Domain.BlogAgg.Repository;
 
 
 namespace Infrastructure
@@ -28,6 +36,9 @@ namespace Infrastructure
         public static void Init(IServiceCollection services, string connectionString)
         {
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IBlogRepository, BlogRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IPackageRepository, PackageRepository>();
             services.AddScoped<IUserRepository<Domain.UserAgg.User>, UserRepository<Domain.UserAgg.User>>();
             services.AddScoped<IInstagramRepository, InstagramRepository>();

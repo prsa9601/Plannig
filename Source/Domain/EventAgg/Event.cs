@@ -1,4 +1,5 @@
-﻿using Common.Domain;
+﻿using System.Reflection.Emit;
+using Common.Domain;
 using Common.Domain.Exceptions;
 using Domain.EventAgg.Enum;
 using Domain.UserAgg;
@@ -15,7 +16,7 @@ namespace Domain.EventAgg
         public string EventAddress { get; private set; }
 
         public Tagged Tag { get; private set; }
-        public List<EventUser> EventUser { get; set; }
+        public List<EventUser> EventUser { get; set; } = new List<EventUser>();
         public NotificationEnum notification { get; private set; }
         //public List<UserEvent> Participants { get; private set; }
 
@@ -64,7 +65,7 @@ namespace Domain.EventAgg
             this.Tag = tag;
             this.notification = notification;
             AccessNotification = accessNotification;
-            EventUser = new List<EventUser>();
+            //EventUser = new List<EventUser>();
 
             //Participants = new List<UserEvent>();
             //Participants = new List<EventParticipants>();
@@ -114,6 +115,14 @@ namespace Domain.EventAgg
             //eventUser.Clear();
             EventUser.AddRange(users);
         }
+        public void RemoveUserAsFromEvent(string userName)
+        {
+            var eventUser = EventUser.FirstOrDefault(f => f.UserName.Equals(userName) && f.EventId.Equals(Id));
+            if (eventUser != null)
+            {
+                EventUser.Remove(eventUser);
+            }
+        }
         //public Event(string title, DateTime startTime, DateTime endTime, string description)
         //{    
 
@@ -152,7 +161,7 @@ namespace Domain.EventAgg
                 {
                     users.Add(new EventUser(item));
                 }
-                    users.Add(new EventUser(creatorUserName));
+                users.Add(new EventUser(creatorUserName));
                 users.ForEach(f => f.EventId = Id);
                 users.ForEach(i => i.CreatorUserName = creatorUserName);
                 //eventUser.Clear();

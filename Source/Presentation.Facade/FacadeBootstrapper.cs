@@ -1,5 +1,8 @@
 ﻿using Domain.PackageAgg.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using Presentation.Facade.Blog;
+using Presentation.Facade.Category;
+using Presentation.Facade.Comment;
 using Presentation.Facade.Event;
 using Presentation.Facade.Instagram;
 using Presentation.Facade.Notification;
@@ -24,6 +27,9 @@ namespace Presentation.Facade
             services.AddScoped<ITelegramFacade, TelegramFacade>();
             services.AddScoped<IPackageFacade, PackageFacade>();
             services.AddScoped<IRoleFacade, RoleFacade>();
+            services.AddScoped<IBlogFacade, BlogFacade>();
+            services.AddScoped<ICommentFacade, CommentFacade>();
+            services.AddScoped<ICategoryFacade, CategoryFacade>();
             services.AddScoped<IInstagramFacade, InstagramFacade>();
             services.AddScoped<IRequestFacade, RequestFacade>();
             services.AddScoped<IFriendFacade, FriendFacade>();

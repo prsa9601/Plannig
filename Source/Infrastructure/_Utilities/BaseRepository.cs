@@ -96,6 +96,32 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
             return false; 
         }
     }
+    public async Task<bool> DeleteOneEntity(Expression<Func<TEntity , bool>> expression)
+    {
+        try
+        {
+            var Entity = await Context.Set<TEntity>().Where(expression).FirstOrDefaultAsync();
+            Context.Set<TEntity>().Remove(Entity!);
+            return true;
+        }
+        catch
+        {
+            return false; 
+        }
+    }
+    public Task<bool> DeleteAsync(TEntity entity)
+    {
+        try
+        {
+            var Entity = Context.Set<TEntity>().Remove(entity);
+            return Task.FromResult(true);
+        }
+        catch
+        {
+            return Task.FromResult(false); 
+        }
+    }
+   
  
 
    

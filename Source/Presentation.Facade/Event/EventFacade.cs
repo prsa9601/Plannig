@@ -34,7 +34,7 @@ namespace Presentation.Facade.Event
             return await _mediator.Send(command);
         }
 
-        public async Task<OperationResult> DeleteEvent(DeleteEventCommand command)
+        public async Task<OperationResult<long>> DeleteEvent(DeleteEventCommand command)
         {
             return await _mediator.Send(command);
         }

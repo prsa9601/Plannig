@@ -17,7 +17,7 @@ namespace Infrastructure.Persistent.Ef.EventAgg
 
             builder.OwnsMany(b => b.EventUser, option =>
             {
-                option.ToTable("eventUser", "event");
+                option.ToTable("EventUser", "event");
                 option.HasIndex(b => b.EventId);
             });
         }

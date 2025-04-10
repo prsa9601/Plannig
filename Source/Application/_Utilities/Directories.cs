@@ -17,6 +17,7 @@ namespace Application._Utilities
         public const string TelegramVideo = "wwwroot/images/Telegram/Video";
         public const string InstagramStoryImages = "wwwroot/images/Instagram/Story/image";
         public const string InstagramStoryVideos = "wwwroot/images/Instagram/Story/Video";
+        public const string BlogImage = "wwwroot/images/Blog/Image";
 
 
     }

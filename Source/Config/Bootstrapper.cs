@@ -1,5 +1,7 @@
 ﻿using AngleSharp;
 using Application._Utilities;
+using Application.Blog;
+using Application.Category;
 using Application.Event;
 using Application.Event.Add;
 using Application.Notification;
@@ -11,6 +13,8 @@ using Application.User;
 using Application.User._RequestBox;
 using Application.User.SendVerificationEmailToken;
 using Common.Application.Schedule;
+using Domain.BlogAgg.Service;
+using Domain.CategoryAgg.Service;
 using Domain.EventAgg.Service;
 using Domain.Notification.NotificationSchedule;
 using Domain.Notification.Service;
@@ -44,6 +48,9 @@ namespace Config
             //services.AddTransient<IPostDomainService, PostDomainService>();
             // services.AddTransient<IUserService, UserService>();
             //services.AddTransient<ICategoryDomainService, CategoryDomainService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<INotificationService, NotificationService>();

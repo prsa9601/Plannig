@@ -1,4 +1,5 @@
-﻿using Domain.EventAgg.Enum;
+﻿using Common.Application;
+using Domain.EventAgg.Enum;
 
 namespace Planning.Api.Model.Event
 {
@@ -19,7 +20,7 @@ namespace Planning.Api.Model.Event
             public Domain.EventAgg.Enum.NotificationEnum notification { get; set; }
         
     }
-
+ 
     public class EditEventCommandViewModel
     {
         public long Id { get; set; }

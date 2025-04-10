@@ -98,11 +98,12 @@ namespace Planning.Api.Controllers
             return CommandResult(result);
         }
         [HttpDelete("{id}")]
-        public async Task<ApiResult> Delete(long id)
+        public async Task<ApiResult<long>> Delete(long id)
         {
             var result = await _facade.DeleteEvent(new DeleteEventCommand()
             {
-                Id = id
+                Id = id,
+                UserName = User.GetUserName(),
             });
             return CommandResult(result);
         }

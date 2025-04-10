@@ -22,6 +22,130 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.BlogAgg.Blog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatorUserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSend")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SendTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Visit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("Blog", "Blog");
+                });
+
+            modelBuilder.Entity("Domain.CategoryAgg.Category", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(900)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Domain.CommentAgg.Comment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("PostId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments", "dbo");
+                });
+
             modelBuilder.Entity("Domain.EventAgg.Event", b =>
                 {
                     b.Property<long>("Id")
@@ -601,6 +725,103 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.BlogAgg.Blog", b =>
+                {
+                    b.OwnsOne("Common.Domain.ValueObjects.SeoData", "SeoData", b1 =>
+                        {
+                            b1.Property<long>("BlogId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<string>("Canonical")
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("Canonical");
+
+                            b1.Property<bool>("IndexPage")
+                                .HasColumnType("bit")
+                                .HasColumnName("IndexPage");
+
+                            b1.Property<string>("MetaDescription")
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("MetaDescription");
+
+                            b1.Property<string>("MetaKeyWords")
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("MetaKeyWords");
+
+                            b1.Property<string>("MetaTitle")
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("MetaTitle");
+
+                            b1.Property<string>("Schema")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Schema");
+
+                            b1.HasKey("BlogId");
+
+                            b1.ToTable("Blog", "Blog");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BlogId");
+                        });
+
+                    b.Navigation("SeoData")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.CategoryAgg.Category", b =>
+                {
+                    b.OwnsOne("Common.Domain.ValueObjects.SeoData", "SeoData", b1 =>
+                        {
+                            b1.Property<long>("CategoryId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<string>("Canonical")
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("Canonical");
+
+                            b1.Property<bool>("IndexPage")
+                                .HasColumnType("bit")
+                                .HasColumnName("IndexPage");
+
+                            b1.Property<string>("MetaDescription")
+                                .HasMaxLength(500)
+                                .IsUnicode(true)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("MetaDescription");
+
+                            b1.Property<string>("MetaKeyWords")
+                                .HasMaxLength(500)
+                                .IsUnicode(true)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("MetaKeyWords");
+
+                            b1.Property<string>("MetaTitle")
+                                .HasMaxLength(500)
+                                .IsUnicode(true)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("MetaTitle");
+
+                            b1.Property<string>("Schema")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Schema");
+
+                            b1.HasKey("CategoryId");
+
+                            b1.ToTable("Categories");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CategoryId");
+                        });
+
+                    b.Navigation("SeoData")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.EventAgg.Event", b =>
                 {
                     b.OwnsMany("Domain.EventAgg.EventUser", "EventUser", b1 =>
@@ -629,7 +850,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasIndex("EventId");
 
-                            b1.ToTable("eventUser", "event");
+                            b1.ToTable("EventUser", "event");
 
                             b1.WithOwner()
                                 .HasForeignKey("EventId");

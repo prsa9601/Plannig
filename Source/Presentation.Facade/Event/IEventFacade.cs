@@ -12,7 +12,7 @@ namespace Presentation.Facade.Event
         Task<OperationResult<long>> AddEvent(AddEventCommand command);
         Task<OperationResult<long>> EditEvent(EditEventCommand command);
         Task<OperationResult> SetDatesEvent(SetDatesEventCommand command);
-        Task<OperationResult> DeleteEvent(DeleteEventCommand command);
+        Task<OperationResult<long>> DeleteEvent(DeleteEventCommand command);
 
 
         Task<EventDto?> GetEventById(long id);

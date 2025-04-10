@@ -25,16 +25,15 @@ namespace Application.Notification.Remove
         {
             try
             {
-                var notification = await _repository.GetAsync(request.EventId);
+                var notification = await _repository.GetTracking(request.EventId);
                 var result = await _repository.Delete(i => i.EventId == request.EventId);
                 //return (result) ? OperationResult.Success() : OperationResult.NotFound();
                 if (!result)
                     return OperationResult.NotFound();
                 bool deleteScheduleResult = false;
                 var DeleteScheduleResult = false;
-                if (result)
+                if (result && notification!.ScheduleId != null)
                 {
-
                   deleteScheduleResult = BackgroundJob.Delete(notification.ScheduleId);
                   DeleteScheduleResult = BackgroundJob.Delete(notification.NotificationScheduleId);
                 }
