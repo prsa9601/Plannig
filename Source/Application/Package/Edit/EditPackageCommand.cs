@@ -1,9 +1,12 @@
 ﻿using Application._Utilities;
+using Application.Package.Add;
 using Common.Application;
 using Common.Application.FileUtil.Interfaces;
+using Common.Application.Validation;
 using Domain.PackageAgg;
 using Domain.PackageAgg.Repository;
 using Domain.PackageAgg.Service;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using static Domain.PackageAgg.Package;
 
@@ -18,6 +21,9 @@ namespace Application.Package.Edit
         public ExpiryTime ExpiryTime { get; set; }
         public int AllowedEmailCount { get; set; }
         public int AllowedSmsCount { get; set; }
+        public int AllowedPostTelegram { get; set; }
+        public int AllowedPostInstagram { get; set; }
+        public int AllowedStoryInstagram { get; set; }
         public IFormFile? Picture { get; set; }
         public Dictionary<string, string> Specifications { get; set; }
 
@@ -57,7 +63,10 @@ namespace Application.Package.Edit
 
             }
 
-            package.Edit(request.ExpiryTime, request.AllowedSmsCount, request.AllowedEmailCount, request.Price, request.Title, request.Link, _service);
+            package.Edit(request.ExpiryTime, request.AllowedSmsCount,
+                request.AllowedEmailCount, request.Price, request.Title,
+                request.Link, request.AllowedPostTelegram, request.AllowedPostInstagram,
+                request.AllowedStoryInstagram, _service);
 
             var specifications = new List<PackageSpecification>();
             request.Specifications.ToList().ForEach(specification =>
@@ -77,6 +86,46 @@ namespace Application.Package.Edit
 
             _fileService.DeleteFile(Directories.UserAvatars, oldImage);
         }
-    }
+        public class EditPackageCommandValidator : AbstractValidator<EditPackageCommand>
+        {
+            public EditPackageCommandValidator()
+            {
+                RuleFor(r => r.Picture)
+                    .NotNull().NotEmpty()
+                    .WithMessage(ValidationMessages.required("Picture"));
 
+                RuleFor(r => r.Title)
+                    .NotNull().NotEmpty()
+                    .WithMessage(ValidationMessages.required("Title"));
+
+
+                RuleFor(r => r.AllowedEmailCount)
+                    .NotNull().NotEmpty()
+                    .GreaterThanOrEqualTo(0) // چک می‌کند که مقدار کمتر از صفر نباشد
+                    .WithMessage(ValidationMessages.required("AllowedEmailCount باید بزرگتر یا مساوی صفر باشد"));
+
+                RuleFor(r => r.AllowedSmsCount)
+                    .NotNull().NotEmpty()
+                    .GreaterThanOrEqualTo(0)
+                    .WithMessage("AllowedSmsCount باید بزرگتر یا مساوی صفر باشد");
+
+                RuleFor(r => r.AllowedPostTelegram)
+                    .NotNull().NotEmpty()
+                    .GreaterThanOrEqualTo(0)
+                    .WithMessage("AllowedPostTelegram باید بزرگتر یا مساوی صفر باشد");
+
+                RuleFor(r => r.AllowedPostInstagram)
+                    .NotNull().NotEmpty()
+                    .GreaterThanOrEqualTo(0)
+                    .WithMessage("AllowedPostInstagram باید بزرگتر یا مساوی صفر باشد");
+
+                RuleFor(r => r.AllowedStoryInstagram)
+                    .NotNull().NotEmpty()
+                    .GreaterThanOrEqualTo(0)
+                    .WithMessage("AllowedStoryInstagram باید بزرگتر یا مساوی صفر باشد");
+            }
+
+
+        }
+    }
 }

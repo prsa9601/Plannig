@@ -8,7 +8,7 @@ namespace Planning.Api.Model.Notification
         public DateTime SendTime { get; set; }
         public long EventId { get; set; }
         public DateTime EventStartTime { get; set; }
-        public List<string> UserIds { get; set; }
+        public List<string> UserNames { get; set; }
     }
     public class EditNotificationViewModel
     {

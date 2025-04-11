@@ -12,7 +12,9 @@ namespace Infrastructure.Persistent.Ef.TelegramAgg
         public TelegramRepository(PlanningContext context) : base(context)
         {
         }
-        public async Task<int> SendVideoToTelegram(string channelName, string videoCaption, string videoPath, long id, int width, int height, string thumbnail, string token)
+        public async Task<int> SendVideoToTelegram(string channelName,
+            string videoCaption, string videoPath, long id,
+            int width, int height, string thumbnail, string token)
         {
             try
             {
@@ -40,7 +42,8 @@ namespace Infrastructure.Persistent.Ef.TelegramAgg
                 return 500;
             }
         }
-        public async Task<int> SendImageToTelegram(string channelName, string caption, string imagePath, long id, string token)
+        public async Task<int> SendImageToTelegram(string channelName, string caption,
+            string imagePath, long id, string token)
         {
             try
             {
@@ -60,7 +63,8 @@ namespace Infrastructure.Persistent.Ef.TelegramAgg
                 return 500;
             }
         }
-        public async Task<int> SendMessageToTelegram(string channelName, string caption, string token)
+        public async Task<int> SendMessageToTelegram(string channelName,
+            string caption, string token)
         {
 
             try
@@ -110,8 +114,6 @@ namespace Infrastructure.Persistent.Ef.TelegramAgg
                 return 500;
             }
         }
-
-
 
 
     }

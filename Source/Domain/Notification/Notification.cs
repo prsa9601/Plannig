@@ -25,7 +25,7 @@ namespace Domain.Notification
             IsActive = isActive;
             //ScheduleId = scheduleId;, string scheduleId
         }
-
+        
         private Notification()
         {
             UserNames = new List<string>();

@@ -23,15 +23,6 @@ namespace Presentation.Facade.Blog
     }
     internal class BlogFacade : IBlogFacade
     {
-        private readonly HttpClient _client;
-
-        public BlogFacade(HttpClient client)
-        {
-            _client = client;
-        }
-
-        private const string ModuleName = "Blog";
-
         private readonly IMediator _mediator;
 
         public BlogFacade(IMediator mediator)

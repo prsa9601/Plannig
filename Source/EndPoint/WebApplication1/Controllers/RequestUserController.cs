@@ -7,8 +7,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Planning.Api.Model.RequestBox;
+using Presentation.Facade.Notification;
 using Presentation.Facade.User.Request;
 using Query.User._RequestBox.DTOs;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Planning.Api.Controllers
 {
@@ -17,10 +19,12 @@ namespace Planning.Api.Controllers
     public class RequestUserController : ApiController
     {
         private readonly IRequestFacade _facade;
+        private readonly INotificationFacade _notifiicationFacade;
 
-        public RequestUserController(IRequestFacade facade)
+        public RequestUserController(IRequestFacade facade, INotificationFacade notifiicationFacade)
         {
             _facade = facade;
+            _notifiicationFacade = notifiicationFacade;
         }
         [Authorize]
         [HttpPost]
@@ -34,6 +38,7 @@ namespace Planning.Api.Controllers
                 userName = User.GetUserName(),
                 userNameFriend = ReceiverUserName
             });
+         
             return CommandResult(result);
         }
         [Authorize]
@@ -74,7 +79,7 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpGet("GetFilter")]
-        public async Task<ApiResult<RequestBoxFilterResult?>> GetRequestByFilter([FromQuery]RequestBoxParamViewModel param)
+        public async Task<ApiResult<RequestBoxFilterResult?>> GetRequestByFilter([FromQuery] RequestBoxParamViewModel param)
         {
             var UserId = User.Identity.GetUserId();
 

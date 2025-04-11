@@ -16,6 +16,9 @@ namespace Domain.PackageAgg
         public int Price { get; private set; }
         public int AllowedEmailCount { get; private set; }
         public int AllowedSmsCount { get; private set; }
+        public int AllowedPostTelegram { get; set; } = 10;
+        public int AllowedPostInstagram { get; set; } = 10;
+        public int AllowedStoryInstagram { get; set; } = 10;
         public ExpiryTime ExpiryDate { get; set; }
 
         public List<PackageSpecification> Specification { get; set; }
@@ -24,7 +27,10 @@ namespace Domain.PackageAgg
         {
 
         }
-        public Package(ExpiryTime expiryTime, int allowedSmsCount, int allowedEmailCount, int price, string title, string imageName, string link, IPackageService _service)
+        public Package(ExpiryTime expiryTime, int allowedSmsCount,
+            int allowedEmailCount, int price, string title, string imageName, 
+            string link, int allowedPostTelegram, int allowedPostInstagram, 
+            int allowedStoryInstagram, IPackageService _service)
         {
             Guard(title, _service);
             Title = title;
@@ -34,9 +40,15 @@ namespace Domain.PackageAgg
             AllowedEmailCount = allowedSmsCount;
             AllowedSmsCount = allowedEmailCount;
             ExpiryDate = expiryTime;
+
+            AllowedPostInstagram = allowedPostInstagram;
+            AllowedStoryInstagram = allowedStoryInstagram;
+            AllowedPostTelegram = allowedPostTelegram;
         }
 
-        public void Edit(ExpiryTime expiryTime, int allowedSmsCount, int allowedEmailCount, int price, string title, string link, IPackageService _service)
+        public void Edit(ExpiryTime expiryTime, int allowedSmsCount, int allowedEmailCount, 
+            int price, string title, string link, int allowedPostTelegram, int allowedPostInstagram,
+            int allowedStoryInstagram, IPackageService _service)
         {
             Title = title;
             Link = link;
@@ -44,6 +56,10 @@ namespace Domain.PackageAgg
             AllowedEmailCount = allowedSmsCount;
             AllowedSmsCount = allowedEmailCount;
             ExpiryDate = expiryTime;
+
+            AllowedPostInstagram = allowedPostInstagram;
+            AllowedStoryInstagram = allowedStoryInstagram;
+            AllowedPostTelegram = allowedPostTelegram;
         }
 
         public void SetImage(string imageName)

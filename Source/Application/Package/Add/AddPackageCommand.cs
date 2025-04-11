@@ -19,6 +19,9 @@ namespace Application.Package.Add
         public ExpiryTime ExpiryTime { get; set; }
         public int AllowedEmailCount { get; set; }
         public int AllowedSmsCount { get; set; }
+        public int AllowedPostTelegram { get; set; }
+        public int AllowedPostInstagram { get; set; }
+        public int AllowedStoryInstagram { get; set; }
         public IFormFile Picture { get; set; }
         public Dictionary<string, string> Specifications { get; set; }
 
@@ -41,8 +44,11 @@ namespace Application.Package.Add
             var imageName = await _fileService
                 .SaveFileAndGenerateName(request.Picture, Directories.PackageImages);
 
-            var package = new Domain.PackageAgg.Package(request.ExpiryTime, request.AllowedSmsCount, 
-                request.AllowedEmailCount, request.Price, request.Title, imageName, request.Link, _service); 
+            var package = new Domain.PackageAgg.Package(request.ExpiryTime,
+                request.AllowedSmsCount,
+                request.AllowedEmailCount, request.Price, request.Title,
+                imageName, request.Link, request.AllowedPostTelegram, request.AllowedPostInstagram,
+                request.AllowedStoryInstagram, _service);
             _repository.Add(package);
             //_repository.SaveChange();
             var specifications = new List<PackageSpecification>();
@@ -67,8 +73,33 @@ namespace Application.Package.Add
 
             RuleFor(r => r.Title)
                 .NotNull().NotEmpty()
-                .WithMessage(ValidationMessages.required("Picture"));
+                .WithMessage(ValidationMessages.required("Title"));
 
+
+            RuleFor(r => r.AllowedEmailCount)
+                .NotNull().NotEmpty()
+                .GreaterThanOrEqualTo(0) // چک می‌کند که مقدار کمتر از صفر نباشد
+                .WithMessage(ValidationMessages.required("AllowedEmailCount باید بزرگتر یا مساوی صفر باشد"));
+
+            RuleFor(r => r.AllowedSmsCount)
+                .NotNull().NotEmpty()
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("AllowedSmsCount باید بزرگتر یا مساوی صفر باشد");
+
+            RuleFor(r => r.AllowedPostTelegram)
+                .NotNull().NotEmpty()
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("AllowedPostTelegram باید بزرگتر یا مساوی صفر باشد");
+
+            RuleFor(r => r.AllowedPostInstagram)
+                .NotNull().NotEmpty()
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("AllowedPostInstagram باید بزرگتر یا مساوی صفر باشد");
+
+            RuleFor(r => r.AllowedStoryInstagram)
+                .NotNull().NotEmpty()
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("AllowedStoryInstagram باید بزرگتر یا مساوی صفر باشد");
         }
 
 

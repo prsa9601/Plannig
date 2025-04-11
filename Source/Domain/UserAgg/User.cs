@@ -319,19 +319,23 @@ namespace Domain.UserAgg
 
         }
         public void SetUserPackage(DateTime time, long packageId, int AllowedSmsCount,
-            int AllowedEmailCount, string packageTitle)
+            int AllowedEmailCount, string packageTitle, int allowedPostTelegram,
+            int allowedPostInstagram, int allowedStoryInstagram)
         {
-            var package = new UserPackage(packageId, AllowedSmsCount, AllowedEmailCount, time, packageTitle);
+            var package = new UserPackage(packageId, AllowedSmsCount, AllowedEmailCount,
+                time, packageTitle,allowedPostTelegram,allowedPostInstagram, allowedStoryInstagram);
             package.UserId = Id;
             package.IsActive = true;
             UserPackages.Add(package);
         }
         public void EditUserPackage(long packageId, DateTime time, int AllowedSmsCount,
-            int AllowedEmailCount)
+            int AllowedEmailCount, int allowedPostTelegram, 
+            int allowedPostInstagram, int allowedStoryInstagram)
         {
             var package = UserPackages.Where(i =>
                 i.UserId == Id && i.PackageId == packageId && i.IsActive == true).FirstOrDefault();
-            package.Edit(time, AllowedSmsCount, AllowedEmailCount);
+            package.Edit(time, AllowedSmsCount, AllowedEmailCount, 
+                allowedPostTelegram, allowedPostInstagram, allowedStoryInstagram);
             if (time.Equals(0))
             {
                 package.IsActive = false;

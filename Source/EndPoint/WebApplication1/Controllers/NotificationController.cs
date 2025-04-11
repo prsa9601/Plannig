@@ -74,7 +74,7 @@ namespace Planning.Api.Controllers
                 IsSend = false,
                 NotificationType = command.NotificationType,
                 SendTime = command.SendTime,
-                UserNames = command.UserIds
+                UserNames = command.UserNames
             });
             return CommandResult(result);
             //}

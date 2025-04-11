@@ -39,6 +39,9 @@ namespace Planning.Api.Controllers
                 Link = command.Link,
                 AllowedSmsCount = command.AllowedSmsCount,
                 AllowedEmailCount = command.AllowedEmailCount,
+                AllowedPostTelegram = command.AllowedPostTelegram,
+                AllowedStoryInstagram = command.AllowedStoryInstagram,
+                AllowedPostInstagram = command.AllowedPostInstagram,
                 ExpiryTime = command.ExpiryTime,
                 Picture = command.Picture,
                 Price = command.Price,
@@ -73,9 +76,12 @@ namespace Planning.Api.Controllers
         {
             var result = await _facade.Edit(new EditPackageCommand()
             {
-                Id = command.packageId,
+                Id = command.Id,
                 AllowedEmailCount = command.AllowedEmailCount,
                 AllowedSmsCount = command.AllowedSmsCount,
+                AllowedPostTelegram = command.AllowedPostTelegram,
+                AllowedStoryInstagram = command.AllowedStoryInstagram,
+                AllowedPostInstagram = command.AllowedPostInstagram,
                 ExpiryTime = command.ExpiryTime,
                 Title = command.Title,
                 Link = command.Link,

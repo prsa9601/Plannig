@@ -48,7 +48,8 @@ namespace Application.User._UserPackage.SetPackage
         
             user.SetUserPackage
             (expiryDate, request.packageId
-                , package.AllowedSmsCount, package.AllowedEmailCount, package.Title);
+                , package.AllowedSmsCount, package.AllowedEmailCount, package.Title,
+                 package.AllowedPostTelegram, package.AllowedPostInstagram, package.AllowedStoryInstagram);
             await _repository.Save();
             return OperationResult.Success();
         }
