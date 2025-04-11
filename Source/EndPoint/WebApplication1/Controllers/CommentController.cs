@@ -41,9 +41,9 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpDelete("DeleteComment")]
-        public async Task<ApiResult> DeleteComment(DeleteCommentCommand command)
+        public async Task<ApiResult> DeleteComment(long CommentId)
         {
-            return CommandResult(await _facade.Remove(command));
+            return CommandResult(await _facade.Remove(new DeleteCommentCommand(CommentId)));
         }
         [Authorize]
         [HttpGet("GetCommentById")]

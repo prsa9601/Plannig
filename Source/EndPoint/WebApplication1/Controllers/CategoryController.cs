@@ -34,9 +34,9 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpDelete("DeleteCategory")]
-        public async Task<ApiResult> DeleteCategory(RemoveCategoryCommand command)
+        public async Task<ApiResult> DeleteCategory(long CategoryId)
         {
-            return CommandResult(await _facade.Remove(command));
+            return CommandResult(await _facade.Remove(new RemoveCategoryCommand(CategoryId)));
         }
         [Authorize]
         [HttpGet("GetCategoryById")]

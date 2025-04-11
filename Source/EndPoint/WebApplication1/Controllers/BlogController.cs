@@ -2,6 +2,7 @@
 using Application.Blog.Edit;
 using Application.Blog.IncreaseVisit;
 using Application.Blog.Remove;
+using Application.Comment.ChangeStatus;
 using Common.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,15 +36,24 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpPatch("IncreaseVisit")]
-        public async Task<ApiResult> ChangeBlogStatus(IncreaseBlogVisitCommand command)
+        public async Task<ApiResult> IncreaseVisit(IncreaseBlogVisitCommand command)
         {
             return CommandResult(await _facade.IncreaseVisit(command));
         }
+        //[Authorize]
+        //[HttpPatch("ChangeBlogStatus")]
+        //public async Task<ApiResult> ChangeBlogStatus(ChangeStatusCommentCommand command)
+        //{
+        //    return CommandResult(await _facade.IncreaseVisit(command));
+        //}
         [Authorize]
         [HttpDelete("DeleteBlog")]
-        public async Task<ApiResult> DeleteBlog(RemoveBlogCommand command)
+        public async Task<ApiResult> DeleteBlog(long BlogId)
         {
-            return CommandResult(await _facade.Remove(command));
+            return CommandResult(await _facade.Remove(new RemoveBlogCommand
+            {
+                BlogId = BlogId
+            }));
         }
         [Authorize]
         [HttpGet("GetBlogById")]
