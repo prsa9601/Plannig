@@ -48,7 +48,7 @@ namespace Query.SocialMedia.Telegram.GetByFilter
             var skip = (@params.PageId - 1) * @params.Take;
             var model = new TelegramFilterResult()
             {
-                Data = await result.Skip(skip).Take(@params.Take).Select(s => s.MapTelegram())
+                Data = await result.Skip(skip).Take(@params.Take).Select(s => s.MapTelegram()!)
                     .ToListAsync(cancellationToken),
                 FilterParams = @params
             };

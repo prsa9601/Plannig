@@ -1,22 +1,31 @@
 ﻿using Common.Query;
-using Query.SocialMedia.Telegram.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Infrastructure.Persistent.Ef;
+using Microsoft.EntityFrameworkCore;
+using Query.SocialMedia.Telegram.Account.DTOs;
 
 namespace Query.SocialMedia.Telegram.Account.GetById
 {
-    public class GetTelegramAccountByIdQuery : IQuery<TelegramDto?>
+    public record class GetTelegramAccountByIdQuery(long AccountId) : IQuery<TelegramAccountDto?>;
+
+    public class GetTelegramAccountByIdQueryHandler
+        : IQueryHandler<GetTelegramAccountByIdQuery, TelegramAccountDto?>
     {
-    }
-    public class GetTelegramAccountByIdQueryHandler 
-        : IQueryHandler<GetTelegramAccountByIdQuery, TelegramDto?>
-    {
-        public Task<TelegramDto?> Handle(GetTelegramAccountByIdQuery request, CancellationToken cancellationToken)
+        private readonly PlanningContext _context;
+
+        public GetTelegramAccountByIdQueryHandler(PlanningContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task<TelegramAccountDto?> Handle(GetTelegramAccountByIdQuery request, CancellationToken cancellationToken)
+        {
+            var TelegramAccount = await _context.Telegrams.FirstOrDefaultAsync
+                (i => i.Id.Equals(request.AccountId), cancellationToken);
+
+            if (TelegramAccount == null)
+                return null;
+
+            return TelegramAccount.Map();
         }
     }
 }

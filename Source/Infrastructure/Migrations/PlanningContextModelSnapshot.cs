@@ -1191,27 +1191,13 @@ namespace Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("ImageName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
                             b1.Property<bool>("IsSend")
                                 .HasColumnType("bit");
 
-                            b1.Property<string>("Link")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
                             b1.Property<string>("TelegramUserName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("VideoName")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("postId")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(450)");
 
                             b1.HasKey("TelegramId", "Id");
@@ -1244,10 +1230,6 @@ namespace Infrastructure.Migrations
                                         .IsRequired()
                                         .HasColumnType("nvarchar(max)");
 
-                                    b2.Property<string>("Link")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
                                     b2.Property<int>("Secuence")
                                         .HasColumnType("int");
 
@@ -1277,10 +1259,6 @@ namespace Infrastructure.Migrations
 
                                     b2.Property<DateTime>("CreationDate")
                                         .HasColumnType("datetime2");
-
-                                    b2.Property<string>("Link")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
 
                                     b2.Property<int>("Sequence")
                                         .HasColumnType("int");

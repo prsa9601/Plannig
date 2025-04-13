@@ -8,20 +8,20 @@ public class TelegramPostVideo : BaseEntity
     public string VideoName { get; private set; }
     public long PostId { get; internal set; }
     public int Sequence { get; private set; }
-    public string Link { get; private set; }
+    //public string? Link { get; private set; }
 
-    public TelegramPostVideo(string videoName, int sequence, string link)
+    public TelegramPostVideo(string videoName, int sequence)
     {
         //DateOfPosting = dateOfPosting;DateTime dateOfPosting, 
         VideoName = videoName;
         Sequence = sequence;
-        Link = link;
+        //Link = link;, string? link
     }
-    public void Edit(string videoName, int sequence, string link)
+    public void Edit(string videoName, int sequence)
     {
         // DateOfPosting = dateOfPosting;DateTime dateOfPosting, 
         VideoName = videoName;
         Sequence = sequence;
-        Link = link;
+        //Link = link;, string? link
     }
 }

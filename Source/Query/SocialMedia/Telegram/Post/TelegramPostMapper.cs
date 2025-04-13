@@ -19,11 +19,13 @@ namespace Query.SocialMedia.Telegram.Post
                 DateOfPosting = post.DateOfPosting,
                 Description = post.Description,
                 Id = post.Id,
-                ImageName = post.ImageName,
+                //ImageName = post.ImageName,
+                TelegramUserName = post.TelegramUserName,
+                IsSend = post.IsSend,
                 Images = post.Images.ImageMap(),
                 postId = post.postId,
                 Videos = post.Videos.VideoMap(),
-                Link = post.Link
+                //Link = post.Link
             };
         }
         internal static List<PostVideoDto?> VideoMap(this List<TelegramPostVideo?> posts)
@@ -36,7 +38,7 @@ namespace Query.SocialMedia.Telegram.Post
                 {
                     CreationDate = item.CreationDate,
                     Id = item.Id,
-                    Link = item.Link
+                    //Link = item.Link
                 };
                 model.Add(dto);
             }
@@ -53,7 +55,7 @@ namespace Query.SocialMedia.Telegram.Post
                 {
                     CreationDate = item.CreationDate,
                     Id = item.Id,
-                    Link = item.Link
+                    //Link = item.Link
                 };
                 model.Add(dto);
             }

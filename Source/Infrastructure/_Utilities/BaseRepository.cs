@@ -67,7 +67,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
     public int SaveChange()
     {
-        return  Context.SaveChanges();
+        return Context.SaveChanges();
     }
     public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
     {

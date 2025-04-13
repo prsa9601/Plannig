@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Facade.Telegram;
 using Presentation.Facade.Telegram.Account;
+using Query.SocialMedia.Telegram.Account.DTOs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,14 +34,16 @@ namespace Planning.Api.Controllers
             _account = account;
         }
 
-        [HttpPost]
-        public async Task<ApiResult> Add(AddPostCommand command)
+        [HttpPost("AddPost")]
+        public async Task<ApiResult> Add([FromForm]AddPostCommand command)
         {
-            var result = await _facade.Add(command);
+            var result = await _facade.Add(new AddPostCommand(command.TelegramId,
+                 DateTime.Now, command.description, command.link, command.slug, command.Images,
+                 command.Videos));
             return CommandResult(result);
         }
         [HttpPatch]
-        public async Task<ApiResult> Edit(EditPostCommand command)
+        public async Task<ApiResult> Edit([FromForm]EditPostCommand command)
         {
             var result = await _facade.Edit(command);
             return CommandResult(result);
@@ -106,6 +109,24 @@ namespace Planning.Api.Controllers
         public async Task<ApiResult> RemoveAccount(RemoveTelegramAccountCommand command)
         {
             return CommandResult(await _account.DeleteAccount(command));
+        }
+        [Authorize]
+        [HttpGet("GetTelegramAccountById")]
+        public async Task<ApiResult<TelegramAccountDto?>> GetTelegramAccountById(long TelegramAccountId)
+        {
+            return QueryResult(await _account.GetById(TelegramAccountId));
+        }
+        [Authorize]
+        [HttpGet("GetListTelegramAccount")]
+        public async Task<ApiResult<List<TelegramAccountDto?>>> GetListTelegramAccount(string UserName)
+        {
+            return QueryResult(await _account.GetList(UserName));
+        }
+        [Authorize]
+        [HttpGet("GetByFilter")]
+        public async Task<ApiResult<TelegramAccountFilterResult?>> GetListTelegramAccount([FromQuery]TelegramAccountFilterParam param)
+        {
+            return QueryResult(await _account.GetByFilter(param));
         }
         #endregion
     }

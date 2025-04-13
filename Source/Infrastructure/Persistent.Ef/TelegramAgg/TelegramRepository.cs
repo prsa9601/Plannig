@@ -43,7 +43,7 @@ namespace Infrastructure.Persistent.Ef.TelegramAgg
             }
         }
         public async Task<int> SendImageToTelegram(string channelName, string caption,
-            string imagePath, long id, string token)
+            List<string> imagePaths, long id, string token)
         {
             try
             {
@@ -52,10 +52,17 @@ namespace Infrastructure.Persistent.Ef.TelegramAgg
                 //var photoStream = new FileStream(imagePath, FileMode.Open);
                 //var t = await bot.SendPhotoAsync("@channelname یا chat_id", new InputOnlineFile(photoStream), caption);
                 // ارسال تصویر به کانال (با نام کاربری یا chat_id)
-                var photoStream = new FileStream(imagePath, FileMode.Open);
-                var photo = new InputFileStream(photoStream, "image.jpg");
+                foreach (var imagePath in imagePaths)
+                {
+                    using var photoStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
+                    var photo = new InputFileStream(photoStream, Path.GetFileName(imagePath));
 
-                var t = await bot.SendPhotoAsync("@channelname یا chat_id", photo, (Int32)id, caption);
+                    await bot.SendPhotoAsync(channelName, photo, (int)id, caption);
+                }
+                //var photoStream = new FileStream(imagePath, FileMode.Open);
+                //var photo = new InputFileStream(photoStream, "image.jpg");
+
+                //var t = await bot.SendPhotoAsync("@channelname یا chat_id", photo, (Int32)id, caption);
                 return 200;
             }
             catch (Exception e)

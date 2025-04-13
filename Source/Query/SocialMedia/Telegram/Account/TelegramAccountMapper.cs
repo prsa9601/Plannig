@@ -50,13 +50,13 @@ namespace Query.SocialMedia.Telegram.Account
                     CreationDate = post.CreationDate,
                     DateOfPosting = post.DateOfPosting,
                     Description = post.Description,
-                    ImageName = post.ImageName,
+                    //ImageName = post.ImageName,
                     Images = post.Images!.TelegramImagePostMap()!,
                     IsSend = post.IsSend,
-                    Link = post.Link,
+                    //Link = post.Link,
                     postId = post.postId,
                     TelegramUserName = post.TelegramUserName,
-                    VideoName = post.VideoName,
+                    //VideoName = post.VideoName,
                     Videos = post.Videos!.TelegramVideoPostMap()!,
                 };
                 Posts.Add(postModel);
@@ -73,7 +73,7 @@ namespace Query.SocialMedia.Telegram.Account
                     Id = image!.Id,
                     CreationDate = image.CreationDate,
                     ImageName = image.ImageName,
-                    Link = image.Link,
+                    //Link = image.Link,
                     PostId = image.PostId,
                     Secuence = image.Secuence,
                 };
@@ -91,7 +91,7 @@ namespace Query.SocialMedia.Telegram.Account
                 {
                     Id = video!.Id,
                     CreationDate = video.CreationDate,
-                    Link = video.Link,
+                    //Link = video.Link,
                     PostId = video.PostId,
                     Sequence = video.Sequence,
                     VideoName = video.VideoName,

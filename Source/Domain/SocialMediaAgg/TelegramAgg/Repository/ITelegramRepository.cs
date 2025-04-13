@@ -8,7 +8,7 @@ namespace Domain.SocialMediaAgg.TelegramAgg.Repository
         Task<int> DeleteTelegram(int postId);
         Task<int> SendMessageToTelegram(string channelName, string caption, string token);
         Task<int> SendImageToTelegram(string channelName, string caption
-            , string imagePath, long id, string token);
+            , List<string> imagePath, long id, string token);
         Task<int> SendVideoToTelegram(string channelName, string videoCaption
             , string videoPath, long id, int width, int height
                   , string thumbnail, string token);

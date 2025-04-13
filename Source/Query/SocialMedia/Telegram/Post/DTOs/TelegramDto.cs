@@ -33,7 +33,7 @@ namespace Query.SocialMedia.Telegram.Post.DTOs
         public string ImageName { get; set; }
         public long PostId { get; set; }
         public int Secuence { get; set; }
-        public string Link { get; set; }
+        //public string Link { get; set; }
     }
     public class PostVideoDto : BaseDto
     {

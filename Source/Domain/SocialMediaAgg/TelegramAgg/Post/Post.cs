@@ -12,48 +12,54 @@ namespace Domain.SocialMediaAgg.TelegramAgg.Post
         public DateTime DateOfPosting { get; private set; }
         //public string Picture { get; private set; }
         public string Description { get; private set; }
-        public string ImageName { get; private set; }
-        public string VideoName { get; private set; }
-        public string TelegramUserName { get; set; } //channelAddress Or Group
+        //public string ImageName { get; private set; }
+        //public string VideoName { get; private set; }
+        public string? TelegramUserName { get; set; } //channelAddress Or Group
 
         //public string Title { get; private set; }
-        public string Link { get; private set; }
+        //public string? Link { get; private set; }
         // public string Slug { get; private set; }
         public bool IsSend { get; private set; } = false;
-        public string postId { get; private set; } //InstagramPostId OR TelegramPostId
+        public string? postId { get; private set; } //InstagramPostId OR TelegramPostId
         //[NotMapped]
-        public List<TelegramPostImage> Images { get; private set; }
+        public List<TelegramPostImage> Images { get; private set; }= new List<TelegramPostImage>();
         //[NotMapped]
-        public List<TelegramPostVideo> Videos { get; private set; }
+        public List<TelegramPostVideo> Videos { get; private set; }= new List<TelegramPostVideo>();
 
         private Post()
         {
-            Images = new List<TelegramPostImage>();
-            Videos = new List<TelegramPostVideo>();
         }
-        public Post(DateTime dateOfPosting, string description, string link, string imageName, string videoName)
+        public Post(DateTime dateOfPosting, string description)
         {
             DateOfPosting = dateOfPosting;
             Description = description;
-            Link = link;
+            //Link = link;
             // Slug = slug?.ToSlug(); string slug,
-            ImageName = imageName;
-            VideoName = videoName;
+        //    ImageName = imageName;, string imageName, string videoName
+        //    VideoName = videoName;
         }
-        public void Edit(DateTime dateOfPosting, string description, string link, string imageName, string videoName)
+        public void Edit(DateTime dateOfPosting, string description)
         {
             DateOfPosting = dateOfPosting;
             Description = description;
-            Link = link;
+            //Link = link;
             //Slug = slug?.ToSlug(); string slug,
-            ImageName = imageName;
-            VideoName = videoName;
+            //ImageName = imageName; string imageName, string videoName
+            //VideoName = videoName;
         }
-        public void SetPostImage(string imageName)
-        {
-            NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
-            ImageName = imageName;
-        }
+        //public void SetImage(string imageName)
+        //{
+        //    ImageName = imageName;
+        //}
+        //public void SetVideo(string videoName)
+        //{
+        //    VideoName = videoName;
+        //}
+        //public void SetPostImage(string imageName)
+        //{
+        //    NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
+        //    ImageName = imageName;
+        //}
 
         public void AddImage(TelegramPostImage image)
         {
@@ -61,26 +67,35 @@ namespace Domain.SocialMediaAgg.TelegramAgg.Post
             Images.Add(image);
         }
 
-        public void SetPostVideo(string imageName)
+        //public void SetPostVideo(string imageName)
+        //{
+        //    NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
+        //    ImageName = imageName;
+        //}
+
+        public void AddVideo(TelegramPostVideo video)
         {
-            NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
-            ImageName = imageName;
+            video.PostId = Id;
+            Videos.Add(video);
         }
 
-        public void AddVideo(TelegramPostImage image)
+        public string RemoveImage(long Id)
         {
-            image.PostId = Id;
-            Images.Add(image);
-        }
-
-        public string RemoveImage(long id)
-        {
-            var image = Images.FirstOrDefault(f => f.Id == id);
+            var image = Images.FirstOrDefault(f => f.Id == Id);
             if (image == null)
                 throw new NullOrEmptyDomainDataException("عکس یافت نشد");
 
             Images.Remove(image);
             return image.ImageName;
+        }
+        public string RemoveVideo(long Id)
+        {
+            var video = Videos.FirstOrDefault(f => f.Id == Id);
+            if (video == null)
+                throw new NullOrEmptyDomainDataException("عکس یافت نشد");
+
+            Videos.Remove(video);
+            return video.VideoName;
         }
         //public void Edit(DateTime dateOfPosting, string discription, string link)
         //{

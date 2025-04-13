@@ -3,6 +3,7 @@ using Common.Query;
 using Common.Query.Filter;
 using Domain.SocialMediaAgg.TelegramAgg;
 using Domain.SocialMediaAgg.TelegramAgg.Post;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Query.SocialMedia.Telegram.Account.DTOs
 {
@@ -29,7 +30,7 @@ namespace Query.SocialMedia.Telegram.Account.DTOs
         public string ImageName { get; set; }
         public string VideoName { get; set; }
         public string TelegramUserName { get; set; } //channelAddress Or Group
-        public string Link { get; set; }
+        //public string Link { get; set; }
         public bool IsSend { get; set; } = false;
         public string postId { get; set; } //InstagramPostId OR TelegramPostId
         //[NotMapped]
@@ -43,7 +44,7 @@ namespace Query.SocialMedia.Telegram.Account.DTOs
         public string VideoName { get; set; }
         public long PostId { get; set; }
         public int Sequence { get; set; }
-        public string Link { get; set; }
+        //public string Link { get; set; }
     }
     public class TelegramPostImageDto : BaseDto
     {
@@ -51,7 +52,7 @@ namespace Query.SocialMedia.Telegram.Account.DTOs
         public string ImageName { get; set; }
         public long PostId { get; set; }
         public int Secuence { get; set; }
-        public string Link { get; set; }
+        //public string Link { get; set; }
     }
     public class TelegramAccountFilterData : BaseDto
     {
@@ -59,12 +60,20 @@ namespace Query.SocialMedia.Telegram.Account.DTOs
     }
     public class TelegramAccountFilterParam : BaseFilterParam
     {
+        public long? TelegramAccountId { get; set; }
         public string? UserName { get; set; }
         public string? Chat_Id { get; set; }//ChanelName OR GroupName
+        public TelegramAccountSearchOrderBy? SearchOrderBy { get; set; }
+
     }
     public class TelegramAccountFilterResult : 
         BaseFilter<TelegramAccountDto, TelegramAccountFilterParam>
     {
 
+    }
+    public enum TelegramAccountSearchOrderBy
+    {
+        //visit,
+        latest
     }
 }
