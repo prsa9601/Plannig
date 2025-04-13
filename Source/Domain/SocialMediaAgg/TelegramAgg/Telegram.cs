@@ -1,13 +1,15 @@
 ﻿using Common.Domain;
+using Domain.SocialMediaAgg.TelegramAgg.Service;
+using System.Runtime.Versioning;
 
 namespace Domain.SocialMediaAgg.TelegramAgg
 {
     public class Telegram : BaseEntity
     {
         //Telegram
-        public string token { get; set; } //token Telegram
-        public string chat_id { get; set; } //TelegramID
-        public string UserName { get; set; } //UserName
+        public string Token { get; set; } //token Telegram Bot
+        public string Chat_Id { get; set; } //TelegramID
+        public string UserName { get; set; } //CreatorUserName
         //public string ChannelName { get; set; } //ChannelName
         public List<TelegramProfile> TelegramProfiles { get; set; } = new List<TelegramProfile>();
         public List<Post.Post> Posts { get; set; }
@@ -21,31 +23,63 @@ namespace Domain.SocialMediaAgg.TelegramAgg
         public void AddImage(string imagePath)
         {
             var model = new TelegramProfile(imagePath);
-            model.TelegramId = chat_id;
+            model.TelegramId = Chat_Id;
             TelegramProfiles.Add(model);
         }
         public void RemoveImage(long id)
         {
             var model = TelegramProfiles.FirstOrDefault
-                (i => i.Id == id );
+                (i => i.Id == id);
             if (model == null)
                 throw new Exception("خطای سمت سرور!");
             TelegramProfiles.Remove(model);
         }
-        public Telegram(string token, string chatId, string userName, List<Post.Post> posts, SendMethodTelegram sendMethod)
+        public Telegram(string? token, string chatId, string userName, bool DefaultToken
+            , ITelegramService service)
         {
-            this.token = token;
-            chat_id = chatId;
+            Chat_Id = chatId;
             UserName = userName;
+
+            if (!DefaultToken)
+            {
+                ExistAccount(token, chatId, userName, service);
+
+                Task.Run(async () => await GuardAsync(token!, service))
+                    .GetAwaiter().GetResult();
+                if (token == null)
+                    throw new ArgumentNullException(nameof(token));
+                Token = token;
+            }
+            else
+            {
+                ExistAccount("8034643778:AAEEbUXrPRlpLtcPIPQulOxWMzCRVAQHbKw", chatId, userName, service);
+
+                Token = "8034643778:AAEEbUXrPRlpLtcPIPQulOxWMzCRVAQHbKw";
+            }
+
             Posts = new List<Post.Post>();
-            SendMethod = sendMethod;
         }
-        public void Edit(string token, string chatId, string userName, List<Post.Post> posts, SendMethodTelegram sendMethod)
+        public void Edit(string? token, string chatId, string userName, bool DefaultToken
+            , ITelegramService service)
         {
-            this.token = token;
-            chat_id = chatId;
+            Chat_Id = chatId;
             UserName = userName;
-            SendMethod = sendMethod;
+
+            if (!DefaultToken)
+            {
+                Task.Run(async () => await GuardAsync(token!, service))
+                    .GetAwaiter().GetResult();
+            
+                if (token == null)
+                    throw new ArgumentNullException(nameof(token));
+                Token = token;
+            }
+            else
+            {
+                Token = "8034643778:AAEEbUXrPRlpLtcPIPQulOxWMzCRVAQHbKw";
+            }
+
+            Posts = new List<Post.Post>();
         }
 
         public void AddPost(Post.Post post)
@@ -63,6 +97,21 @@ namespace Domain.SocialMediaAgg.TelegramAgg
         //{
         //    Posts.AddRange(post);
         //}
+        private void ExistAccount(string token, string chatId,
+            string userName, ITelegramService service)
+        {
+            if(service.ExistAccount(token, chatId, userName) == true)
+            {
+                throw new Exception("حسابی با همین اطلاعات از قبل وجود دارد!");
+            }
+        }
+        private async Task GuardAsync(string token, ITelegramService service)
+        {
+            if (await service.CheckBotExist(token) == false)
+            {
+                throw new Exception("Bot does not exist (maybe you entered the wrong BotToken).");
+            }
+        }
     }
     public enum SendMethodTelegram
     {
@@ -76,5 +125,4 @@ namespace Domain.SocialMediaAgg.TelegramAgg
         Channel,
         Group
     }
-
 }

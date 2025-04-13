@@ -98,22 +98,22 @@ namespace Infrastructure.Persistent.Ef.TelegramAgg
                 return 500;
             }
         }
-        public async Task<int> Delete(long id)
-        {
-            try
-            {
-                var Post = await Context.Telegrams.FirstOrDefaultAsync(i => i.Id.Equals(id));
-                if (Post == null)
-                    return 404;
-                Context.Telegrams.Remove(Post);
-                return 200;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return 500;
-            }
-        }
+        //public async Task<int> Delete(long id)
+        //{
+        //    try
+        //    {
+        //        var Post = await Context.Telegrams.FirstOrDefaultAsync(i => i.Id.Equals(id));
+        //        if (Post == null)
+        //            return 404;
+        //        Context.Telegrams.Remove(Post);
+        //        return 200;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        return 500;
+        //    }
+        //}
 
 
     }

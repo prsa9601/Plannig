@@ -36,7 +36,7 @@ namespace Application.SocialMedia.Telegram.Post.SendVideoToTelegram
             await _repository.SendVideoToTelegram(request.TelegramId,
                 post.Description, post.VideoName, post.Id,
                 request.width, request.height, request.thumbnail,
-                telegram.token);
+                telegram.Token);
 
             return OperationResult.Success();
         }

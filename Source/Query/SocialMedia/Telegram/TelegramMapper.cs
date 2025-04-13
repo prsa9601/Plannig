@@ -10,9 +10,9 @@ namespace Query.SocialMedia.Telegram
             {
                 Id= model.Id,
                 UserName= model.UserName,
-                accessToken = model.token,
+                accessToken = model.Token,
                 CreationDate = model.CreationDate,
-                TelegramName = model.chat_id,
+                TelegramName = model.Chat_Id,
                 SendMethod = model.SendMethod,
                 ChannelMethod = model.TelegramChannelMethod
             };

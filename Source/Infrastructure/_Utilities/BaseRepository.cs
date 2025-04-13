@@ -121,8 +121,4 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
             return Task.FromResult(false); 
         }
     }
-   
- 
-
-   
 }

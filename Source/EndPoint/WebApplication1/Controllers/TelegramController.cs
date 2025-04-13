@@ -1,4 +1,7 @@
-﻿using Application.SocialMedia.Telegram.Post.AddImageToPost;
+﻿using Application.SocialMedia.Telegram.Account._RemoveAccount;
+using Application.SocialMedia.Telegram.Account.CreateAccount;
+using Application.SocialMedia.Telegram.Account.EditAccount;
+using Application.SocialMedia.Telegram.Post.AddImageToPost;
 using Application.SocialMedia.Telegram.Post.AddPost;
 using Application.SocialMedia.Telegram.Post.DeletePost;
 using Application.SocialMedia.Telegram.Post.EditPost;
@@ -8,8 +11,10 @@ using Application.SocialMedia.Telegram.Post.SendPictureToTelegram;
 using Application.SocialMedia.Telegram.Post.SendVideoToTelegram;
 using Application.SocialMedia.Telegram.Post.SetImageToPost;
 using Common.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Facade.Telegram;
+using Presentation.Facade.Telegram.Account;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,10 +25,12 @@ namespace Planning.Api.Controllers
     public class TelegramController : ApiController
     {
         private readonly ITelegramFacade _facade;
+        private readonly IAccountTelegramFacade _account;
 
-        public TelegramController(ITelegramFacade facade)
+        public TelegramController(ITelegramFacade facade, IAccountTelegramFacade account)
         {
             _facade = facade;
+            _account = account;
         }
 
         [HttpPost]
@@ -80,5 +87,26 @@ namespace Planning.Api.Controllers
             var result = await _facade.SendVideoToTelegram(command);
             return CommandResult(result);
         }
+        #region Account
+
+        [Authorize]
+        [HttpPost("CreateAccount")]
+        public async Task<ApiResult> CreateAccount(CreateTelegramAccountCommand command)
+        {
+            return CommandResult(await _account.CreateAccount(command));
+        }
+        [Authorize]
+        [HttpPatch("EditAccount")]
+        public async Task<ApiResult> CreateAccount(EditTelegramAccountCommand command)
+        {
+            return CommandResult(await _account.EditAccount(command));
+        }
+        [Authorize]
+        [HttpDelete("RemoveAccount")]
+        public async Task<ApiResult> RemoveAccount(RemoveTelegramAccountCommand command)
+        {
+            return CommandResult(await _account.DeleteAccount(command));
+        }
+        #endregion
     }
 }

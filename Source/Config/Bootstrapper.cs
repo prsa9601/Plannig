@@ -9,6 +9,7 @@ using Application.Notification.Remove;
 using Application.NotificationSchedule;
 using Application.Package._Service;
 using Application.Role.Create;
+using Application.SocialMedia.Telegram;
 using Application.User;
 using Application.User._RequestBox;
 using Application.User.SendVerificationEmailToken;
@@ -19,6 +20,7 @@ using Domain.EventAgg.Service;
 using Domain.Notification.NotificationSchedule;
 using Domain.Notification.Service;
 using Domain.PackageAgg.Service;
+using Domain.SocialMediaAgg.TelegramAgg.Service;
 using Domain.UserAgg;
 using Domain.UserAgg.Service;
 using FluentValidation;
@@ -30,6 +32,7 @@ using Microsoft.Extensions.Logging;
 using Presentation.Facade;
 using Query.Event.GetById;
 using StackExchange.Redis;
+using Telegram.Bot;
 
 namespace Config
 {
@@ -51,6 +54,7 @@ namespace Config
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ITelegramService, TelegramService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<INotificationService, NotificationService>();
@@ -61,13 +65,14 @@ namespace Config
 
             services.AddMemoryCache();
 
-             services.AddLogging(); // اضافه کردن سرویس‌های لاگینگ
+            services.AddLogging(); // اضافه کردن سرویس‌های لاگینگ
             var serviceProvider = services.BuildServiceProvider();
             var logger = serviceProvider.GetService<ILogger<RemoveNotificationCommandHandler>>();
             services.AddSingleton(typeof(ILogger), logger);
 
             services.AddValidatorsFromAssembly(typeof(AddEventCommandValidator).Assembly);
-
+            services.AddSingleton<TelegramBotClient>(
+                new TelegramBotClient("8034643778:AAEEbUXrPRlpLtcPIPQulOxWMzCRVAQHbKw"));
             services.InitFacadeDependency();
         }
     }

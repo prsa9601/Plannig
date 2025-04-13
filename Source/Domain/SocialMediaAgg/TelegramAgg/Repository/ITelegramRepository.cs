@@ -4,7 +4,7 @@ namespace Domain.SocialMediaAgg.TelegramAgg.Repository
 {
     public interface ITelegramRepository : IBaseRepository<Telegram>
     {
-        Task<int> Delete(long id);
+        //Task<int> Delete(long id);
         Task<int> DeleteTelegram(int postId);
         Task<int> SendMessageToTelegram(string channelName, string caption, string token);
         Task<int> SendImageToTelegram(string channelName, string caption

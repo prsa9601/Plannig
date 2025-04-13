@@ -33,7 +33,7 @@ namespace Application.SocialMedia.Telegram.Post.SendPictureToTelegram
                 return OperationResult.NotFound();
 
            // string ImageName = await _fileService.SaveFileAndGenerateName(request.Image, Directories.TelegramImages);
-            await _repository.SendImageToTelegram(request.TelegramId, post.Description, post.ImageName, post.Id, telegram.token );
+            await _repository.SendImageToTelegram(request.TelegramId, post.Description, post.ImageName, post.Id, telegram.Token );
             return OperationResult.Success();
         }
     }
