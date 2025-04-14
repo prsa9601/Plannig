@@ -5,7 +5,7 @@ namespace Application.SocialMedia.Telegram.Post.DeletePost
 {
     public class DeletePostCommand : IBaseCommand
     {
-        public String TelegramId { get; set; }
+        public long TelegramId { get; set; }
         public long PostId { get; set; }
     }
     internal class DeletePostCommandHandler : IBaseCommandHandler<DeletePostCommand>
@@ -19,7 +19,7 @@ namespace Application.SocialMedia.Telegram.Post.DeletePost
 
         public async Task<OperationResult> Handle(DeletePostCommand request, CancellationToken cancellationToken)
         {
-            var telegram = await _repository.GetTrackingWithString(request.TelegramId);
+            var telegram = await _repository.GetTracking(request.TelegramId);
             if (telegram == null)
                 return OperationResult.NotFound();
             telegram.RemovePost(request.PostId);

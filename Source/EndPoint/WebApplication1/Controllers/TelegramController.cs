@@ -42,13 +42,13 @@ namespace Planning.Api.Controllers
                  command.Videos));
             return CommandResult(result);
         }
-        [HttpPatch]
+        [HttpPatch("EditPost")]
         public async Task<ApiResult> Edit([FromForm]EditPostCommand command)
         {
             var result = await _facade.Edit(command);
             return CommandResult(result);
         }
-        [HttpDelete]
+        [HttpDelete("DeletePost")]
         public async Task<ApiResult> Delete([FromQuery]DeletePostCommand command)
         {
             var result = await _facade.Delete(command);

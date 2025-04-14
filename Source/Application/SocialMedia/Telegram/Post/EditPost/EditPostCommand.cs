@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 namespace Application.SocialMedia.Telegram.Post.EditPost
 {
     public record class EditPostCommand(long TelegramId, long PostId,
-        DateTime DateOfPosting, string Description, 
+        DateTime DateOfPosting, string Description,
         string Slug, List<IFormFile> Videos, List<IFormFile> Images) : IBaseCommand;
     internal class EditPostCommandHandler : IBaseCommandHandler<EditPostCommand>
     {
@@ -30,10 +30,11 @@ namespace Application.SocialMedia.Telegram.Post.EditPost
             var post = telegram.Posts.FirstOrDefault(i => i.Id == request.PostId);
             if (post == null)
                 return OperationResult.NotFound();
-           
+
             post.Edit(request.DateOfPosting, request.Description);
-            if (request.Images != null)
+            if (request.Images != null && request.Images.Count() != 0)
             {
+                post.ClearImageList();
                 int i = 1;
                 foreach (var item in request.Images)
                 {
@@ -44,8 +45,9 @@ namespace Application.SocialMedia.Telegram.Post.EditPost
                     i++;
                 }
             }
-            if (request.Videos != null)
+            if (request.Videos != null && request.Videos.Count() != 0)
             {
+                post.ClearVideoList();
                 var i = 1;
                 foreach (var item in request.Videos)
                 {
@@ -53,6 +55,7 @@ namespace Application.SocialMedia.Telegram.Post.EditPost
                                 SaveFileAndGenerateName(item,
                                 Directories.TelegramImages);
                     post.AddVideo(new TelegramPostVideo(videoName, i));
+                    
                     i++;
                 }
             }

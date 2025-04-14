@@ -89,9 +89,9 @@ namespace Domain.SocialMediaAgg.TelegramAgg
         }
         public long RemovePost(long postId)
         {
-            var post = Posts.Where(i => i.Id.Equals(postId)).FirstOrDefault();
-            Posts.Remove(post);
-            return post.Id;
+            var post = Posts.FirstOrDefault(i => i.Id.Equals(postId));
+            Posts.Remove(post!);
+            return post!.Id;
         }
         //public void AddPost(List<Post.Post> post)
         //{

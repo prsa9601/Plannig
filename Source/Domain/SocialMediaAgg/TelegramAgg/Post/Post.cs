@@ -78,6 +78,15 @@ namespace Domain.SocialMediaAgg.TelegramAgg.Post
             video.PostId = Id;
             Videos.Add(video);
         }
+        
+        public void ClearVideoList()
+        {
+            Videos.Clear();
+        }
+        public void ClearImageList()
+        {
+            Images.Clear();
+        }
 
         public string RemoveImage(long Id)
         {
