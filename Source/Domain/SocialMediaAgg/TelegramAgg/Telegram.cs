@@ -8,7 +8,7 @@ namespace Domain.SocialMediaAgg.TelegramAgg
     {
         //Telegram
         public string Token { get; set; } //token Telegram Bot
-        public string Chat_Id { get; set; } //TelegramID
+        public string Chat_Id { get; set; } //TelegramID ChannelName
         public string UserName { get; set; } //CreatorUserName
         //public string ChannelName { get; set; } //ChannelName
         public List<TelegramProfile> TelegramProfiles { get; set; } = new List<TelegramProfile>();

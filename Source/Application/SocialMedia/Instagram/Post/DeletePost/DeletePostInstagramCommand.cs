@@ -6,8 +6,8 @@ namespace Application.SocialMedia.Instagram.Post.DeletePost
 {
     public class DeletePostInstagramCommand : IBaseCommand
     {
-        public long PostId { get; set; }
-        public string UserName { get; set; }
+        public long InstagramId { get; set; }
+        public long Id { get; set; }
     }
     internal class DeletePostCommandHandler : IBaseCommandHandler<DeletePostInstagramCommand>
     {
@@ -20,11 +20,11 @@ namespace Application.SocialMedia.Instagram.Post.DeletePost
 
         public async Task<OperationResult> Handle(DeletePostInstagramCommand request, CancellationToken cancellationToken)
         {
-            var instagram = await _repository.GetTrackingByUserName(request.UserName);
+            var instagram = await _repository.GetTracking(request.InstagramId);
             if (instagram == null) 
                 return OperationResult.NotFound();
 
-            instagram.RemovePost(request.PostId);
+            instagram.RemovePost(request.Id);
 
             await _repository.Save();
             return OperationResult.Success();

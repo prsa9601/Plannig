@@ -4,10 +4,13 @@ using NReco.VideoInfo;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 using Domain.SocialMediaAgg.TelegramAgg.Repository;
+using System.Net;
+using Telegram.Bot.Exceptions;
+using Telegram.Bot.Types.Enums;
 
 namespace Infrastructure.Persistent.Ef.TelegramAgg
 {
-    public class TelegramRepository :BaseRepository<Domain.SocialMediaAgg.TelegramAgg.Telegram>, ITelegramRepository
+    public class TelegramRepository : BaseRepository<Domain.SocialMediaAgg.TelegramAgg.Telegram>, ITelegramRepository
     {
         public TelegramRepository(PlanningContext context) : base(context)
         {
@@ -73,20 +76,39 @@ namespace Infrastructure.Persistent.Ef.TelegramAgg
         public async Task<int> SendMessageToTelegram(string channelName,
             string caption, string token)
         {
-
             try
             {
-
-                // کلید API را در اینجا قرار دهید
-                var bot = new TelegramBotClient("کلید API شما");
-
+            //https://api.telegram.org/bot123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11/getMe
+                var botClient = new TelegramBotClient
+                    ("7503920971:AAEssb5Kmr4IY1YrAPKeqdeV6IhCawlodRM");
+                //var botClient = new TelegramBotClient(token);
+                //botId 7503920971
+                var r = botClient.SendTextMessageAsync(chatId: "@PlanningTest",text: "g");
+                
+                // ارسال پیام به کانال
+                var sentMessage = await botClient.SendTextMessageAsync(
+                    chatId: channelName , // یا آیدی عددی کانال (مثال: -100123456789)
+                    text: caption
+                );
                 // ارسال پیام متنی به کانال (با نام کاربری یا chat_id)
-                var t = await bot.SendTextMessageAsync("@channelname یا chat_id", "متن پیام");
-                return 200;
+                //var t = await bot.SendTextMessageAsync($"{channelName}, {token}, {caption});
+                //var t = await bot.SendTextMessageAsync("@channelname یا chat_id", "متن پیام");
+                return (int)HttpStatusCode.OK;
             }
-            catch (Exception e)
+            catch (ApiRequestException ex) when (ex.Message.Contains("Forbidden"))
             {
-                return 500;
+                Console.WriteLine($"Error: Bot is not admin in channel {channelName}");
+                return (int)HttpStatusCode.Forbidden; // 403
+            }
+            catch (ApiRequestException ex)
+            {
+                Console.WriteLine($"Telegram API Error: {ex.ErrorCode} - {ex.Message}");
+                return (int)HttpStatusCode.BadRequest; // 400
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+                return (int)HttpStatusCode.InternalServerError; // 500
             }
         }
         public async Task<int> DeleteTelegram(int postId)

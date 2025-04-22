@@ -1,4 +1,5 @@
 ﻿using Common.Domain;
+using Domain.SocialMediaAgg.InstagramAgg.Service;
 using Domain.SocialMediaAgg.TelegramAgg;
 
 namespace Domain.SocialMediaAgg.InstagramAgg
@@ -6,45 +7,57 @@ namespace Domain.SocialMediaAgg.InstagramAgg
     public class Instagram : BaseEntity
     {
         //Instagram
-        public string InstagramId { get; set; } //AccessToken Instagram
+        public string? InstagramId { get; set; } //InstagramAccountId
+        public string? PageId { get; set; } //PageId
         public string accessToken { get; set; } //AccessToken Instagram
         public string UserName { get; set; } //AccessToken Instagram
-        public List<Story.Story> Stories { get; set; } //token Telegram
-        public List<Post.Post> Posts { get; set; } //token Telegram
-        public List<InstagramProfile> InstagramProfiles { get; set; } //token Telegram
-        public SendMethodInstagram SendMethod { get; set; }
-
-        public Instagram(string accessToken, string userName, SendMethodInstagram sendMethod)
+        public string UserId { get; set; }
+        public List<Story.Story>? Stories { get; set; } //token Telegram
+        public List<Post.Post>? Posts { get; set; } //token Telegram
+        public string? Profile { get; set; } //token Telegram
+        //public SendMethodInstagram SendMethod { get; set; }
+        private Instagram()
         {
+            
+        }
+        public Instagram(string accessToken, string userName, string userId, IInstagramService service)
+        {
+            UserId = userId;
             this.accessToken = accessToken;
             UserName = userName;
             Stories = new List<Story.Story>();
             Posts = new List<Post.Post>();
-            SendMethod = sendMethod;
+            //SendMethod = sendMethod;, SendMethodInstagram sendMethod
         }
-        public void Edit(string accessToken, string userName, SendMethodInstagram sendMethod)
+        public void Edit(string accessToken, string userName, string userId, IInstagramService service)
         {
+            UserId = userId;
             this.accessToken = accessToken;
             UserName = userName;
-            SendMethod = sendMethod;
+            //SendMethod = sendMethod;, SendMethodInstagram sendMethod
         }
-        public void ChangeImage(string imagePath)
+        //public void ChangeImage(string imagePath)
+        //{
+        //    var model = new InstagramProfile(imagePath);
+        //    model.InstagramId = InstagramId;
+        //    InstagramProfiles.Add(model);
+        //}
+        //public void RemoveImage(long id)
+        //{
+        //    var model = InstagramProfiles.FirstOrDefault
+        //        (i => i.Id == id);
+        //    if (model == null)
+        //        throw new Exception("خطای سمت سرور!");
+        //    InstagramProfiles.Remove(model);
+        //}
+        public void ChangeImage(string imageName)
         {
-            var model = new InstagramProfile(imagePath);
-            model.TelegramId = InstagramId;
-            InstagramProfiles.Add(model);
-        }
-        public void RemoveImage(long id)
-        {
-            var model = InstagramProfiles.FirstOrDefault
-                (i => i.Id == id);
-            if (model == null)
-                throw new Exception("خطای سمت سرور!");
-            InstagramProfiles.Remove(model);
+            Profile = imageName;
         }
         public void AddPost(Post.Post post)
         {
             post.InstagramUserName = UserName;
+            post.InstagramId = InstagramId;
             Posts.Add(post);
         }
         //public void EditPost(Post.Post post)

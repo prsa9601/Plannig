@@ -45,7 +45,7 @@ namespace Application.Event.Edit
             var Event = await _repository.GetTracking(request.Id);
             if (Event == null)
                 return OperationResult<long>.NotFound(0);
-            if (!Event.EventUser.Any(i => i.CreatorUserName.Equals(request.creatorUserName)))
+            if (!Event.EventUser.Any(i => i.CreatorUserId.Equals(request.creatorUserName)))
             {
                 return OperationResult<long>.Error("فقط سازنده میتواند ایونترا تغییر دهد!");
             }

@@ -49,24 +49,24 @@ namespace Planning.Api.Controllers
             return CommandResult(result);
         }
         [HttpDelete("DeletePost")]
-        public async Task<ApiResult> Delete([FromQuery]DeletePostCommand command)
+        public async Task<ApiResult> Delete(DeletePostCommand command)
         {
             var result = await _facade.Delete(command);
             return CommandResult(result);
         }
-        [HttpPatch("SetImage")]
-        public async Task<ApiResult> Add(SetImageCommand command)
+        [HttpPatch("SetPostImage")]
+        public async Task<ApiResult> SetPostImage([FromForm]SetImageCommand command)
         {
             var result = await _facade.SetImage(command);
             return CommandResult(result);
         }
-        [HttpPost("AddImage")]
-        public async Task<ApiResult> Edit(AddImageCommand command)
+        [HttpPost("AddPostImage")]
+        public async Task<ApiResult> AddPostImage(AddImageCommand command)
         {
             var result = await _facade.AddImage(command);
             return CommandResult(result);
         }
-        [HttpDelete("RemoveImage")]
+        [HttpDelete("RemovePostImage")]
         public async Task<ApiResult> Delete([FromQuery]RemoveImagePostCommand command)
         {
             var result = await _facade.RemoveImage(command);
@@ -124,7 +124,7 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpGet("GetByFilter")]
-        public async Task<ApiResult<TelegramAccountFilterResult?>> GetListTelegramAccount([FromQuery]TelegramAccountFilterParam param)
+        public async Task<ApiResult<TelegramAccountFilterResult?>> GetTelegramAccountByFilter([FromQuery]TelegramAccountFilterParam param)
         {
             return QueryResult(await _account.GetByFilter(param));
         }

@@ -24,11 +24,12 @@ namespace Query.Notification
                 IsSend = notification.IsSend,
                 NotificationType = notification.NotificationType,
                 SendTime = notification.SendTime,
-                UserNames = notification.UserNames,
+                UserNames = notification.UserIds,
                 eventDto = await EventMap(notification.EventId, context)!
             };
         }
-        internal static NotificationFilterData? MapFilter(this Domain.Notification.Notification? notification, PlanningContext context)
+        internal static NotificationFilterData? MapFilter(this
+            Domain.Notification.Notification? notification, PlanningContext context)
         {
             return new NotificationFilterData
             {
@@ -41,7 +42,9 @@ namespace Query.Notification
                 IsSend = notification.IsSend,
                 NotificationType = notification.NotificationType,
                 SendTime = notification.SendTime,
-                UserNames = notification.UserNames,
+                UserNames = context.
+                Users.Where(i => i.Id.Equals(notification.UserIds)).
+                Select(i => i.UserName).ToList()!,
                 IsSeen = notification.IsSeen,
                 eventDto = EventMapForFilter(notification.EventId, context)!
 
@@ -87,7 +90,7 @@ namespace Query.Notification
                     CreationDate = Event.CreationDate,
                     notification = Event.notification,
                     Title = Event.Title,
-                    Description= Event.Description,
+                    Description = Event.Description,
                 };
             }
         }

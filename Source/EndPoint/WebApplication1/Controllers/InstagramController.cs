@@ -1,17 +1,20 @@
-﻿using Application.SocialMedia.Instagram.Post.AddImageToPost;
+﻿using Application.SocialMedia.Instagram.Account.Add;
+using Application.SocialMedia.Instagram.Account.Delete;
+using Application.SocialMedia.Instagram.Account.Edit;
+using Application.SocialMedia.Instagram.Account.SetProfile;
+using Application.SocialMedia.Instagram.Post.AddImageToPost;
 using Application.SocialMedia.Instagram.Post.AddPost;
 using Application.SocialMedia.Instagram.Post.DeletePost;
 using Application.SocialMedia.Instagram.Post.EditPost;
 using Application.SocialMedia.Instagram.Post.RemoveImageToPost;
 using Application.SocialMedia.Instagram.Post.SendPostToInstagram;
 using Application.SocialMedia.Instagram.Post.SetImageToPost;
-using Application.SocialMedia.Instagram.Story.Add;
-using Application.SocialMedia.Instagram.Story.Delete;
-using Application.SocialMedia.Instagram.Story.Edit;
 using Common.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Planning.Api.Model.InstagramModel;
 using Presentation.Facade.Instagram;
+using Query.SocialMedia.Instagram.Account.DTOs;
 using static Planning.Api.Model.InstagramModel.InstagramViewModel;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,7 +32,7 @@ namespace Planning.Api.Controllers
             _facade = facade;
         }
 
-        [HttpPost]
+        [HttpPost("AddPost")]
         public async Task<ApiResult> AddPost([FromForm] AddPostInstagramViewModel command)
         {
             DateTime dateTime = DateTime.Parse(command.DateOfPosting);
@@ -38,10 +41,10 @@ namespace Planning.Api.Controllers
             {
                 DateOfPosting = dateTime,
                 Description = command.Description,
-                ImageName = command.ImageName,
-                InstagramId = command.InstagramId,
+                Videos = command.Videos,
+                InstagramAccountId = command.InstagramAccountId,
                 Link = command.Link,
-                VideoName = command.VideoName
+                Images = command.Images
             });
             return CommandResult(result);
         }
@@ -52,20 +55,20 @@ namespace Planning.Api.Controllers
             var result = await _facade.UploadStory(command);
             return CommandResult(result);
         }
-        [HttpPatch]
-        public async Task<ApiResult> EditPost([FromBody] EditPostInstagramCommand instagramCommand)
+        [HttpPatch("EditPost")]
+        public async Task<ApiResult> EditPost([FromForm] EditPostInstagramCommand instagramCommand)
         {
             var result = await _facade.Edit(instagramCommand);
             return CommandResult(result);
         }
-        [HttpDelete]
+        [HttpDelete("DeletePost")]
         public async Task<ApiResult> DeletePost([FromQuery] DeletePostInstagramCommand instagramCommand)
         {
             var result = await _facade.Delete(instagramCommand);
             return CommandResult(result);
         }
         [HttpPatch("EditStory")]
-        public async Task<ApiResult> EditStory(Application.SocialMedia.Instagram
+        public async Task<ApiResult> EditStory([FromForm]Application.SocialMedia.Instagram
             .Story.Edit.EditStoryCommand command)
         {
             var result = await _facade.EditStory(command);
@@ -77,24 +80,78 @@ namespace Planning.Api.Controllers
         {
             var result = await _facade.DeleteStory(command);
             return CommandResult(result);
-        } 
-        [HttpPatch("SetImage")]
-        public async Task<ApiResult> SetImage(SetImageCommand command)
+        }
+        [HttpPatch("SetImagePost")]
+        public async Task<ApiResult> SetImage([FromForm] SetImageCommand command)
         {
             var result = await _facade.SetImage(command);
             return CommandResult(result);
-        } 
-        [HttpPost("AddImage")]
-        public async Task<ApiResult> AddImage(AddImageCommand command)
+        }
+        [HttpPatch("AddImagePost")]
+        public async Task<ApiResult> AddImage([FromForm] AddImageCommand command)
         {
             var result = await _facade.AddImage(command);
             return CommandResult(result);
-        } 
+        }
         [HttpDelete("RemoveImage")]
-        public async Task<ApiResult> DeleteImage([FromQuery]RemoveImagePostCommand command)
+        public async Task<ApiResult> DeleteImage(RemoveImagePostCommand command)
         {
             var result = await _facade.RemoveImage(command);
             return CommandResult(result);
         }
+        [HttpGet("GetInstagramAccountById")]
+        public async Task<ApiResult<InstagramAccountDto?>> GetById(long Id)
+        {
+            var result = await _facade.GetById(Id);
+            return QueryResult(result);
+        }
+        [Authorize]
+        [HttpGet("GetListInstagram")]
+        public async Task<ApiResult<List<InstagramAccountDto>?>> GetList()
+        {
+            var result = await _facade.GetList(User.GetUserName());
+            return QueryResult(result);
+        }
+        [HttpGet("GetInstagramByFilter")]
+        [Authorize]
+        public async Task<ApiResult<InstagramAccountFilterResult?>> GetInstagramByFilter(
+            [FromQuery]InstagramAccountFilterParam filterParams)
+        {
+            var result = await _facade.GetByFilter(filterParams);
+            return QueryResult(result);
+        }
+
+        [Authorize]
+        [HttpPost("AddInstagramAccount")]
+        public async Task<ApiResult> AddAccount([FromForm]AddInstagramAccountCommand command)
+        {
+            var result = await _facade.AddAccount(command);
+            return CommandResult(result);
+        }
+        [Authorize]
+        [HttpPatch("EditInstagramAccount")]
+        public async Task<ApiResult> EditAccount([FromForm] EditInstagramAccountCommand command)
+        {
+            var result = await _facade.EditAccount(command);
+            return CommandResult(result);
+        }
+        [Authorize]
+        [HttpPatch("SetProfileInstagramAccount")]
+        public async Task<ApiResult> SetProfileAccount([FromForm]SetProfileInstagramAccountCommand command)
+        {
+            var result = await _facade.SetProfileAccount(command);
+            return CommandResult(result);
+        }
+        [Authorize]
+        [HttpDelete("DeleteInstagramAccount")]
+        public async Task<ApiResult> DeleteAccount([FromQuery] long id)
+        {
+            var result = await _facade.DeleteAccount(new DeleteInstagramAccountCommand
+            {
+                Id = id
+            });
+            return CommandResult(result);
+        }
+
     }
 }

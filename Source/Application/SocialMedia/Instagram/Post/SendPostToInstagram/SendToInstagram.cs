@@ -6,7 +6,7 @@ namespace Application.SocialMedia.Instagram.Post.SendPostToInstagram
 {
     public class SendToInstagramCommand : IBaseCommand
     {
-        public long PostId { get; set; }
+        public string PostId { get; set; }
       
     }
     internal class SendToInstagramCommandHandler : IBaseCommandHandler<SendToInstagramCommand>
@@ -20,14 +20,14 @@ namespace Application.SocialMedia.Instagram.Post.SendPostToInstagram
 
         public async Task<OperationResult> Handle(SendToInstagramCommand request, CancellationToken cancellationToken)
         {
-            var instagram = await _repository.GetTracking(request.PostId);
+            var instagram = await _repository.GetTrackingWithString(request.PostId);
 
             foreach (var item in instagram.Posts)
             {
-                if (item.InstagramId == request.PostId && item.Id == request.PostId)
+                if (item.PostId == request.PostId)
                 {
-                    await _repository.PostToInstagram(instagram.accessToken
-                    ,item.ImageName ,  item.Description);
+                    //await _repository.PostToInstagram(instagram.accessToken
+                    //,item.ImageName ,  item.Description);
 
                     //, item.Images.Select(i => i.ImageName).ToList(),
 

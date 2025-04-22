@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Application;
 using Domain.SocialMediaAgg.TelegramAgg.Repository;
 
@@ -11,8 +7,8 @@ namespace Application.SocialMedia.Telegram.Post.SendMessageToTelegram
     public class SendMessageToTelegramCommand : IBaseCommand
     {
         //public long id { get; set; }
-        public string TelegramId { get; set; }
-        public string token { get; set; }
+        public long TelegramId { get; set; }
+        //public string token { get; set; }
        // public string imagePath { get; set; }
         public string caption { get; set; }
     }
@@ -27,11 +23,11 @@ namespace Application.SocialMedia.Telegram.Post.SendMessageToTelegram
 
         public async Task<OperationResult> Handle(SendMessageToTelegramCommand request, CancellationToken cancellationToken)
         {
-            //var telegram = await _repository.GetTrackingWithString(request.TelegramId);
-            //if (telegram == null) 
-            //    return OperationResult.NotFound();
+            var telegram = await _repository.GetTracking(request.TelegramId);
+            if (telegram == null)
+                return OperationResult.NotFound();
 
-            await _repository.SendMessageToTelegram(request.TelegramId, request.caption, request.token);
+            await _repository.SendMessageToTelegram(telegram.Chat_Id, request.caption, telegram.Token);
             return OperationResult.Success();
         }
     }

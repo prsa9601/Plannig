@@ -21,14 +21,14 @@ namespace Domain.Notification
             //EventExpiredTime = eventExpiredTime;
             SendTime = sendTime;
             NotificationType = notificationType;
-            UserNames = userNames;
+            UserIds = userNames;
             IsActive = isActive;
             //ScheduleId = scheduleId;, string scheduleId
         }
         
         private Notification()
         {
-            UserNames = new List<string>();
+            UserIds = new List<string>();
             IsSeen = false;
             IsSend = false;
             IsActive = false;
@@ -46,7 +46,7 @@ namespace Domain.Notification
         public DateTime SendTime { get; private set; }
 
         public NotificationType NotificationType { get; private set; }
-        public ICollection<string>? UserNames { get; private set; }
+        public ICollection<string>? UserIds { get; private set; }
 
 
 
@@ -65,13 +65,13 @@ namespace Domain.Notification
             EventEndTime = eventEndTime;
             SendTime = sendTime;
             NotificationType = notificationType;
-            UserNames = userIds;
+            UserIds = userIds;
         }
 
         public void Edit(long eventId, bool isSend, bool isSeen,
             DateTime eventSendTime,
             DateTime sendTime, NotificationType notificationType,
-            ICollection<string>? userNames, bool isActive, DateTime endTime)
+            ICollection<string>? userIds ,bool isActive, DateTime endTime)
         {
             EventId = eventId;
             IsSend = isSend;
@@ -83,7 +83,7 @@ namespace Domain.Notification
             //EventExpiredTime = eventExpiredTime;
             SendTime = sendTime;
             NotificationType = notificationType;
-            UserNames = userNames;
+            UserIds = userIds;
             IsActive = isActive;
             //ScheduleId = scheduleId;, string scheduleId
         }
@@ -102,7 +102,7 @@ namespace Domain.Notification
 
         public void RemoveUser(string userId)
         {
-            UserNames.Remove(userId);
+            UserIds.Remove(userId);
         }
         public void DisabledActive()
         {
@@ -122,17 +122,17 @@ namespace Domain.Notification
         }
         public void AddUser(ICollection<string> userIds)
         {
-            UserNames.Clear();
+            UserIds.Clear();
             foreach (var item in userIds)
             {
-                UserNames.Add(item);
+                UserIds.Add(item);
             }
         }
 
         //  هم میتونم با ریپازیتوری بزنمش هم با سرویس
         public void SendEmailForEvent(List<string> userIds, long eventId,
             DateTime eventStartTime, DateTime eventEndTime, bool isSend,
-            int allowedEmailCount, bool isActive, string creatorUserName)
+            int allowedEmailCount, bool isActive, string creatorUserId)
         {
             GuardSendEmail(isSend, isActive, allowedEmailCount);
             //service.SendEmailForEvent(userIds, eventId, eventStartTime,
@@ -147,19 +147,19 @@ namespace Domain.Notification
         //    service.SendEmailForEvent(userIds, eventId, eventStartTime,
         //        eventEndTime, creatorUserName);
         //}
-        public void SendEmail(List<string>? userNames, long eventId,
+        public void SendEmail(List<string>? userIds, long eventId,
             DateTime eventStartTime, DateTime eventEndTime, bool isSend,
             int allowedEmailCount, bool isActive, INotificationService service)
         {
             GuardSendEmail(isSend, isActive, allowedEmailCount);
-            service.SendEmail(userNames, eventId, eventStartTime, eventEndTime);
+            service.SendEmail(userIds, eventId, eventStartTime, eventEndTime);
         }
-        public void SendSms(List<string> userNames, long eventId, 
+        public void SendSms(List<string> userIds, long eventId, 
             DateTime eventStartTime, DateTime eventEndTime, bool isSend, 
             int allowedSmsCount, bool isActive, INotificationService service)
         {
             GuardSendSms(isSend, isActive, allowedSmsCount);
-            service.SendSms(userNames, eventId, eventStartTime, eventEndTime);
+            service.SendSms(userIds, eventId, eventStartTime, eventEndTime);
         }
 
         private void CountEmailControl(List<string>? userIds)

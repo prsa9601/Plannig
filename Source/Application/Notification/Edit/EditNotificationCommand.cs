@@ -83,7 +83,7 @@ namespace Application.Notification.Edit
                                                  && notification.NotificationType == NotificationType.Email &&
                                                  notification.AllowedEmailCount >= 0)
                 {
-                    var creator = await _userRepository.GetByFilterAsync(i=>i.UserName.Equals(eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()));
+                    var creator = await _userRepository.GetByFilterAsync(i=>i.UserName.Equals(eventClass.EventUser.Select(i => i.CreatorUserId).FirstOrDefault()));
                     int SendEmailCount = 0;
                     foreach (var item in request.UserNames)
                     {
@@ -109,7 +109,7 @@ namespace Application.Notification.Edit
                                       , request.EventId
                                       , request.EventStartTime,
                                       request.SendTime,
-                                      eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.SendTime);
+                                      eventClass.EventUser.Select(i => i.CreatorUserId).FirstOrDefault()), request.SendTime);
 
                     notification.ScheduleId = scheduleId;
                     //var scheduleid =

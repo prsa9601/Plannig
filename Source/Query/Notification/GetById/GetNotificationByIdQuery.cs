@@ -21,7 +21,7 @@ namespace Query.Notification.GetById
 
         public async Task<NotificationDto?> Handle(GetNotificationByIdQuery request, CancellationToken cancellationToken)
         {
-            var notifications = await  _context.Notifications.Where(i => i.UserNames!.Equals(request.UserName)
+            var notifications = await  _context.Notifications.Where(i => i.UserIds!.Equals(request.UserName)
             && i.IsSend == true && i.Id.Equals(request.NotificationId)).FirstOrDefaultAsync();
             return await notifications.Map(_context);
         }

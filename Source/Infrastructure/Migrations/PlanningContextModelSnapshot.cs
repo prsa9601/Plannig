@@ -243,7 +243,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("SendTime")
                         .HasColumnType("datetime2");
 
-                    b.PrimitiveCollection<string>("UserNames")
+                    b.PrimitiveCollection<string>("UserIds")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -347,11 +347,17 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("InstagramId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SendMethod")
-                        .HasColumnType("int");
+                    b.Property<string>("PageId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Profile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -364,35 +370,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Instagram", "instagram");
-                });
-
-            modelBuilder.Entity("Domain.SocialMediaAgg.InstagramAgg.InstagramProfile", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("InstagramId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("TelegramId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InstagramId");
-
-                    b.ToTable("InstagramProfile");
                 });
 
             modelBuilder.Entity("Domain.SocialMediaAgg.InstagramAgg.Story.StoryImage", b =>
@@ -847,11 +824,11 @@ namespace Infrastructure.Migrations
                             b1.Property<DateTime>("CreationDate")
                                 .HasColumnType("datetime2");
 
-                            b1.Property<string>("CreatorUserName")
+                            b1.Property<string>("CreatorUserId")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("UserName")
+                            b1.Property<string>("UserId")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
@@ -944,7 +921,7 @@ namespace Infrastructure.Migrations
                 {
                     b.OwnsMany("Domain.SocialMediaAgg.InstagramAgg.Post.Post", "Posts", b1 =>
                         {
-                            b1.Property<long>("InstagramId")
+                            b1.Property<long>("InstagramId1")
                                 .HasColumnType("bigint");
 
                             b1.Property<long>("Id")
@@ -963,8 +940,7 @@ namespace Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("ImageName")
-                                .IsRequired()
+                            b1.Property<string>("InstagramId")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("InstagramUserName")
@@ -979,28 +955,23 @@ namespace Infrastructure.Migrations
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("PostId")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("VideoName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("InstagramId", "Id");
+                            b1.HasKey("InstagramId1", "Id");
 
                             b1.HasIndex("Id");
 
                             b1.ToTable("Posts", "instagram");
 
                             b1.WithOwner()
-                                .HasForeignKey("InstagramId");
+                                .HasForeignKey("InstagramId1");
 
                             b1.OwnsMany("Domain.SocialMediaAgg.InstagramAgg.Post.InstagramPostImage", "Images", b2 =>
                                 {
-                                    b2.Property<long>("PostInstagramId")
+                                    b2.Property<long>("PostInstagramId1")
                                         .HasColumnType("bigint");
 
-                                    b2.Property<long>("PostId1")
+                                    b2.Property<long>("PostId")
                                         .HasColumnType("bigint");
 
                                     b2.Property<long>("Id")
@@ -1017,32 +988,27 @@ namespace Infrastructure.Migrations
                                         .HasColumnType("nvarchar(max)");
 
                                     b2.Property<string>("Link")
-                                        .IsRequired()
                                         .HasColumnType("nvarchar(max)");
 
-                                    b2.Property<string>("PostId")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<int>("Secuence")
+                                    b2.Property<int>("Seqence")
                                         .HasColumnType("int");
 
-                                    b2.HasKey("PostInstagramId", "PostId1", "Id");
+                                    b2.HasKey("PostInstagramId1", "PostId", "Id");
 
                                     b2.HasIndex("Id");
 
                                     b2.ToTable("Images", "instagram");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PostInstagramId", "PostId1");
+                                        .HasForeignKey("PostInstagramId1", "PostId");
                                 });
 
                             b1.OwnsMany("Domain.SocialMediaAgg.InstagramAgg.Post.InstagramPostVideo", "Videos", b2 =>
                                 {
-                                    b2.Property<long>("PostInstagramId")
+                                    b2.Property<long>("PostInstagramId1")
                                         .HasColumnType("bigint");
 
-                                    b2.Property<long>("PostId1")
+                                    b2.Property<long>("PostId")
                                         .HasColumnType("bigint");
 
                                     b2.Property<long>("Id")
@@ -1055,11 +1021,6 @@ namespace Infrastructure.Migrations
                                         .HasColumnType("datetime2");
 
                                     b2.Property<string>("Link")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<string>("PostId")
-                                        .IsRequired()
                                         .HasColumnType("nvarchar(max)");
 
                                     b2.Property<int>("Sequence")
@@ -1069,14 +1030,14 @@ namespace Infrastructure.Migrations
                                         .IsRequired()
                                         .HasColumnType("nvarchar(max)");
 
-                                    b2.HasKey("PostInstagramId", "PostId1", "Id");
+                                    b2.HasKey("PostInstagramId1", "PostId", "Id");
 
                                     b2.HasIndex("Id");
 
                                     b2.ToTable("Videos", "instagram");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PostInstagramId", "PostId1");
+                                        .HasForeignKey("PostInstagramId1", "PostId");
                                 });
 
                             b1.Navigation("Images");
@@ -1086,7 +1047,7 @@ namespace Infrastructure.Migrations
 
                     b.OwnsMany("Domain.SocialMediaAgg.InstagramAgg.Story.Story", "Stories", b1 =>
                         {
-                            b1.Property<long>("InstagramId")
+                            b1.Property<long>("InstagramId1")
                                 .HasColumnType("bigint");
 
                             b1.Property<long>("Id")
@@ -1108,6 +1069,10 @@ namespace Infrastructure.Migrations
                             b1.Property<long>("ImagesId")
                                 .HasColumnType("bigint");
 
+                            b1.Property<string>("InstagramId")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
                             b1.Property<string>("InstagramUserName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
@@ -1126,7 +1091,7 @@ namespace Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(450)");
 
-                            b1.HasKey("InstagramId", "Id");
+                            b1.HasKey("InstagramId1", "Id");
 
                             b1.HasIndex("ImagesId");
 
@@ -1143,7 +1108,7 @@ namespace Infrastructure.Migrations
                                 .IsRequired();
 
                             b1.WithOwner()
-                                .HasForeignKey("InstagramId");
+                                .HasForeignKey("InstagramId1");
 
                             b1.HasOne("Domain.SocialMediaAgg.InstagramAgg.Story.StoryVideo", "Videos")
                                 .WithMany()
@@ -1159,13 +1124,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("Stories");
-                });
-
-            modelBuilder.Entity("Domain.SocialMediaAgg.InstagramAgg.InstagramProfile", b =>
-                {
-                    b.HasOne("Domain.SocialMediaAgg.InstagramAgg.Instagram", null)
-                        .WithMany("InstagramProfiles")
-                        .HasForeignKey("InstagramId");
                 });
 
             modelBuilder.Entity("Domain.SocialMediaAgg.TelegramAgg.Telegram", b =>
@@ -1619,11 +1577,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.SocialMediaAgg.InstagramAgg.Instagram", b =>
-                {
-                    b.Navigation("InstagramProfiles");
                 });
 
             modelBuilder.Entity("Domain.SocialMediaAgg.TelegramAgg.Telegram", b =>

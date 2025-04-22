@@ -10,8 +10,8 @@ namespace Application.SocialMedia.Instagram.Story.Delete
 {
     public class DeleteStoryCommand : IBaseCommand
     {
-        public long id { get; set; }
-        public long InstagramId { get; set; }
+        public long StoryId { get; set; } //TableId
+        public long InstagramId { get; set; }//TableId
     }
     internal class DeleteStoryCommandHandler : IBaseCommandHandler<DeleteStoryCommand>
     {
@@ -27,7 +27,7 @@ namespace Application.SocialMedia.Instagram.Story.Delete
             var instagram = await _repository.GetTracking(request.InstagramId);
             if (instagram == null) 
                 return OperationResult.NotFound();
-            instagram.RemoveStory(request.id);
+            instagram.RemoveStory(request.StoryId);
             await _repository.Save();
             return OperationResult.Success();
         }

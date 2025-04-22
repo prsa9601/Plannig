@@ -14,7 +14,7 @@ namespace Query.SocialMedia.Instagram
                 accessToken = model.accessToken,
                 InstagramName = model.accessToken,
                 UserName = model.UserName,
-                SendMethod = model.SendMethod
+                //SendMethod = model.SendMethod
             };
         }
     }

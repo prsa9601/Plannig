@@ -34,7 +34,7 @@ namespace Application.SocialMedia.Instagram.Post.SetImageToPost
                 if (item.Id == request.postId)
                 {
                     string imageName = await _fileService.SaveFileAndGenerateName(request.ImageFile, Directories.InstagramPostImages);
-                    item.SetPostImage(imageName);
+                    //item.SetPostImage(imageName);
                     await _repository.Save();
                     return OperationResult.Success();
                 }

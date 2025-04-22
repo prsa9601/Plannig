@@ -104,7 +104,7 @@ namespace Application.Notification.Add
                         , request.EventId
                     , notification.EventStartTime,
                     notification.SendTime,
-                    eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.SendTime);
+                    eventClass.EventUser.Select(i => i.CreatorUserId).FirstOrDefault()), request.SendTime);
 
                     notification.ScheduleId = scheduleId;
                 }

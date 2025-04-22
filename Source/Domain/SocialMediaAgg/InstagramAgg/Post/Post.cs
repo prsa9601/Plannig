@@ -12,64 +12,72 @@ namespace Domain.SocialMediaAgg.InstagramAgg.Post
         public DateTime DateOfPosting { get; private set; }
         //public string Picture { get; private set; }
         public string Description { get; private set; }
-        public string ImageName { get; private set; }
-        public string PostId { get; set; }
-        public string VideoName { get; private set; }
+        //public string ImageName { get; private set; }
+        public string? PostId { get; set; }
+        //public string VideoName { get; private set; }
         public string InstagramUserName { get; set; }
         //public string Title { get; private set; }
         public string Link { get; private set; }
         // public string Slug { get; private set; }
         public bool IsSend { get; private set; } = false;
-        public long InstagramId { get; private set; } //InstagramPostId OR TelegramPostId
-       // [NotMapped]
-        public List<InstagramPostImage> Images { get; private set; }
-        //[NotMapped]
-        public List<InstagramPostVideo> Videos { get; private set; }
+        public string? InstagramId { get; internal set; } //InstagramPostId OR TelegramPostId
+                                                        // [NotMapped]
+        public List<InstagramPostImage> Images { get; private set; } = new List<InstagramPostImage>();
+        //[NotMapped]                                               
+        public List<InstagramPostVideo> Videos { get; private set; } = new List<InstagramPostVideo>();
 
         private Post()
         {
-            Images = new List<InstagramPostImage>();
-            Videos = new List<InstagramPostVideo>();
+          
         }
-        public Post(DateTime dateOfPosting, string description, string link, string imageName, string videoName)
+        public Post(DateTime dateOfPosting, string description, string link)
         {
             DateOfPosting = dateOfPosting;
             Description = description;
             Link = link;
             // Slug = slug?.ToSlug(); string slug,
-            ImageName = imageName;
-            VideoName = videoName;
+            //ImageName = imageName;
+            //VideoName = videoName;
         }
-        public void Edit(DateTime dateOfPosting, string description, string link, string imageName, string videoName)
+        public void Edit(DateTime dateOfPosting, string description, string link)
         {
             DateOfPosting = dateOfPosting;
             Description = description;
             Link = link;
             //Slug = slug?.ToSlug(); string slug,
-            ImageName = imageName;
-            VideoName = videoName;
+            //ImageName = imageName;
+            //VideoName = videoName;
         }
-        public void SetPostImage(string imageName)
-        {
-            NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
-            ImageName = imageName;
-        }
+        //public void SetPostImage(string imageName)
+        //{
+        //    NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
+        //    ImageName = imageName;
+        //}
 
-        public void AddImage(InstagramPostImage image)
+        public void AddImage(List<string> imageName)
         {
-            image.PostId = PostId;
-            Images.Add(image);
+            for (int i = 1; i <= imageName.Count(); i++)
+            {
+                var image = new InstagramPostImage(imageName[i-1], i);
+                
+                image.PostId = Id;
+                Images.Add(image);
+            }
         }
-        public void SetPostVideo(string imageName)
+        //public void SetPostVideo(string imageName)
+        //{
+        //    NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
+        //    ImageName = imageName;
+        //}
+
+        public void AddVideo(List<string> videoName)
         {
-            NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
-            ImageName = imageName;
-        }
- 
-        public void AddVideo(InstagramPostImage image)
-        {
-            image.PostId = PostId;
-            Images.Add(image);
+            for (int i = 1; i <= videoName.Count(); i++)
+            {
+                var video = new InstagramPostVideo(videoName[i-1], i);
+                video.PostId = Id;
+                Videos.Add(video);
+            }
         }
         public string RemoveImage(long id)
         {

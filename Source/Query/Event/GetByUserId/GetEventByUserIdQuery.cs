@@ -33,7 +33,7 @@ namespace Query.Event.GetByUserId
             {
                 foreach (var item1 in item)
                 {
-                    if (item1.UserName.Equals(user.UserName))
+                    if (item1.UserId.Equals(user.UserName))
                     {
                         EventIds.Add(item1.EventId);
                     }

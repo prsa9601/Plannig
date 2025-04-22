@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common.Application;
+﻿using Common.Application;
 using Domain.SocialMediaAgg.InstagramAgg.Repository;
 
 namespace Application.SocialMedia.Instagram.Post.RemoveImageToPost
 {
     public class RemoveImagePostCommand : IBaseCommand
     {
-        public long InstagramId { get; set; }
-        public long PostId { get; set; }
-        public long ImageId { get; set; }
+        public long InstagramId { get; set; } // TableId
+        public long PostId { get; set; } // TableId
+        public long ImageId { get; set; } // TableId
     }
 
     internal class RemoveImagePostCommandHandler : IBaseCommandHandler<RemoveImagePostCommand>
@@ -35,8 +30,7 @@ namespace Application.SocialMedia.Instagram.Post.RemoveImageToPost
                 if (item.Id == request.PostId)
                 {
                     var post = new Domain.SocialMediaAgg.InstagramAgg.Post.Post(item.DateOfPosting,
-                        item.Description, item.Link,
-                        item.ImageName, item.VideoName);
+                        item.Description, item.Link);
                     post.RemoveImage(request.ImageId);
                     await _repository.Save();
                     return OperationResult.Success();

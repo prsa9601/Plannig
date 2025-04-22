@@ -9,10 +9,9 @@ namespace Application.SocialMedia.Instagram.Post.AddImageToPost
 {
     public class AddImageCommand : IBaseCommand
     {
-        public string InstagramUserName { get; set; }
-        public IFormFile ImageFile { get; set; }
-        public long PostId { get; set; }
-        public int Sequence { get; set; }
+        public long InstagramId { get; set; } // TableId
+        public List<IFormFile> ImageFile { get; set; }
+        public long PostId { get; set; } // TableId
     }
     internal class AddImageCommandHandler : IBaseCommandHandler<AddImageCommand>
     {
@@ -27,18 +26,31 @@ namespace Application.SocialMedia.Instagram.Post.AddImageToPost
 
         public async Task<OperationResult> Handle(AddImageCommand request, CancellationToken cancellationToken)
         {
-            var instagram = await _repository.GetTrackingByUserName(request.InstagramUserName);
+            var instagram = await _repository.GetTracking(request.InstagramId);
+
+            if (instagram == null)
+                return OperationResult.NotFound();
+
+            List<string> ImageNames = new List<string>();
             foreach (var item in instagram.Posts)
             {
                 if (item.Id == request.PostId)
                 {
-                    string imageName = await _fileService.SaveFileAndGenerateName(request.ImageFile, Directories.InstagramPostImages);
-                    item.AddImage(new InstagramPostImage(imageName,request.Sequence));
-                    await _repository.Save();
-                    return OperationResult.Success();
-                } 
+                    for (global::System.Int32 i = 1; i < request.ImageFile.Count(); i++)
+                    {
+                        string imageName = await _fileService.
+                            SaveFileAndGenerateName(request.ImageFile[i],
+                            Directories.InstagramPostImages);
+                        ImageNames.Add(imageName);
+
+                    }
+                    item.AddImage(ImageNames);
+
+                }
             }
-            return OperationResult.NotFound();
+            await _repository.Save();
+            return OperationResult.Success();
+
         }
     }
 }

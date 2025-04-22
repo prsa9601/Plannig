@@ -1,5 +1,4 @@
-﻿using AngleSharp;
-using Application._Utilities;
+﻿using Application._Utilities;
 using Application.Blog;
 using Application.Category;
 using Application.Event;
@@ -9,10 +8,9 @@ using Application.Notification.Remove;
 using Application.NotificationSchedule;
 using Application.Package._Service;
 using Application.Role.Create;
+using Application.SocialMedia.Instagram;
 using Application.SocialMedia.Telegram;
 using Application.User;
-using Application.User._RequestBox;
-using Application.User.SendVerificationEmailToken;
 using Common.Application.Schedule;
 using Domain.BlogAgg.Service;
 using Domain.CategoryAgg.Service;
@@ -20,18 +18,16 @@ using Domain.EventAgg.Service;
 using Domain.Notification.NotificationSchedule;
 using Domain.Notification.Service;
 using Domain.PackageAgg.Service;
+using Domain.SocialMediaAgg.InstagramAgg.Service;
 using Domain.SocialMediaAgg.TelegramAgg.Service;
-using Domain.UserAgg;
 using Domain.UserAgg.Service;
 using FluentValidation;
 using Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Presentation.Facade;
 using Query.Event.GetById;
-using StackExchange.Redis;
 using Telegram.Bot;
 
 namespace Config
@@ -54,6 +50,7 @@ namespace Config
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IInstagramService, InstagramService>();
             services.AddScoped<ITelegramService, TelegramService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();

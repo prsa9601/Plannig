@@ -25,7 +25,8 @@ namespace Query.Notification.GetList
         public async Task<NotificationFilterResult> Handle(GetListFilterNotificationByCurrentUserIdQuery request, CancellationToken cancellationToken)
         {
             var @params = request.FilterParams;
-            var notifications = _context.Notifications.Where(i => i.UserNames.Any(x=>x.Equals(request.FilterParams.UserName)) && i.IsSend == true);
+            var userNames = _context.Users.Where(i => i.Id.Equals(@params.UserName)).ToListAsync(cancellationToken);
+            var notifications = _context.Notifications.Where(i => i.UserIds.Any(x=>x.Equals(userNames)) && i.IsSend == true);
             //var f = notifications.ToList();            
             //&&i.NotificationType==NotificationType.
             var skip = (@params.PageId - 1) * @params.Take;

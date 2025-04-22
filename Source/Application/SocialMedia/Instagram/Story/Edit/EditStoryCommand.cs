@@ -14,7 +14,7 @@ namespace Application.SocialMedia.Instagram.Story.Edit
     public class EditStoryCommand : IBaseCommand
     {
         public long InstagramId { get; set; }
-        public long StoryId { get; set; }
+        public long StoryId { get; set; } //TableId
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; }
         public IFormFile Image { get; set; }

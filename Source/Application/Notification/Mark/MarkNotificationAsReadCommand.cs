@@ -26,7 +26,7 @@ namespace Application.Notification.Mark
         {
             //var q = await _repository.GetListTrackingAsync();
             var notification = await _repository.GetByFilterAsync(i=>i.Id.Equals
-            (request.NotificationId)&&i.UserNames!.Any(x=>x.Equals(request.UserName)));
+            (request.NotificationId)&&i.UserIds!.Any(x=>x.Equals(request.UserName)));
             if (notification == null)
                 return OperationResult.NotFound();
             notification!.MarkAsSeen();

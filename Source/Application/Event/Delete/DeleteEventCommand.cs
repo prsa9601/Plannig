@@ -32,7 +32,7 @@ namespace Application.Event.Delete
                 return OperationResult<long>.NotFound();
 
             var eventUser = Event.EventUser.FirstOrDefault
-                (i => i.CreatorUserName.Equals(request.UserName));
+                (i => i.CreatorUserId.Equals(request.UserName));
             if (eventUser == null)
             {
 

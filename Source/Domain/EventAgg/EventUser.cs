@@ -5,13 +5,13 @@ namespace Domain.EventAgg
 {
     public class EventUser : BaseEntity
     {
-        public EventUser(string userName)
+        public EventUser(string UserId)
         {
 
-            UserName = userName;
+            this.UserId = UserId;
         }
-        public string UserName { get; set; }
-        public string CreatorUserName { get; set; }
+        public string UserId { get; set; }
+        public string CreatorUserId { get; set; }
         public long EventId { get; set; }
     }
 }

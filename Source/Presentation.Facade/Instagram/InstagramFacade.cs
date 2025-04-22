@@ -1,4 +1,8 @@
-﻿using Application.SocialMedia.Instagram.Post.AddImageToPost;
+﻿using Application.SocialMedia.Instagram.Account.Add;
+using Application.SocialMedia.Instagram.Account.Delete;
+using Application.SocialMedia.Instagram.Account.Edit;
+using Application.SocialMedia.Instagram.Account.SetProfile;
+using Application.SocialMedia.Instagram.Post.AddImageToPost;
 using Application.SocialMedia.Instagram.Post.AddPost;
 using Application.SocialMedia.Instagram.Post.DeletePost;
 using Application.SocialMedia.Instagram.Post.EditPost;
@@ -6,11 +10,12 @@ using Application.SocialMedia.Instagram.Post.RemoveImageToPost;
 using Application.SocialMedia.Instagram.Post.SetImageToPost;
 using Application.SocialMedia.Instagram.Story.Delete;
 using Application.SocialMedia.Instagram.Story.Edit;
-using Application.SocialMedia.Instagram.Story.SendToInstagram;
 using Common.Application;
 using MediatR;
-using Presentation.Facade.Instagram;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Query.SocialMedia.Instagram.Account.DTOs;
+using Query.SocialMedia.Instagram.Account.GetByFilter;
+using Query.SocialMedia.Instagram.Account.GetById;
+using Query.SocialMedia.Instagram.Account.GetList;
 
 namespace Presentation.Facade.Instagram
 {
@@ -48,9 +53,9 @@ namespace Presentation.Facade.Instagram
             return await _mediator.Send(command);
         }
 
-        public async Task<OperationResult> Delete(DeletePostInstagramCommand instagramCommand)
+        public async Task<OperationResult> Delete(DeletePostInstagramCommand command)
         {
-            return await _mediator.Send(instagramCommand);
+            return await _mediator.Send(command);
         }
 
         public async Task<OperationResult> SetImage(SetImageCommand command)
@@ -73,14 +78,14 @@ namespace Presentation.Facade.Instagram
             return await _mediator.Send(command);
         }
 
-        public async Task<OperationResult> Add(AddPostInstagramCommand instagramCommand)
+        public async Task<OperationResult> Add(AddPostInstagramCommand command)
         {
-            return await _mediator.Send(instagramCommand);
+            return await _mediator.Send(command);
         }
 
-        public async Task<OperationResult> Edit(EditPostInstagramCommand instagramCommand)
+        public async Task<OperationResult> Edit(EditPostInstagramCommand command)
         {
-            return await _mediator.Send(instagramCommand);
+            return await _mediator.Send(command);
         }
 
         public async Task<OperationResult> PostToInstagram(Application.SocialMedia.Instagram.Post.SendPostToInstagram.SendToInstagramCommand command)
@@ -88,6 +93,39 @@ namespace Presentation.Facade.Instagram
             return await _mediator.Send(command);
         }
 
+        public async Task<InstagramAccountDto?> GetById(long Id)
+        {
+            return await _mediator.Send(new GetInstagramAccountById(Id));
+        }
 
+        public async Task<List<InstagramAccountDto>?> GetList(string UserName)
+        {
+            return await _mediator.Send(new GetListInstagramQuery(UserName));
+        }
+
+        public async Task<InstagramAccountFilterResult?> GetByFilter(InstagramAccountFilterParam param)
+        {
+            return await _mediator.Send(new GetInstagramAccountByFilter(param));
+        }
+
+        public async Task<OperationResult> AddAccount(AddInstagramAccountCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> EditAccount(EditInstagramAccountCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> DeleteAccount(DeleteInstagramAccountCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> SetProfileAccount(SetProfileInstagramAccountCommand command)
+        {
+            return await _mediator.Send(command);
+        }
     }
 }

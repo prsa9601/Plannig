@@ -31,11 +31,11 @@ namespace Domain.EventAgg
             AccessNotification = true;
         }
 
-        public void AddUser(List<string> userName)
+        public void AddUser(List<string> UserIds)
         {
             List<EventUser> users = new List<EventUser>();
 
-            foreach (var item in userName)
+            foreach (var item in UserIds)
             {
                 users.Add(new EventUser(item));
             }
@@ -45,14 +45,16 @@ namespace Domain.EventAgg
             EventUser.Clear();
             EventUser.AddRange(users);
         }
-        public void AddUser(string userName)
+        public void AddUser(string UserId)
         {
-            var user = new EventUser(userName);
+            var user = new EventUser(UserId);
             user.EventId = Id;
             EventUser.Add(user);
         }
 
-        public Event(string title, DateTime startTime, DateTime endTime, string description, string link, string eventAddress, Tagged tag, NotificationEnum notification, bool accessNotification)
+        public Event(string title, DateTime startTime, DateTime endTime,
+            string description, string link, string eventAddress, Tagged tag, 
+            NotificationEnum notification, bool accessNotification)
         {
             Guard(title, startTime, endTime);
 
@@ -70,8 +72,9 @@ namespace Domain.EventAgg
             //Participants = new List<UserEvent>();
             //Participants = new List<EventParticipants>();
         }
-        public Event(string creatorUserName, List<string>? userNames, string title,
-            DateTime startTime, DateTime endTime, string description, string link, string eventAddress,
+        public Event(string creatorUserId, List<string>? UserIds, string title,
+            DateTime startTime, DateTime endTime, string description, string link,
+            string eventAddress,
             Tagged tag, NotificationEnum notification, bool accessNotification)
         {
             Guard(title, startTime, endTime);
@@ -91,33 +94,33 @@ namespace Domain.EventAgg
             //Participants = new List<EventParticipants>();
         }
 
-        public void AddEventUser(string creatorUserName)
+        public void AddEventUser(string CreatorUserId)
         {
-            EventUser user = new EventUser(creatorUserName);
+            EventUser user = new EventUser(CreatorUserId);
             user.EventId = Id;
-            user.CreatorUserName = creatorUserName;
+            user.CreatorUserId = CreatorUserId;
             //eventUser.Clear();
             //eventUser.Clear();
             EventUser.Add(user);
         }
-        public void AddEventUser(string creatorUserName, List<string> userNames)
+        public void AddEventUser(string CreatorUserId, List<string> UserIds)
         {
             List<EventUser> users = new List<EventUser>();
 
-            foreach (var item in userNames)
+            foreach (var item in UserIds)
             {
                 users.Add(new EventUser(item));
             }
-            users.Add(new EventUser(creatorUserName));
+            users.Add(new EventUser(CreatorUserId));
             users.ForEach(f => f.EventId = Id);
-            users.ForEach(f => f.CreatorUserName = creatorUserName);
+            users.ForEach(f => f.CreatorUserId = CreatorUserId);
             //eventUser.Clear();
             //eventUser.Clear();
             EventUser.AddRange(users);
         }
-        public void RemoveUserAsFromEvent(string userName)
+        public void RemoveUserAsFromEvent(string UserId)
         {
-            var eventUser = EventUser.FirstOrDefault(f => f.UserName.Equals(userName) && f.EventId.Equals(Id));
+            var eventUser = EventUser.FirstOrDefault(f => f.UserId.Equals(UserId) && f.EventId.Equals(Id));
             if (eventUser != null)
             {
                 EventUser.Remove(eventUser);
@@ -163,7 +166,7 @@ namespace Domain.EventAgg
                 }
                 users.Add(new EventUser(creatorUserName));
                 users.ForEach(f => f.EventId = Id);
-                users.ForEach(i => i.CreatorUserName = creatorUserName);
+                users.ForEach(i => i.CreatorUserId = creatorUserName);
                 //eventUser.Clear();
                 EventUser.Clear();
                 EventUser.AddRange(users);

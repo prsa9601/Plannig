@@ -77,11 +77,11 @@ namespace Application.Notification.ChangeDate
                 {
             
                     notification.NotificationScheduleId = NotificationScheduleId;
-                    string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(notification.UserNames.ToList()
+                    string scheduleId = BackgroundJob.Schedule(() => _service.SendEmailForEvent(notification.UserIds.ToList()
                                       , request.EventId
                                       , request.StartTime,
                                       notification.SendTime,
-                                      eventClass.EventUser.Select(i => i.CreatorUserName).FirstOrDefault()), request.SendTime);
+                                      eventClass.EventUser.Select(i => i.CreatorUserId).FirstOrDefault()), request.SendTime);
 
                     notification.ScheduleId = scheduleId;
                     //var scheduleid =

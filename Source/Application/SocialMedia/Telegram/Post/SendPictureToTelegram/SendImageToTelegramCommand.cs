@@ -32,7 +32,7 @@ namespace Application.SocialMedia.Telegram.Post.SendPictureToTelegram
             if (post == null)
                 return OperationResult.NotFound();
 
-            // string ImageName = await _fileService.SaveFileAndGenerateName(request.Image, Directories.TelegramImages);
+            // string ImageName = await _fileService.SaveFileAndGenerateName(request.Images, Directories.TelegramImages);
             await _repository.SendImageToTelegram(request.TelegramId,
                 post.Description,
                 post.Images.OrderByDescending(i => i.Secuence).Select(i => i.ImageName).ToList(),

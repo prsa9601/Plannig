@@ -6,13 +6,12 @@ namespace Planning.Api.Model.InstagramModel
     {
         public class AddPostInstagramViewModel: IBaseCommand
         {
-            public string InstagramId { get; set; } = string.Empty;
+            public long InstagramAccountId { get; set; } 
             public string DateOfPosting { get; set; }
             public string Link { get; set; } = string.Empty;
             public string Description { get; set; } = string.Empty;
-            public string ImageName { get; set; } = string.Empty;
-            public string VideoName { get; set; } = string.Empty;
-
+            public List<IFormFile>? Images { get; set; }
+            public List<IFormFile>? Videos { get; set; }
         }
 
     }
