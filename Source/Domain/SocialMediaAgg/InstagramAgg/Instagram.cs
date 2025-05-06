@@ -10,6 +10,7 @@ namespace Domain.SocialMediaAgg.InstagramAgg
         public string? InstagramId { get; set; } //InstagramAccountId
         public string? PageId { get; set; } //PageId
         public string accessToken { get; set; } //AccessToken Instagram
+        public string InstagramUserName { get; set; }
         public string UserName { get; set; } //AccessToken Instagram
         public string UserId { get; set; }
         public List<Story.Story>? Stories { get; set; } //token Telegram
@@ -20,11 +21,12 @@ namespace Domain.SocialMediaAgg.InstagramAgg
         {
             
         }
-        public Instagram(string accessToken, string userName, string userId, IInstagramService service)
+        public Instagram(string accessToken, string instagramUserName, string userName, string userId, IInstagramService service)
         {
             UserId = userId;
             this.accessToken = accessToken;
             UserName = userName;
+            InstagramUserName = instagramUserName;
             Stories = new List<Story.Story>();
             Posts = new List<Post.Post>();
             //SendMethod = sendMethod;, SendMethodInstagram sendMethod
@@ -74,7 +76,8 @@ namespace Domain.SocialMediaAgg.InstagramAgg
         }
         public void AddStory(Story.Story story)
         {
-            story.InstagramUserName = UserName;
+            //story.InstagramUserName = UserName;
+            story.InstagramId = Id;
             Stories.Add(story);
         }
         public long RemoveStory(long storyId)

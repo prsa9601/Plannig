@@ -9,6 +9,7 @@ using Application.SocialMedia.Instagram.Post.EditPost;
 using Application.SocialMedia.Instagram.Post.RemoveImageToPost;
 using Application.SocialMedia.Instagram.Post.SendPostToInstagram;
 using Application.SocialMedia.Instagram.Post.SetImageToPost;
+using Application.SocialMedia.Instagram.Story.Add;
 using Application.SocialMedia.Instagram.Story.Delete;
 using Common.Application;
 using Query.SocialMedia.Instagram.Account.DTOs;
@@ -18,6 +19,7 @@ namespace Presentation.Facade.Instagram
     public interface IInstagramFacade
     {
         Task<OperationResult> Delete(DeleteStoryCommand command);
+        Task<OperationResult> AddStory(AddStoryCommand command);
         //Task<OperationResult> DeleteStory();
         Task<OperationResult> UploadStory(Application.SocialMedia
             .Instagram.Story.SendToInstagram.SendToInstagramCommand command);

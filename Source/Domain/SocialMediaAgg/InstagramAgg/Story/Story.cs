@@ -6,31 +6,47 @@ namespace Domain.SocialMediaAgg.InstagramAgg.Story;
 
 public class Story : BaseEntity
 {
-    public string storyId { get; private set; } //InstagramPostId OR TelegramPostId
+    public string? storyId { get; private set; } //InstagramPostId OR TelegramPostId
     public DateTime DateOfPosting { get; private set; }
     //public string Picture { get; private set; }
     //public string Discription { get; private set; }
     public string Link { get; private set; }
     public bool IsSend { get; private set; }
-    public string ImageName { get; private set; }
-    public string InstagramUserName { get; set; }
-    public string InstagramId { get; set; }
+    //public string ImageName { get; private set; }
+    public long InstagramId { get; set; }
     //public string? Slug { get; private set; }  
-    public StoryImage Images { get; private set; }
-    public StoryVideo Videos { get; private set; }
+    public StoryImage? Image { get; private set; }
+    public StoryVideo? Video { get; private set; }
 
-    public Story(DateTime dateOfPosting, string link, string imageName)
+    public Story(DateTime dateOfPosting, string link)
     {
-        ImageName = imageName;
+        //ImageName = imageName;, string imageName
         DateOfPosting = dateOfPosting;
         Link = link;
     }
-    public void SetProductImage(string imageName)
+    //public void SetProductImage(string imageName)
+    //{
+    //    NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
+    //    ImageName = imageName;
+    //}
+    public void SetImage(string imageName)
     {
-        NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
-        ImageName = imageName;
+        var image = new StoryImage(imageName);
+        Image = image;
     }
-
+    public void RemoveImage()
+    {
+        Image = null;
+    }
+    public void RemoveVideo()
+    {
+        Video = null;
+    }
+    public void SetVideo(string videoName)
+    {
+        var video = new StoryVideo(videoName);
+        Video = video;
+    }
     //public void AddImage(PostImage image)
     //{
     //    image.PostId = Id;
@@ -55,18 +71,18 @@ public class Story : BaseEntity
         else
             throw new Exception("ارسال پست در  این زمان مجاز نیست!");
     }
-    public void Edit(DateTime dateOfPosting, string link, string imageName)
+    public void Edit(DateTime dateOfPosting, string link)
     {
-        ImageName = imageName;
+        //ImageName = imageName;, string imageName
         DateOfPosting = dateOfPosting;
         Link = link;
     }
-    public void ChangeImage(string imagePath)
-    {
-        ImageName = imagePath;
-    }
-    public void DeleteImage()
-    {
-        ImageName = "";
-    }
+    //public void ChangeImage(string imagePath)
+    //{
+    //    ImageName = imagePath;
+    //}
+    //public void DeleteImage()
+    //{
+    //    ImageName = "";
+    //}
 }

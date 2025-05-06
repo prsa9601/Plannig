@@ -1,9 +1,5 @@
 ﻿using Common.Domain;
 using Common.Domain.Exceptions;
-using Common.Domain.Utils;
-using Domain.SocialMediaAgg.TelegramAgg.Post;
-using System.ComponentModel.DataAnnotations.Schema;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Domain.SocialMediaAgg.InstagramAgg.Post
 {
@@ -21,14 +17,14 @@ namespace Domain.SocialMediaAgg.InstagramAgg.Post
         // public string Slug { get; private set; }
         public bool IsSend { get; private set; } = false;
         public string? InstagramId { get; internal set; } //InstagramPostId OR TelegramPostId
-                                                        // [NotMapped]
+                                                          // [NotMapped]
         public List<InstagramPostImage> Images { get; private set; } = new List<InstagramPostImage>();
         //[NotMapped]                                               
         public List<InstagramPostVideo> Videos { get; private set; } = new List<InstagramPostVideo>();
 
         private Post()
         {
-          
+
         }
         public Post(DateTime dateOfPosting, string description, string link)
         {
@@ -58,12 +54,22 @@ namespace Domain.SocialMediaAgg.InstagramAgg.Post
         {
             for (int i = 1; i <= imageName.Count(); i++)
             {
-                var image = new InstagramPostImage(imageName[i-1], i);
-                
+                var image = new InstagramPostImage(imageName[i - 1], Images.Count + 1);
+
                 image.PostId = Id;
                 Images.Add(image);
             }
         }
+        //public void AddImagesequence(List<string> imageName)
+        //{
+        //    for (int i = 1; i <= imageName.Count(); i++)
+        //    {
+        //        var image = new InstagramPostImage(imageName[i-1], Images.Count()+i);
+
+        //        image.PostId = Id;
+        //        Images.Add(image);
+        //    }
+        //}
         //public void SetPostVideo(string imageName)
         //{
         //    NullOrEmptyDomainDataException.CheckString(imageName, nameof(imageName));
@@ -74,7 +80,7 @@ namespace Domain.SocialMediaAgg.InstagramAgg.Post
         {
             for (int i = 1; i <= videoName.Count(); i++)
             {
-                var video = new InstagramPostVideo(videoName[i-1], i);
+                var video = new InstagramPostVideo(videoName[i - 1], Images.Count + 1);
                 video.PostId = Id;
                 Videos.Add(video);
             }

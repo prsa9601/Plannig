@@ -32,8 +32,8 @@ namespace Query.SocialMedia.Instagram.Account.DTOs
         public string Link { get;  set; }
         public bool IsSend { get;  set; } = false;
         public string InstagramId { get;  set; }
-        public List<InstagramPostImageDto> Images { get;  set; }
-        public List<InstagramPostVideoDto> Videos { get;  set; }
+        public List<InstagramPostImageDto>? Images { get;  set; }
+        public List<InstagramPostVideoDto>? Videos { get;  set; }
     }
     public class InstagramAccountStoryDto : BaseDto
     {
@@ -41,34 +41,34 @@ namespace Query.SocialMedia.Instagram.Account.DTOs
         public DateTime DateOfPosting { get;  set; }
         public string Link { get;  set; }
         public bool IsSend { get;  set; }
-        public string ImageName { get;  set; }
-        public string InstagramUserName { get; set; }
-        public string InstagramId { get; set; }
-        public InstagramStoryImageDto Images { get;  set; }
-        public InstagramStoryVideoDto Videos { get;  set; }
+        //public string ImageName { get;  set; }
+        //public string InstagramUserName { get; set; }
+        public long InstagramId { get; set; }
+        public InstagramStoryImageDto? Images { get;  set; }
+        public InstagramStoryVideoDto? Videos { get;  set; }
     }
     public class InstagramStoryImageDto : BaseDto
     {
-        public string PictureName { get;  set; }
-        public string Link { get;  set; }
+        public string? PictureName { get;  set; }
+        public string? Link { get;  set; }
     }
     public class InstagramStoryVideoDto : BaseDto
     {
-        public string VideoPath { get;  set; }
-        public string Link { get;  set; }
+        public string? VideoPath { get;  set; }
+        public string? Link { get;  set; }
     }
     public class InstagramPostImageDto : BaseDto
     {
         public string ImageName { get;  set; }
         public long PostId { get;  set; }
         public int Sequence { get;  set; }
-        public string Link { get;  set; } 
+        public string? Link { get;  set; } 
     }
     public class InstagramPostVideoDto : BaseDto
     {
         public string VideoName { get;  set; }
         public long PostId { get;  set; }
         public int Sequence { get;  set; }
-        public string Link { get;  set; }
+        public string? Link { get;  set; }
     }
 }

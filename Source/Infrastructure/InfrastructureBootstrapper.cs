@@ -27,6 +27,7 @@ using Domain.CategoryAgg.Repository;
 using Infrastructure.Persistent.Ef.CategoryAgg;
 using Infrastructure.Persistent.Ef.BlogAgg;
 using Domain.BlogAgg.Repository;
+using AngleSharp;
 
 
 namespace Infrastructure
@@ -48,6 +49,7 @@ namespace Infrastructure
             //services.AddSingleton<IPostRepository, PostRepository>();
 
             //services.AddSingleton<ICustomPublisher, CustomPublisher>();
+       
 
             services.AddIdentity<Domain.UserAgg.User, Domain.RoleAgg.Role>(options =>
             {
@@ -89,12 +91,17 @@ namespace Infrastructure
              .AddEntityFrameworkStores<PlanningContext>().AddDefaultTokenProviders();
             //.AddDefaultTokenProviders();
             //.AddErrorDescriber<PersianIdentityErrors>();
+          
 
             services.AddTransient(_ => new DapperContext(connectionString));
             services.AddDbContext<PlanningContext>(option =>
             {
                 option.UseSqlServer(connectionString);
             });
+            //services.AddDbContext<PlanningContext>(option =>
+            //{
+            //    option.UseSqlServer(connectionString);
+            //}, ServiceLifetime.Scoped);
         }
     }
 }

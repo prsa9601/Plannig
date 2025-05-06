@@ -63,12 +63,12 @@ namespace Query.SocialMedia.Instagram.Account
                     Id = storyItem.Id,
                     DateOfPosting = storyItem.DateOfPosting,
                     CreationDate = storyItem.CreationDate,
-                    ImageName = storyItem.ImageName,
-                    Images = storyItem.Images!.MapStoryImage()!,
-                    InstagramUserName = storyItem.InstagramUserName,
+                    //ImageName = storyItem.ImageName,
+                    Images = storyItem.Image?.MapStoryImage()!,
+                    //InstagramUserName = storyItem.InstagramUserName,
                     IsSend = storyItem.IsSend,
                     Link = storyItem.Link,
-                    Videos = storyItem.Videos!.MapStoryVideo()!
+                    Videos = storyItem.Video?.MapStoryVideo()!
                 };
                 Posts.Add(model);
             }

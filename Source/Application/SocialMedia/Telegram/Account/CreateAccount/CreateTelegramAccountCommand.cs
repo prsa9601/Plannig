@@ -5,7 +5,7 @@ using Domain.SocialMediaAgg.TelegramAgg.Service;
 
 namespace Application.SocialMedia.Telegram.Account.CreateAccount
 {
-    public record class CreateTelegramAccountCommand(string Token, string ChatId, string UserName, bool UsedDefaultToken) : IBaseCommand;
+    public record class CreateTelegramAccountCommand(string? Token, string ChatId, string UserName, bool UsedDefaultToken) : IBaseCommand;
 
     internal class CreateTelegramAccountCommandHandler : IBaseCommandHandler<CreateTelegramAccountCommand>
     {

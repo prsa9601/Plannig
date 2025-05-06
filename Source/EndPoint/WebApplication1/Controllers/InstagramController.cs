@@ -9,6 +9,7 @@ using Application.SocialMedia.Instagram.Post.EditPost;
 using Application.SocialMedia.Instagram.Post.RemoveImageToPost;
 using Application.SocialMedia.Instagram.Post.SendPostToInstagram;
 using Application.SocialMedia.Instagram.Post.SetImageToPost;
+using Application.SocialMedia.Instagram.Story.Add;
 using Common.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,12 @@ namespace Planning.Api.Controllers
             return CommandResult(result);
         }
         [HttpPost("AddStory")]
+        public async Task<ApiResult> AddStory([FromForm] AddStoryCommand command)
+        {
+            var result = await _facade.AddStory(command);
+            return CommandResult(result);
+        }
+        [HttpPost("SendStory")]
         public async Task<ApiResult> UploadStory([FromForm] Application.SocialMedia
             .Instagram.Story.SendToInstagram.SendToInstagramCommand command)
         {
@@ -93,7 +100,7 @@ namespace Planning.Api.Controllers
             var result = await _facade.AddImage(command);
             return CommandResult(result);
         }
-        [HttpDelete("RemoveImage")]
+        [HttpDelete("RemoveImageToPost")]
         public async Task<ApiResult> DeleteImage(RemoveImagePostCommand command)
         {
             var result = await _facade.RemoveImage(command);
@@ -115,7 +122,7 @@ namespace Planning.Api.Controllers
         [HttpGet("GetInstagramByFilter")]
         [Authorize]
         public async Task<ApiResult<InstagramAccountFilterResult?>> GetInstagramByFilter(
-            [FromQuery]InstagramAccountFilterParam filterParams)
+            [FromQuery] InstagramAccountFilterParam filterParams)
         {
             var result = await _facade.GetByFilter(filterParams);
             return QueryResult(result);
@@ -123,9 +130,16 @@ namespace Planning.Api.Controllers
 
         [Authorize]
         [HttpPost("AddInstagramAccount")]
-        public async Task<ApiResult> AddAccount([FromForm]AddInstagramAccountCommand command)
+        public async Task<ApiResult> AddAccount([FromForm] AddInstagramAccountCommandViewModel command)
         {
-            var result = await _facade.AddAccount(command);
+            var result = await _facade.AddAccount(new AddInstagramAccountCommand
+            {
+                UserId = User.GetUserIdToString(),
+                accessToken = command.accessToken,
+                Profile = command.Profile,
+                InstagramUserName = command.InstagramUserName,
+                UserName = User.GetUserName(),
+            });
             return CommandResult(result);
         }
         [Authorize]
@@ -137,14 +151,14 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpPatch("SetProfileInstagramAccount")]
-        public async Task<ApiResult> SetProfileAccount([FromForm]SetProfileInstagramAccountCommand command)
+        public async Task<ApiResult> SetProfileAccount([FromForm] SetProfileInstagramAccountCommand command)
         {
             var result = await _facade.SetProfileAccount(command);
             return CommandResult(result);
         }
         [Authorize]
         [HttpDelete("DeleteInstagramAccount")]
-        public async Task<ApiResult> DeleteAccount([FromQuery] long id)
+        public async Task<ApiResult> DeleteAccount(long id)
         {
             var result = await _facade.DeleteAccount(new DeleteInstagramAccountCommand
             {

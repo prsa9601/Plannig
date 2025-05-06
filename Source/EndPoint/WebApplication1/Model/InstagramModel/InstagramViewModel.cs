@@ -13,6 +13,14 @@ namespace Planning.Api.Model.InstagramModel
             public List<IFormFile>? Images { get; set; }
             public List<IFormFile>? Videos { get; set; }
         }
-
+        public class AddInstagramAccountCommandViewModel : IBaseCommand
+        {
+            //public string InstagramId { get; set; } //InstagramAccountId
+            //public string PageId { get; set; } //PageId
+            public string accessToken { get; set; } //AccessToken Instagram
+            public string InstagramUserName { get; set; } //AccessToken Instagram
+            public IFormFile Profile { get; set; } //token Telegram
+        }
+   
     }
 }

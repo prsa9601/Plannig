@@ -36,7 +36,7 @@ namespace Application.SocialMedia.Instagram.Post.AddImageToPost
             {
                 if (item.Id == request.PostId)
                 {
-                    for (global::System.Int32 i = 1; i < request.ImageFile.Count(); i++)
+                    for (global::System.Int32 i = 0; i < request.ImageFile.Count(); i++)
                     {
                         string imageName = await _fileService.
                             SaveFileAndGenerateName(request.ImageFile[i],

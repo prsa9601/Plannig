@@ -21,9 +21,9 @@ namespace Query.SocialMedia.Instagram.Story
                 CreationDate = story.CreationDate,
                 DateOfPosting = story.DateOfPosting,
                 Id = story.Id,
-                ImageName = story.ImageName,
-                Images = story.Images.ImageMap(),
-                Videos = story.Videos.VideoMap(),
+                //ImageName = story.ImageName,
+                Images = story.Image.ImageMap()!,
+                Videos = story.Video.VideoMap()!,
                 Link = story.Link
             };
         }

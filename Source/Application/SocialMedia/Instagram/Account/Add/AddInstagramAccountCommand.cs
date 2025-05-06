@@ -16,6 +16,7 @@ namespace Application.SocialMedia.Instagram.Account.Add
         //public string PageId { get; set; } //PageId
         public string accessToken { get; set; } //AccessToken Instagram
         public string UserName { get; set; } //AccessToken Instagram
+        public string InstagramUserName { get; set; }
         public string UserId { get; set; }
         public IFormFile Profile { get; set; } //token Telegram
     }
@@ -37,7 +38,7 @@ namespace Application.SocialMedia.Instagram.Account.Add
             try
             {
                 var instagram = new Domain.SocialMediaAgg.InstagramAgg.Instagram
-                          (request.accessToken, request.UserName, request.UserId, _service);
+                          (request.accessToken, request.InstagramUserName, request.UserName, request.UserId, _service);
 
                 if (request.Profile != null)
                 {

@@ -8,6 +8,7 @@ using Application.SocialMedia.Instagram.Post.DeletePost;
 using Application.SocialMedia.Instagram.Post.EditPost;
 using Application.SocialMedia.Instagram.Post.RemoveImageToPost;
 using Application.SocialMedia.Instagram.Post.SetImageToPost;
+using Application.SocialMedia.Instagram.Story.Add;
 using Application.SocialMedia.Instagram.Story.Delete;
 using Application.SocialMedia.Instagram.Story.Edit;
 using Common.Application;
@@ -124,6 +125,11 @@ namespace Presentation.Facade.Instagram
         }
 
         public async Task<OperationResult> SetProfileAccount(SetProfileInstagramAccountCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> AddStory(AddStoryCommand command)
         {
             return await _mediator.Send(command);
         }

@@ -31,18 +31,26 @@ namespace Application.SocialMedia.Instagram.Story.Add
 
         public async Task<OperationResult> Handle(AddStoryCommand request, CancellationToken cancellationToken)
         {
-            var instagram = await _repository.GetTracking(request.InstagramId);
-            if (instagram == null) 
-                return OperationResult.NotFound();
-            
-            string imageName = await _fileService.SaveFileAndGenerateName(
-                request.Image, Directories.InstagramStoryVideos);
-           
-            instagram.AddStory(new Domain.SocialMediaAgg.InstagramAgg.Story.Story(
-                request.DateOfPosting, request.Link, imageName));
-            
-            await _repository.Save();
-            return OperationResult.Success();
+            try
+            {
+
+                var instagram = await _repository.GetTracking(request.InstagramId);
+                if (instagram == null)
+                    return OperationResult.NotFound();
+
+                string imageName = await _fileService.SaveFileAndGenerateName(
+                    request.Image, Directories.InstagramStoryVideos);
+
+                instagram.AddStory(new Domain.SocialMediaAgg.InstagramAgg.Story.Story(
+                    request.DateOfPosting, request.Link));
+
+                await _repository.Save();
+                return OperationResult.Success();
+            }
+            catch (Exception e)
+            {
+                return OperationResult.Error(e.Message);
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ using Application.SocialMedia.Telegram.Post.SetImageToPost;
 using Common.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Planning.Api.Model.Telegram;
 using Presentation.Facade.Telegram;
 using Presentation.Facade.Telegram.Account;
 using Query.SocialMedia.Telegram.Account.DTOs;
@@ -94,21 +95,23 @@ namespace Planning.Api.Controllers
 
         [Authorize]
         [HttpPost("CreateAccount")]
-        public async Task<ApiResult> CreateAccount(CreateTelegramAccountCommand command)
+        public async Task<ApiResult> CreateAccount(CreateTelegramAccountCommandViewModel command)
         {
-            return CommandResult(await _account.CreateAccount(command));
+            return CommandResult(await _account.CreateAccount(new
+                CreateTelegramAccountCommand(command.Token, command.ChatId, 
+                User.GetUserName(), command.UsedDefaultToken)));
         }
         [Authorize]
         [HttpPatch("EditAccount")]
-        public async Task<ApiResult> CreateAccount(EditTelegramAccountCommand command)
+        public async Task<ApiResult> EditAccount(EditTelegramAccountCommand command)
         {
             return CommandResult(await _account.EditAccount(command));
         }
         [Authorize]
         [HttpDelete("RemoveAccount")]
-        public async Task<ApiResult> RemoveAccount(RemoveTelegramAccountCommand command)
+        public async Task<ApiResult> RemoveAccount(long TelegramId)
         {
-            return CommandResult(await _account.DeleteAccount(command));
+            return CommandResult(await _account.DeleteAccount(new RemoveTelegramAccountCommand(TelegramId)));
         }
         [Authorize]
         [HttpGet("GetTelegramAccountById")]
@@ -118,9 +121,9 @@ namespace Planning.Api.Controllers
         }
         [Authorize]
         [HttpGet("GetListTelegramAccount")]
-        public async Task<ApiResult<List<TelegramAccountDto?>>> GetListTelegramAccount(string UserName)
+        public async Task<ApiResult<List<TelegramAccountDto?>>> GetListTelegramAccount()
         {
-            return QueryResult(await _account.GetList(UserName));
+            return QueryResult(await _account.GetList(User.GetUserName()));
         }
         [Authorize]
         [HttpGet("GetByFilter")]

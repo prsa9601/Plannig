@@ -39,7 +39,7 @@ namespace Application.SocialMedia.Instagram.Post.AddPost
                 return OperationResult.NotFound();
 
             instagram.AddPost(post);
-            await _repository.Save();
+            //await _repository.Save();
 
             if (request.Images!.Count > 0)
             { 
@@ -65,7 +65,7 @@ namespace Application.SocialMedia.Instagram.Post.AddPost
                 post.AddVideo(videoNames);
             }
 
-            instagram.AddPost(post);
+            //instagram.AddPost(post);
             await _repository.Save();
             return OperationResult.Success();
         }

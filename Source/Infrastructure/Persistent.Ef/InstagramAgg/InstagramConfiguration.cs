@@ -9,24 +9,34 @@ namespace Infrastructure.Persistent.Ef.InstagramAgg
     {
         public void Configure(EntityTypeBuilder<Instagram> builder)
         {
-            builder.ToTable("Instagram", "instagram");
+            builder.ToTable("Instagram", "Instagram");
             builder.OwnsMany(b => b.Stories, option =>
             {
-                option.ToTable("Stories", "instagram");
+                option.ToTable("Stories", "Instagram");
                 option.HasIndex(b => b.storyId);
+                option.OwnsOne(b => b.Image, options =>
+                {
+                    options.ToTable("Images", "dbo");
+                    options.HasIndex(b => b.Id);
+                });
+                option.OwnsOne(b => b.Video, options =>
+                {
+                    options.ToTable("Videos", "dbo");
+                    options.HasIndex(b => b.Id);
+                });
             });
             builder.OwnsMany(b => b.Posts, option =>
             {
-                option.ToTable("Posts", "instagram");
+                option.ToTable("Posts", "Instagram");
                 option.HasIndex(b => b.Id);
                 option.OwnsMany(b => b.Images, options =>
                 {
-                    options.ToTable("Images", "instagram");
+                    options.ToTable("Images", "Instagram");
                     options.HasIndex(b => b.Id);
                 });
                 option.OwnsMany(b => b.Videos, options =>
                 {
-                    options.ToTable("Videos", "instagram");
+                    options.ToTable("Videos", "Instagram");
                     options.HasIndex(b => b.Id);
                 });
             });

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Common.Query;
 using Domain.UserAgg;
 using Infrastructure.Persistent.Ef;
+using Microsoft.EntityFrameworkCore;
 using Query.User._Friend.DTOs;
 
 namespace Query.User._Friend.FilterFriendByUserNameForEventPage
@@ -28,7 +29,7 @@ namespace Query.User._Friend.FilterFriendByUserNameForEventPage
         public async Task<SearchFriendForEventFilterResult> Handle(FilterFriendByUserNameForEventPageQuery request, CancellationToken cancellationToken)
         {
             var @param = request.FilterParams;
-            var requests = _context.Users.Select(i => i).ToList();
+            var requests = await _context.Users.Select(i => i).ToListAsync(cancellationToken);
             var currentUser = requests.Where(i => i.Id.Equals(@param.CurrentUserId)).FirstOrDefault();
             //  var Friends = currentUser.friends.Select(i => i.CurrentUserId || i.UserFriendId).ToList();
             var userFriend = new List<SearchFriendForEventData>();
