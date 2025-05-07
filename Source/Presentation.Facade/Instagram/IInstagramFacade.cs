@@ -13,6 +13,8 @@ using Application.SocialMedia.Instagram.Story.Add;
 using Application.SocialMedia.Instagram.Story.Delete;
 using Common.Application;
 using Query.SocialMedia.Instagram.Account.DTOs;
+using Query.SocialMedia.Instagram.Story.DTOs;
+using static Query.SocialMedia.Instagram.Post.DTOs.PostFilterData;
 
 namespace Presentation.Facade.Instagram
 {
@@ -46,6 +48,12 @@ namespace Presentation.Facade.Instagram
         Task<InstagramAccountDto?> GetById(long Id);
         Task<List<InstagramAccountDto>?> GetList(string UserName);
         Task<InstagramAccountFilterResult?> GetByFilter(InstagramAccountFilterParam param);
+
+        //Story
+        Task<InstagramPostFilterResult?> GetInstagramPostByFilter(InstagramPostFilterParam param);
+        
+        //Post
+        Task<StoryFilterResult?> GetInstagramStoryByFilter(StoryFilterParam param);
 
     }
 }

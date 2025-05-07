@@ -26,12 +26,14 @@ namespace Query.SocialMedia.Instagram.Story.GetByFilter
         
             var storyList = (IQueryable<Domain.SocialMediaAgg.InstagramAgg.Story.Story>)
                 result.Select(i => i).ToList();
-      
+
             ////if (!string.IsNullOrWhiteSpace(@params.Search))
             ////    postList = postList.Where(p =>
             ////        p.Description.Contains(@params.Search));
 
-       
+            if (!string.IsNullOrWhiteSpace(@params.InstagramId))
+                storyList = storyList.Where(i => i.InstagramId.Equals(@params.InstagramId));
+
             switch (@params.SearchOrderBy)
             {
                 case StorySearchOrderBy.latest:

@@ -5,7 +5,7 @@ namespace Query.SocialMedia.Instagram.Account.DTOs
 {
     public class InstagramAccountFilterParam : BaseFilterParam
     {
-        public string? UserName { get; set; }
+        public required string UserName { get; set; }
         //public string PhoneNumbeer { get; set; }
         public string? InstagramUserName { get; set; }
         public DateTime? StartTime { get; set; }

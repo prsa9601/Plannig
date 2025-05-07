@@ -47,7 +47,7 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
         }
         public class InstagramPostFilterParam : BaseFilterParam
         {
-            public long Id { get; set; }
+            public required string InstagramId { get; set; }
             public string? Search { get; set; } = "";
             public PostSearchOrderBy? SearchOrderBy { get; set; }
 

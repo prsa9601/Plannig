@@ -45,6 +45,10 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
                 postList = postList.Where(p =>
                     p.Description.Contains(@params.Search));
             
+            if (!string.IsNullOrWhiteSpace(@params.InstagramId))
+                postList = postList.Where(p =>
+                    p.InstagramId.Equals(@params.InstagramId));
+            
             //if (!string.IsNullOrWhiteSpace(@params.Title))
             //    postListResult.AddRange(postList.Where(p => p.Description.Contains(@params.Search)));
 

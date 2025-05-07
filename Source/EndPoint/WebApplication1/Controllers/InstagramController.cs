@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Mvc;
 using Planning.Api.Model.InstagramModel;
 using Presentation.Facade.Instagram;
 using Query.SocialMedia.Instagram.Account.DTOs;
+using Query.SocialMedia.Instagram.Story.DTOs;
 using static Planning.Api.Model.InstagramModel.InstagramViewModel;
+using static Query.SocialMedia.Instagram.Post.DTOs.PostFilterData;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -122,9 +124,18 @@ namespace Planning.Api.Controllers
         [HttpGet("GetInstagramByFilter")]
         [Authorize]
         public async Task<ApiResult<InstagramAccountFilterResult?>> GetInstagramByFilter(
-            [FromQuery] InstagramAccountFilterParam filterParams)
+            [FromQuery] InstagramAccountFilterParamViewModel filterParams)
         {
-            var result = await _facade.GetByFilter(filterParams);
+            var result = await _facade.GetByFilter(new InstagramAccountFilterParam
+            {
+                UserName = User.GetUserName(),
+                EndTime = filterParams.EndTime,
+                StartTime = filterParams.StartTime,
+                InstagramUserName = filterParams.InstagramUserName,
+                PageId = filterParams.PageId,
+                Take = filterParams.Take,
+                SearchOrderBy = filterParams.SearchOrderBy,
+            });
             return QueryResult(result);
         }
 
@@ -167,5 +178,26 @@ namespace Planning.Api.Controllers
             return CommandResult(result);
         }
 
+        #region Post
+        [HttpGet("GetInstagramPostByFilter")]
+        [Authorize]
+        public async Task<ApiResult<InstagramPostFilterResult?>> GetInstagramPostByFilter(
+          [FromQuery] InstagramPostFilterParam filterParams)
+        {
+            var result = await _facade.GetInstagramPostByFilter(filterParams);
+            return QueryResult(result);
+        }
+        #endregion
+
+        #region Story
+        [HttpGet("GetInstagramStoryByFilter")]
+        [Authorize]
+        public async Task<ApiResult<StoryFilterResult?>> GetInstagramStoryByFilter(
+          [FromQuery] StoryFilterParam filterParams)
+        {
+            var result = await _facade.GetInstagramStoryByFilter(filterParams);
+            return QueryResult(result);
+        }
+        #endregion
     }
 }

@@ -32,10 +32,10 @@ namespace Query.SocialMedia.Instagram.Account.GetByFilter
             if (!string.IsNullOrEmpty(param.InstagramUserName))
                 result = result.Where(i => i.InstagramUserName.Equals(param.InstagramUserName));
 
-            if (param.StartTime != null || param.StartTime != DateTime.MinValue)
+            if (param.StartTime != null && param.StartTime != DateTime.MinValue)
                 result = result.Where(i => i.CreationDate >= param.StartTime);
 
-            if (param.EndTime != null || param.EndTime != DateTime.MaxValue)
+            if (param.EndTime != null && param.EndTime != DateTime.MaxValue)
                 result = result.Where(i => i.CreationDate <= param.EndTime);
             //if (!string.IsNullOrEmpty(param.PhoneNumbeer))
             //    result=result.Where(i=>i.pho)

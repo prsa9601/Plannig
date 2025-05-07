@@ -1,4 +1,6 @@
 ﻿using Common.Application;
+using Common.Query.Filter;
+using Query.SocialMedia.Instagram.Account.DTOs;
 
 namespace Planning.Api.Model.InstagramModel
 {
@@ -21,6 +23,14 @@ namespace Planning.Api.Model.InstagramModel
             public string InstagramUserName { get; set; } //AccessToken Instagram
             public IFormFile Profile { get; set; } //token Telegram
         }
-   
+        public class InstagramAccountFilterParamViewModel : BaseFilterParam
+        {
+            //public string PhoneNumbeer { get; set; }
+            public string? InstagramUserName { get; set; }
+            public DateTime? StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
+            public PostInstagramAccountSearchOrderBy? SearchOrderBy { get; set; }
+            //public string? Title { get; set; }
+        }
     }
 }
