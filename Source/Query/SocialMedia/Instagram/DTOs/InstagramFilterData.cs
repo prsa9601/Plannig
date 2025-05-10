@@ -11,7 +11,7 @@ namespace Query.SocialMedia.Instagram.DTOs
         public string accessToken { get; set; } //AccessToken Instagram
         public List<StoryDto> Stories { get; set; } //token Telegram
         public List<PostDto> Posts { get; set; } //token Telegram
-        public SendMethodInstagram SendMethod { get; set; }
+        public SendMethodInstagramForPost SendMethod { get; set; }
     }
     public class InstagramFilterParam : BaseFilterParam
     {

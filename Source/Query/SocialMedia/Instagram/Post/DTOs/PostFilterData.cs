@@ -17,7 +17,7 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
             public string accessToken { get; set; } //AccessToken Instagram
             public List<StoryDto> Stories { get; set; } //token Telegram
             public List<PostDto> Posts { get; set; } //token Telegram
-            public SendMethodInstagram SendMethod { get; set; }
+            public SendMethodInstagramForPost SendMethod { get; set; }
         }
         public class InstagramFilterParam : BaseFilterParam
         {
@@ -38,6 +38,7 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
             public string ImageName { get; set; }
             public string Link { get; set; }
             public string InstagramUserName { get; set; } // UserName or PageName
+            public string? InstagramPostId { get; set; } // UserName or PageName
 
             //public string Slug { get; set; }
             public bool IsSend { get; set; }
@@ -47,16 +48,21 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
         }
         public class InstagramPostFilterParam : BaseFilterParam
         {
-            public required string InstagramId { get; set; }
-            public string? Search { get; set; } = "";
-            public PostSearchOrderBy? SearchOrderBy { get; set; }
+            public required long InstagramId { get; set; }
+            public string? Search { get; set; } 
+            public InstagramPostSearchOrderBy? InstagramPostSearchOrderBy { get; set; }
 
         }
-        public class InstagramPostFilterResult : BaseFilter<PostDto, InstagramPostFilterParam>
+        public class InstagramPostFilterResult : BaseFilter<InstagramPostFilterData, InstagramPostFilterParam>
         {
         }
 
         public enum PostSearchOrderBy
+        {
+            //visit,
+            latest
+        }
+        public enum InstagramPostSearchOrderBy
         {
             //visit,
             latest

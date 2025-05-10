@@ -59,7 +59,7 @@ namespace Domain.SocialMediaAgg.InstagramAgg
         public void AddPost(Post.Post post)
         {
             post.InstagramUserName = UserName;
-            post.InstagramId = InstagramId;
+            post.InstagramId = Id;
             Posts.Add(post);
         }
         //public void EditPost(Post.Post post)
@@ -88,7 +88,7 @@ namespace Domain.SocialMediaAgg.InstagramAgg
         }
 
     }
-    public enum SendMethodInstagram
+    public enum SendMethodInstagramForPost
     {
         Post,
         Story

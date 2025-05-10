@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Common.Domain.Utils;
 using Domain.SocialMediaAgg.InstagramAgg.Story;
 using Query.SocialMedia.Instagram.Story.DTOs;
+using Domain.SocialMediaAgg.InstagramAgg;
 
 namespace Query.SocialMedia.Instagram.Story
 {
@@ -21,10 +22,18 @@ namespace Query.SocialMedia.Instagram.Story
                 CreationDate = story.CreationDate,
                 DateOfPosting = story.DateOfPosting,
                 Id = story.Id,
+                //InstagramId = story.InstagramId,
+                //InstagramUserName = story.InstagramUserName
                 //ImageName = story.ImageName,
                 Images = story.Image.ImageMap()!,
                 Videos = story.Video.VideoMap()!,
-                Link = story.Link
+                Link = story.Link,
+                IsSend = story.IsSend,
+                InstagramId = story.InstagramId,
+                InstagramStoryId = story.storyId,
+                InstagramUserName = story.InstagramUserName,
+                SendMethod = SendMethodInstagramForPost.Story,
+                
             };
         }
         internal static StoryVideoDto? VideoMap(this StoryVideo? story)

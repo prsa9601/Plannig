@@ -9,14 +9,14 @@ namespace Domain.SocialMediaAgg.InstagramAgg.Post
         //public string Picture { get; private set; }
         public string Description { get; private set; }
         //public string ImageName { get; private set; }
-        public string? PostId { get; set; }
+        public string? InstagramPostId { get; set; }
         //public string VideoName { get; private set; }
         public string InstagramUserName { get; set; }
         //public string Title { get; private set; }
         public string Link { get; private set; }
         // public string Slug { get; private set; }
         public bool IsSend { get; private set; } = false;
-        public string? InstagramId { get; internal set; } //InstagramPostId OR TelegramPostId
+        public long InstagramId { get; internal set; } //InstagramPostId OR TelegramPostId
                                                           // [NotMapped]
         public List<InstagramPostImage> Images { get; private set; } = new List<InstagramPostImage>();
         //[NotMapped]                                               

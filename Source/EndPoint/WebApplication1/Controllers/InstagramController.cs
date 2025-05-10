@@ -178,18 +178,18 @@ namespace Planning.Api.Controllers
             return CommandResult(result);
         }
 
-        #region Post
+        #region InstagramPost
         [HttpGet("GetInstagramPostByFilter")]
         [Authorize]
         public async Task<ApiResult<InstagramPostFilterResult?>> GetInstagramPostByFilter(
-          [FromQuery] InstagramPostFilterParam filterParams)
+          [FromQuery] InstagramPostFilterParam filterParam)
         {
-            var result = await _facade.GetInstagramPostByFilter(filterParams);
+            var result = await _facade.GetInstagramPostByFilter(filterParam);
             return QueryResult(result);
         }
         #endregion
 
-        #region Story
+        #region InstagramStory
         [HttpGet("GetInstagramStoryByFilter")]
         [Authorize]
         public async Task<ApiResult<StoryFilterResult?>> GetInstagramStoryByFilter(

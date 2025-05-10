@@ -29,6 +29,7 @@ namespace Infrastructure.Persistent.Ef.InstagramAgg
             {
                 option.ToTable("Posts", "Instagram");
                 option.HasIndex(b => b.Id);
+                //option.Property(b => b.PostId);
                 option.OwnsMany(b => b.Images, options =>
                 {
                     options.ToTable("Images", "Instagram");

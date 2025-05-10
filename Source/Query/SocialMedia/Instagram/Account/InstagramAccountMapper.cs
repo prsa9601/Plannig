@@ -33,7 +33,7 @@ namespace Query.SocialMedia.Instagram.Account
                 var model = new InstagramAccountPostDto
                 {
                     InstagramId = postItem.InstagramId,
-                    PostId = postItem.PostId,
+                    PostId = postItem.InstagramPostId,
                     Id = postItem.Id,
                     DateOfPosting = postItem.DateOfPosting,
                     Description = postItem.Description,

@@ -5,7 +5,7 @@ using Query.SocialMedia.Instagram.Story.DTOs;
 
 namespace Query.SocialMedia.Instagram.Story.GetByFilter
 {
-    internal class GetInstagramStoryByFilterQuery : QueryFilter<StoryFilterResult, StoryFilterParam>
+    public class GetInstagramStoryByFilterQuery : QueryFilter<StoryFilterResult, StoryFilterParam>
     {
         public GetInstagramStoryByFilterQuery(StoryFilterParam filterParams) : base(filterParams)
         {
@@ -23,7 +23,7 @@ namespace Query.SocialMedia.Instagram.Story.GetByFilter
         {
             var @params = request.FilterParams;
             var result = _context.Instagram.Select(i => i.Stories).Include("Stories");
-        
+
             var storyList = (IQueryable<Domain.SocialMediaAgg.InstagramAgg.Story.Story>)
                 result.Select(i => i).ToList();
 
@@ -31,7 +31,7 @@ namespace Query.SocialMedia.Instagram.Story.GetByFilter
             ////    postList = postList.Where(p =>
             ////        p.Description.Contains(@params.Search));
 
-            if (!string.IsNullOrWhiteSpace(@params.InstagramId))
+            if (@params.InstagramId != null && @params.InstagramId > 0)
                 storyList = storyList.Where(i => i.InstagramId.Equals(@params.InstagramId));
 
             switch (@params.SearchOrderBy)
@@ -40,9 +40,9 @@ namespace Query.SocialMedia.Instagram.Story.GetByFilter
                     {
                         storyList = storyList.OrderByDescending(r => r.CreationDate);
 
-                       break;
+                        break;
                     }
-              
+
             }
 
             var skip = (@params.PageId - 1) * @params.Take;
@@ -52,7 +52,7 @@ namespace Query.SocialMedia.Instagram.Story.GetByFilter
                     .ToListAsync(cancellationToken),
                 FilterParams = @params
             };
-            model.GeneratePaging((IQueryable<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)storyList, @params.Take, @params.PageId);
+            model.GeneratePaging(storyList, @params.Take, @params.PageId);
             return model;
         }
     }

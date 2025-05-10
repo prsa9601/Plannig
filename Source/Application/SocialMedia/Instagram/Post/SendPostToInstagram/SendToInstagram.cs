@@ -24,7 +24,7 @@ namespace Application.SocialMedia.Instagram.Post.SendPostToInstagram
 
             foreach (var item in instagram.Posts)
             {
-                if (item.PostId == request.PostId)
+                if (item.InstagramPostId == request.PostId)
                 {
                     //await _repository.PostToInstagram(instagram.accessToken
                     //,item.ImageName ,  item.Description);

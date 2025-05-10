@@ -14,6 +14,7 @@ public class Story : BaseEntity
     public bool IsSend { get; private set; }
     //public string ImageName { get; private set; }
     public long InstagramId { get; set; }
+    public string InstagramUserName { get; set; }
     //public string? Slug { get; private set; }  
     public StoryImage? Image { get; private set; }
     public StoryVideo? Video { get; private set; }

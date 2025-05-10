@@ -19,11 +19,12 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
         public async Task<PostFilterData.InstagramPostFilterResult> Handle(GetInstagramPostByFilterQuery request, CancellationToken cancellationToken)
         {
             var @params = request.FilterParams;
-            var result = _context.Instagram.Select(i=>i.Posts).Include("Posts");
+            var result = _context.Instagram.Select(i => i.Posts).Include("Posts");
+            //Include(i => i.Posts).SelectMany(i => i.Posts);
             //var posts = _context.Instagram.OrderByDescending(d => d.Id).Include("Posts").ToList();
 
             //List<Domain.SocialMediaAgg.InstagramAgg.Post.Post> postList = new List<Domain.SocialMediaAgg.InstagramAgg.Post.Post>();
-           // List<Domain.SocialMediaAgg.InstagramAgg.Post.Post> postListResult = new List<Domain.SocialMediaAgg.InstagramAgg.Post.Post>();
+            // List<Domain.SocialMediaAgg.InstagramAgg.Post.Post> postListResult = new List<Domain.SocialMediaAgg.InstagramAgg.Post.Post>();
             // List<Domain.SocialMediaAgg.PostAgg.Post> result = new List<Domain.SocialMediaAgg.PostAgg.Post>();
             //foreach (var item in posts)
             //{
@@ -42,28 +43,32 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
             //        p.Description.Contains(@params.Search)));
 
             if (!string.IsNullOrWhiteSpace(@params.Search))
+            {
                 postList = postList.Where(p =>
                     p.Description.Contains(@params.Search));
-            
-            if (!string.IsNullOrWhiteSpace(@params.InstagramId))
+            }
+
+            if (@params.InstagramId > 0 && @params.InstagramId != null)
+            {
                 postList = postList.Where(p =>
-                    p.InstagramId.Equals(@params.InstagramId));
-            
+                    p.InstagramId == (@params.InstagramId));
+            }
+
             //if (!string.IsNullOrWhiteSpace(@params.Title))
             //    postListResult.AddRange(postList.Where(p => p.Description.Contains(@params.Search)));
 
 
-            switch (@params.SearchOrderBy)
+            switch (@params.InstagramPostSearchOrderBy)
             {
-                case Query.SocialMedia.Instagram.Post.DTOs.PostFilterData.PostSearchOrderBy.latest:
-                {
-                    postList = postList.OrderByDescending(r => r.CreationDate);
-                    
-                    //postListResult = postListResult.OrderByDescending(r => r.CreationDate).ToList();
-               
-                    //postListResult = (List<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)postListResult.OrderByDescending(r => r.CreationDate);
-                    break;
-                }
+                case Query.SocialMedia.Instagram.Post.DTOs.PostFilterData.InstagramPostSearchOrderBy.latest:
+                    {
+                        postList = postList.OrderByDescending(r => r.CreationDate);
+
+                        //postListResult = postListResult.OrderByDescending(r => r.CreationDate).ToList();
+
+                        //postListResult = (List<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)postListResult.OrderByDescending(r => r.CreationDate);
+                        break;
+                    }
                     //case PostSearchOrderBy.visit:
                     //    {
                     //        result = result.OrderByDescending(r => r.Visit);
@@ -74,11 +79,11 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
             var skip = (@params.PageId - 1) * @params.Take;
             var model = new PostFilterData.InstagramPostFilterResult()
             {
-                Data = await postList.Skip(skip).Take(@params.Take).Select(s => s.FilterPostMap())
+                Data = await postList.Skip(skip).Take(@params.Take).Select(s => s.PostFilterMap())
                     .ToListAsync(cancellationToken),
                 FilterParams = @params
             };
-            model.GeneratePaging((IQueryable<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)postList, @params.Take, @params.PageId);
+            model.GeneratePaging(postList, @params.Take, @params.PageId);
             return model;
         }
     }

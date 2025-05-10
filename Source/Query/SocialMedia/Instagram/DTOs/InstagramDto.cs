@@ -9,7 +9,7 @@ namespace Query.SocialMedia.Instagram.DTOs
         public string accessToken { get; set; } //AccessToken Instagram
         public string UserName { get; set; }
         public string InstagramName { get; set; }
-        public SendMethodInstagram SendMethod { get; set; } 
+        public SendMethodInstagramForPost SendMethod { get; set; } 
 
     }
   

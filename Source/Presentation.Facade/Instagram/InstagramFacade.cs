@@ -17,6 +17,10 @@ using Query.SocialMedia.Instagram.Account.DTOs;
 using Query.SocialMedia.Instagram.Account.GetByFilter;
 using Query.SocialMedia.Instagram.Account.GetById;
 using Query.SocialMedia.Instagram.Account.GetList;
+using Query.SocialMedia.Instagram.Post.DTOs;
+using Query.SocialMedia.Instagram.Post.GetByFilter;
+using Query.SocialMedia.Instagram.Story.DTOs;
+using Query.SocialMedia.Instagram.Story.GetByFilter;
 
 namespace Presentation.Facade.Instagram
 {
@@ -132,6 +136,16 @@ namespace Presentation.Facade.Instagram
         public async Task<OperationResult> AddStory(AddStoryCommand command)
         {
             return await _mediator.Send(command);
+        }
+
+        public async Task<PostFilterData.InstagramPostFilterResult?> GetInstagramPostByFilter(PostFilterData.InstagramPostFilterParam param)
+        {
+            return await _mediator.Send(new GetInstagramPostByFilterQuery(param));
+        }
+
+        public async Task<StoryFilterResult?> GetInstagramStoryByFilter(StoryFilterParam param)
+        {
+            return await _mediator.Send(new GetInstagramStoryByFilterQuery(param));
         }
     }
 }

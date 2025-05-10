@@ -18,11 +18,11 @@ namespace Query.SocialMedia.Instagram.Story.DTOs
         public string VideoName { get; set; }
         public StoryImageDto Images { get; set; }
         public StoryVideoDto Videos { get; set; }
-        public SendMethodInstagram SendMethod { get; set; }
+        public SendMethodInstagramForPost SendMethod { get; set; }
     }
     public class StoryFilterParam : BaseFilterParam
     {
-        public required string InstagramId { get; set; }
+        public required long InstagramId { get; set; }
         public string? Search { get; set; } = "";
         public StorySearchOrderBy? SearchOrderBy { get; set; }
 

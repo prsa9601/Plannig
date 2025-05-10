@@ -1,6 +1,7 @@
 ﻿using Domain.SocialMediaAgg.InstagramAgg.Post;
 using Query.SocialMedia.Instagram.DTOs;
 using Query.SocialMedia.Instagram.Post.DTOs;
+using static Query.SocialMedia.Instagram.Post.DTOs.PostFilterData;
 
 namespace Query.SocialMedia.Instagram.Post
 {
@@ -17,9 +18,31 @@ namespace Query.SocialMedia.Instagram.Post
                 Id = post.Id,
                 //ImageName = post.ImageName,
                 Images = post.Images.ImageMap(),
-                postId = post.PostId,
+                InstagramPostId = post.InstagramPostId,
                 Videos = post.Videos.VideoMap(),
-                Link = post.Link
+                Link = post.Link,
+                InstagramUserName = post.InstagramUserName,
+                IsSend = post.IsSend,
+                
+            };
+        }
+        public static InstagramPostFilterData PostFilterMap(this Domain.SocialMediaAgg.InstagramAgg.Post.Post? post)
+        {
+            
+            return new InstagramPostFilterData()
+            {
+                CreationDate = post.CreationDate,
+                DateOfPosting = post.DateOfPosting,
+                Description = post.Description,
+                Id = post.Id,
+                //ImageName = post.ImageName,
+                Images = post.Images.ImageMap(),
+                InstagramPostId = post.InstagramPostId,
+                Videos = post.Videos.VideoMap(),
+                Link = post.Link,
+                InstagramUserName = post.InstagramUserName,
+                IsSend = post.IsSend,
+                
             };
         }
         public static PostDto FilterPostMap(this Domain.SocialMediaAgg.InstagramAgg.Post.Post? post)
@@ -33,9 +56,11 @@ namespace Query.SocialMedia.Instagram.Post
                 Id = post.Id,
                 //ImageName = post.ImageName,
                 Images = post.Images.ImageMap(),
-                postId = post.PostId,
+                InstagramPostId = post.InstagramPostId,
                 Videos = post.Videos.VideoMap(),
-                Link = post.Link
+                Link = post.Link,
+                IsSend = post.IsSend,
+                InstagramUserName = post.InstagramUserName,
             };
         }
         internal static List<PostVideoDto?> VideoMap(this List<InstagramPostVideo?> posts)
@@ -48,6 +73,9 @@ namespace Query.SocialMedia.Instagram.Post
                 {
                     CreationDate = item.CreationDate,
                     Id = item.Id,
+                    PostId = item.PostId,
+                    Secuence = item.Sequence,
+                    VideoName = item.VideoName,
                     Link = item.Link
                 };
                 model.Add(dto);
@@ -65,6 +93,9 @@ namespace Query.SocialMedia.Instagram.Post
                 {
                     CreationDate = item.CreationDate,
                     Id = item.Id,
+                    ImageName = item.ImageName,
+                    PostId = item.PostId,
+                    Secuence = item.Seqence,
                     Link = item.Link
                 };
                 model.Add(dto);

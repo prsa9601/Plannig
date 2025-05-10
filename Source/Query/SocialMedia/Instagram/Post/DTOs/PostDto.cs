@@ -13,12 +13,12 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
         public DateTime DateOfPosting { get; set; }
         //public string Picture { get; private set; }
         public string Description { get; set; }
-        public string ImageName { get; set; }
+        //public string ImageName { get; set; }
         public string InstagramUserName { get; set; } // UserName or PageName
         public string Link { get; set; }
         //public string Slug { get; set; }
         public bool IsSend { get; set; }
-        public string postId { get; set; } //InstagramPostId OR TelegramPostId
+        public string? InstagramPostId { get; set; } //InstagramPostId OR TelegramPostId
         public List<PostVideoDto> Videos { get; set; }
         public List<PostImageDto> Images { get; set; }
     }
@@ -28,7 +28,7 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
         public string ImageName { get; set; }
         public long PostId { get; set; }
         public int Secuence { get; set; }
-        public string Link { get; set; }
+        public string? Link { get; set; }
     }
 
     public class StoryImageDto : BaseDto
@@ -36,7 +36,7 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
         // public DateTime DateOfPosting { get; private set; }
         public string Picture { get; set; }
         public int Secuence { get; set; }
-        public string Link { get; set; }
+        public string? Link { get; set; }
     }
 
 
@@ -53,7 +53,7 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
         public string VideoName { get; set; }
         public long PostId { get; set; }
         public int Secuence { get; set; }
-        public string Link { get; set; }
+        public string? Link { get; set; }
 
     }
     public class StoryVideoDto : BaseDto
