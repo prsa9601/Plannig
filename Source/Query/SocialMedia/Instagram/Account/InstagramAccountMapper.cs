@@ -18,6 +18,7 @@ namespace Query.SocialMedia.Instagram.Account
                 CreationDate = instagram.CreationDate,
                 Profile = instagram.Profile,
                 PageId = instagram.PageId,
+                InstagramUserName = instagram.InstagramUserName,
                 Posts = instagram.Posts!.MapPosts()!,
                 //SendMethod = instagram.SendMethod,
                 Stories = instagram.Stories.MapStories(),
@@ -32,8 +33,8 @@ namespace Query.SocialMedia.Instagram.Account
             {
                 var model = new InstagramAccountPostDto
                 {
-                    InstagramId = postItem.InstagramId,
-                    PostId = postItem.InstagramPostId,
+                    //InstagramId = postItem!.InstagramId,
+                    PostId = postItem.InstagramPostId!,
                     Id = postItem.Id,
                     DateOfPosting = postItem.DateOfPosting,
                     Description = postItem.Description,

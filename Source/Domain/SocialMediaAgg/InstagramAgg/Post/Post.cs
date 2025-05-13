@@ -16,7 +16,7 @@ namespace Domain.SocialMediaAgg.InstagramAgg.Post
         public string Link { get; private set; }
         // public string Slug { get; private set; }
         public bool IsSend { get; private set; } = false;
-        public long InstagramId { get; internal set; } //InstagramPostId OR TelegramPostId
+        //public long InstagramId { get; internal set; } //InstagramPostId OR TelegramPostId
                                                           // [NotMapped]
         public List<InstagramPostImage> Images { get; private set; } = new List<InstagramPostImage>();
         //[NotMapped]                                               

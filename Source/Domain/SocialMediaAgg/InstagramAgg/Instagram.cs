@@ -59,7 +59,7 @@ namespace Domain.SocialMediaAgg.InstagramAgg
         public void AddPost(Post.Post post)
         {
             post.InstagramUserName = UserName;
-            post.InstagramId = Id;
+            //post.id = Id;
             Posts.Add(post);
         }
         //public void EditPost(Post.Post post)
@@ -78,6 +78,7 @@ namespace Domain.SocialMediaAgg.InstagramAgg
         {
             //story.InstagramUserName = UserName;
             story.InstagramId = Id;
+            story.InstagramUserName = InstagramUserName;
             Stories.Add(story);
         }
         public long RemoveStory(long storyId)

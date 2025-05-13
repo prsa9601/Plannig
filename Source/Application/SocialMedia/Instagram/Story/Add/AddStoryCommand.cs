@@ -38,11 +38,22 @@ namespace Application.SocialMedia.Instagram.Story.Add
                 if (instagram == null)
                     return OperationResult.NotFound();
 
+                string filePath = _fileService.DetermineDirectory(request.Image);
                 string imageName = await _fileService.SaveFileAndGenerateName(
-                    request.Image, Directories.InstagramStoryVideos);
-
-                instagram.AddStory(new Domain.SocialMediaAgg.InstagramAgg.Story.Story(
-                    request.DateOfPosting, request.Link));
+                    request.Image, filePath);
+                var story = new Domain.SocialMediaAgg.InstagramAgg.Story.Story(
+                    request.DateOfPosting, request.Link);
+                instagram.AddStory(story);
+                //if (filePath == "wwwroot/images/Instagram/Story/Images")
+                if (filePath == Directories.InstagramStoryImages)
+                {
+                    story.SetImage(imageName);
+                }
+                //else if (filePath == "wwwroot/images/Instagram/Story/Videos")
+                else if (filePath == Directories.InstagramStoryVideos)
+                {
+                    story.SetVideo(imageName);
+                }
 
                 await _repository.Save();
                 return OperationResult.Success();

@@ -20,6 +20,7 @@ using Planning.Api.Infrastructure;
 using Common.Application.Schedule;
 using Hangfire;
 using AngleSharp;
+using Microsoft.AspNetCore.Http.Features;
 
 
 // Add services to the container.
@@ -139,6 +140,10 @@ builder.Services.AddHangfire(config =>
 
 builder.Services.AddHangfireServer(); // افزودن سرور پردازشگر Job
 
+//builder.Services.Configure<FormOptions>(options =>
+//{
+//    options.MultipartBodyLengthLimit = 104857600; // 100MB
+//});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

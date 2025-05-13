@@ -23,5 +23,8 @@ namespace Common.Application.FileUtil.Interfaces
         void DeleteFile(string path, string fileName);
         void DeleteFile(string filePath);
         void DeleteDirectory(string directoryPath);
+        bool IsImage(Stream stream);
+        bool IsVideo(Stream stream);
+        string DetermineDirectory(IFormFile file);
     }
 }

@@ -22,10 +22,10 @@ namespace Query.SocialMedia.Instagram.Story.GetByFilter
         public async Task<StoryFilterResult> Handle(GetInstagramStoryByFilterQuery request, CancellationToken cancellationToken)
         {
             var @params = request.FilterParams;
-            var result = _context.Instagram.Select(i => i.Stories).Include("Stories");
+            var result = _context.Instagram.Include(i => i.Stories).SelectMany(i => i.Stories!);
 
             var storyList = (IQueryable<Domain.SocialMediaAgg.InstagramAgg.Story.Story>)
-                result.Select(i => i).ToList();
+                result.Select(i => i);
 
             ////if (!string.IsNullOrWhiteSpace(@params.Search))
             ////    postList = postList.Where(p =>

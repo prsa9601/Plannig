@@ -7,13 +7,11 @@ using Application.SocialMedia.Instagram.Post.AddPost;
 using Application.SocialMedia.Instagram.Post.DeletePost;
 using Application.SocialMedia.Instagram.Post.EditPost;
 using Application.SocialMedia.Instagram.Post.RemoveImageToPost;
-using Application.SocialMedia.Instagram.Post.SendPostToInstagram;
 using Application.SocialMedia.Instagram.Post.SetImageToPost;
 using Application.SocialMedia.Instagram.Story.Add;
 using Common.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Planning.Api.Model.InstagramModel;
 using Presentation.Facade.Instagram;
 using Query.SocialMedia.Instagram.Account.DTOs;
 using Query.SocialMedia.Instagram.Story.DTOs;
@@ -52,6 +50,7 @@ namespace Planning.Api.Controllers
             return CommandResult(result);
         }
         [HttpPost("AddStory")]
+        [RequestSizeLimit(104857600)]
         public async Task<ApiResult> AddStory([FromForm] AddStoryCommand command)
         {
             var result = await _facade.AddStory(command);

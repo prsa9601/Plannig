@@ -11,6 +11,7 @@ namespace Query.SocialMedia.Instagram.Account.DTOs
         public string PageId { get; set; } //PageId
         public string accessToken { get; set; } //AccessToken Instagram
         public string UserName { get; set; } //AccessToken Instagram
+        public string InstagramUserName { get; set; } //AccessToken Instagram
         public List<InstagramAccountStoryDto>? Stories { get; set; } //token Telegram
         public List<InstagramAccountPostDto>? Posts { get; set; } //token Telegram
         public string Profile { get; set; } //image name
@@ -31,7 +32,7 @@ namespace Query.SocialMedia.Instagram.Account.DTOs
         public string InstagramUserName { get; set; }
         public string Link { get;  set; }
         public bool IsSend { get;  set; } = false;
-        public long InstagramId { get;  set; }
+        //public long InstagramId { get;  set; }
         public List<InstagramPostImageDto>? Images { get;  set; }
         public List<InstagramPostVideoDto>? Videos { get;  set; }
     }

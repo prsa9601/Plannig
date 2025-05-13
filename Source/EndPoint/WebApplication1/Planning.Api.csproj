@@ -22,4 +22,8 @@
     <ProjectReference Include="..\..\Config\Config.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\Instagram\Story\Videos\" />
+  </ItemGroup>
+
 </Project>

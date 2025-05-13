@@ -19,7 +19,8 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
         public async Task<PostFilterData.InstagramPostFilterResult> Handle(GetInstagramPostByFilterQuery request, CancellationToken cancellationToken)
         {
             var @params = request.FilterParams;
-            var result = _context.Instagram.Select(i => i.Posts).Include("Posts");
+            var result = _context.Instagram.Include
+                (i => i.Posts).SelectMany(i => i.Posts!).AsQueryable(); 
             //Include(i => i.Posts).SelectMany(i => i.Posts);
             //var posts = _context.Instagram.OrderByDescending(d => d.Id).Include("Posts").ToList();
 
@@ -32,8 +33,8 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
             //}
             //var p = posts.Select(i => i.Posts.FirstOrDefault(i => i.ImageName));
             //result.Select(i => i.Select(p => p.Description));
-            var postList = (IQueryable<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)
-                result.Select(i => i).ToList();
+            var postList = //(IQueryable<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)
+                result.Select(i => i).AsQueryable();
             //postList.AddRange(
             //    (IQueryable<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)
             //    result.Select(i => i).ToList());
@@ -50,8 +51,18 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
 
             if (@params.InstagramId > 0 && @params.InstagramId != null)
             {
-                postList = postList.Where(p =>
-                    p.InstagramId == (@params.InstagramId));
+                //var instagramPost = await _context.Instagram.
+                //    FirstOrDefaultAsync(i => i.Id == @params.InstagramId, cancellationToken);
+                //postList = (IQueryable<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)instagramPost!.Posts!.ToList();
+
+
+                var instagramPost = await _context.Instagram
+                    .FirstOrDefaultAsync(i => i.Id == @params.InstagramId, cancellationToken);
+
+                if (instagramPost?.Posts != null)
+                    postList = instagramPost.Posts.AsQueryable();
+                //postList = postList.Where(p =>
+                //    p.insta == (@params.InstagramId));
             }
 
             //if (!string.IsNullOrWhiteSpace(@params.Title))
@@ -79,12 +90,13 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
             var skip = (@params.PageId - 1) * @params.Take;
             var model = new PostFilterData.InstagramPostFilterResult()
             {
-                Data = await postList.Skip(skip).Take(@params.Take).Select(s => s.PostFilterMap())
-                    .ToListAsync(cancellationToken),
+                Data = postList.Skip(skip).Take(@params.Take).Select(s => s.PostFilterMap())
+                    .ToList(),    
+                //.ToListAsync(cancellationToken),
                 FilterParams = @params
             };
             model.GeneratePaging(postList, @params.Take, @params.PageId);
             return model;
         }
     }
-}
+} 

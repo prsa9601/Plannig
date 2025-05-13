@@ -37,21 +37,23 @@ namespace Query.SocialMedia.Instagram.Story
             };
         }
         internal static StoryVideoDto? VideoMap(this StoryVideo? story)
-        {    
+        {
+            if (story == null)
+            {
+                return null;
+            }
             return new StoryVideoDto()
             { 
-                CreationDate = story.CreationDate, 
+                CreationDate = story!.CreationDate, 
                 Id = story.Id, 
                 Link = story.Link, 
                 VideoPath = story.VideoPath
             };
-            
-
-           
         }
         internal static StoryImageDto? ImageMap(this StoryImage? story)
         {
-          
+            if (story == null)
+                return null;
             return new StoryImageDto()
             {
                 CreationDate = story.CreationDate,

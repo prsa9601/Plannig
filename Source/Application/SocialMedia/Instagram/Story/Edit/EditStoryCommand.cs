@@ -45,35 +45,33 @@ namespace Application.SocialMedia.Instagram.Story.Edit
             if (request.Image != null && request.Video != null)
                 return OperationResult.Error("امکان ذخیره تصویر و ویدیو به صورت همزمان وجود ندارد!");
 
-            if (request.Video != null && request.Image == null)
+            string imageName = await _fileService.SaveFileAndGenerateName(
+                        request.Video, Directories.InstagramStoryImages);
+            if (story.Video != null)
+                _fileService.DeleteFile(Directories.InstagramStoryImages, story.Video!.VideoPath);
+            if (story.Image != null)
             {
-                string videoName = await _fileService.SaveFileAndGenerateName(
-                            request.Video, Directories.InstagramStoryVideos);
-                if (story.Video!=null)
-                    _fileService.DeleteFile(Directories.InstagramStoryVideos, story.Video!.VideoPath);
-                if (story.Image != null)
-                {
 
-                    _fileService.DeleteFile(Directories.InstagramStoryImages, story.Image!.PictureName);
-                    story.RemoveImage();
-                }
-
-                story.SetVideo(videoName);
+                _fileService.DeleteFile(Directories.InstagramStoryImages, story.Image!.PictureName);
+                story.RemoveImage();
             }
-            if (request.Image != null && request.Video == null)
-            {
-                string imageName = await _fileService.SaveFileAndGenerateName(
-                    request.Image, Directories.InstagramStoryImages);
-                if (story.Image!=null)
-                    _fileService.DeleteFile(Directories.InstagramStoryImages, story.Image!.PictureName);
-                if (story.Video != null)
-                {
-                    _fileService.DeleteFile(Directories.InstagramStoryVideos, story.Video!.VideoPath);
-                    story.RemoveVideo();
-                }
 
-                story.SetImage(imageName);
-            }
+            story.SetImage(imageName);
+
+            //if (request.Image != null && request.Video == null)
+            //{
+            //    string imageName = await _fileService.SaveFileAndGenerateName(
+            //        request.Image, Directories.InstagramStoryImages);
+            //    if (story.Image!=null)
+            //        _fileService.DeleteFile(Directories.InstagramStoryImages, story.Image!.PictureName);
+            //    if (story.Video != null)
+            //    {
+            //        _fileService.DeleteFile(Directories.InstagramStoryVideos, story.Video!.VideoPath);
+            //        story.RemoveVideo();
+            //    }
+
+            //    story.SetImage(imageName);
+            //}
 
 
             story.Edit(request.DateOfPosting, request.Link);
