@@ -3,6 +3,7 @@ using Common.Application;
 using Common.Application.FileUtil.Interfaces;
 using Domain.SocialMediaAgg.InstagramAgg.Repository;
 using Microsoft.AspNetCore.Http;
+using System.Linq.Expressions;
 
 namespace Application.SocialMedia.Instagram.Post.EditPost
 {
@@ -13,7 +14,7 @@ namespace Application.SocialMedia.Instagram.Post.EditPost
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public List<IFormFile>? Images { get; set; }
+        //public List<IFormFile>? Images { get; set; }
         public List<IFormFile>? Videos { get; set; }
 
 
@@ -32,43 +33,59 @@ namespace Application.SocialMedia.Instagram.Post.EditPost
         public async Task<OperationResult> Handle(EditPostInstagramCommand request, CancellationToken cancellationToken)
         {
             var instagram = await _repository.GetTracking(request.InstagramAccountId);
-            if (instagram == null) 
+            if (instagram == null)
                 return OperationResult.NotFound();
-
-            foreach (var item in instagram.Posts)
+            var post = instagram.Posts.FirstOrDefault(i => i.Videos.Any(x => x.Id == request.postId));
+            if (post != null)
             {
-                if (item.Id == request.postId)
-                {
-                    item.Edit(request.DateOfPosting,
-                        request.Description, request.Link);
-                    if (request.Images!.Count > 0)
-                    {
-                        List<string> imageNames = new List<string>();
-                        foreach (var image in request.Images)
-                        {
-                            string imageName = await _fileService.SaveFileAndGenerateName
-                                (image, Directories.InstagramPostImages);
-                            imageNames.Add(imageName);
-                        }
-                        item.AddImage(imageNames);
-                    }
+                post.Edit(request.DateOfPosting,
+                request.Description, request.Link);
+                //if (request.Images!.Count > 0)
+                //{
+                //    List<string> imageNames = new List<string>();
+                //    foreach (var image in request.Images)
+                //    {
+                //        string imageName = await _fileService.SaveFileAndGenerateName
+                //            (image, Directories.InstagramPostImages);
+                //        imageNames.Add(imageName);
+                //    }
+                //    item.AddImage(imageNames);
+                //}
 
-                    if (request.Videos!.Count > 0)
+                foreach (var video in post.Videos.ToList())
+                {
+                    try
                     {
-                        List<string> videoNames = new List<string>();
-                        foreach (var image in request.Videos)
-                        {
-                            string imageName = await _fileService.SaveFileAndGenerateName
-                                (image, Directories.InstagramPostVideos);
-                            videoNames.Add(imageName);
-                        }
-                        item.AddVideo(videoNames);
+                        _fileService.DeleteFile(Directories.InstagramPostVideos, video.VideoName);
+                        post.RemoveVideo(video.Id);
+
                     }
-                    await _repository.Save();
-                    return OperationResult.Success();
+                    catch
+                    {
+                        return OperationResult.Error();
+                    }
                 }
+                if (request.Videos!.Count > 0)
+                {
+                    List<string> videoNames = new List<string>();
+                    foreach (var image in request.Videos)
+                    {
+                        string imageName = await _fileService.SaveFileAndGenerateName
+                            (image, Directories.InstagramPostVideos);
+
+                        //item.Videos.ForEach(i=> _fileService.DeleteFile
+                        //    (Directories.InstagramPostVideos,i.VideoName));
+
+
+
+                        videoNames.Add(imageName);
+                    }
+                    post.AddVideo(videoNames);
+                }
+                await _repository.Save();
+                return OperationResult.Success();
             }
-            return OperationResult.Error();
+            return OperationResult.NotFound("پستی یتفت نشد.");
         }
     }
 }

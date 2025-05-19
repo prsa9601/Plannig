@@ -34,6 +34,7 @@ namespace Planning.Api.Controllers
         }
 
         [HttpPost("AddPost")]
+        [RequestSizeLimit(100 * 1024 * 1024)]
         public async Task<ApiResult> AddPost([FromForm] AddPostInstagramViewModel command)
         {
             DateTime dateTime = DateTime.Parse(command.DateOfPosting);
@@ -45,7 +46,7 @@ namespace Planning.Api.Controllers
                 Videos = command.Videos,
                 InstagramAccountId = command.InstagramAccountId,
                 Link = command.Link,
-                Images = command.Images
+                //Images = command.Images
             });
             return CommandResult(result);
         }
@@ -64,6 +65,7 @@ namespace Planning.Api.Controllers
             return CommandResult(result);
         }
         [HttpPatch("EditPost")]
+        [RequestSizeLimit(100 * 1024 * 1024)]
         public async Task<ApiResult> EditPost([FromForm] EditPostInstagramCommand instagramCommand)
         {
             var result = await _facade.Edit(instagramCommand);

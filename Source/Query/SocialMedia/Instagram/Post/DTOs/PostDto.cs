@@ -20,7 +20,7 @@ namespace Query.SocialMedia.Instagram.Post.DTOs
         public bool IsSend { get; set; }
         public string? InstagramPostId { get; set; } //InstagramPostId OR TelegramPostId
         public List<PostVideoDto> Videos { get; set; }
-        public List<PostImageDto> Images { get; set; }
+        //public List<PostImageDto> Images { get; set; }
     }
     public class PostImageDto : BaseDto
     {

@@ -40,7 +40,7 @@ namespace Query.SocialMedia.Instagram.Account
                     Description = postItem.Description,
                     CreationDate = postItem.CreationDate,
                     //ImageName = postItem.ImageName,
-                    Images = postItem.Images!.MapPostImage()!,
+                    //Images = postItem.Images!.MapPostImage()!,
                     InstagramUserName = postItem.InstagramUserName,
                     IsSend = postItem.IsSend,
                     Link = postItem.Link,

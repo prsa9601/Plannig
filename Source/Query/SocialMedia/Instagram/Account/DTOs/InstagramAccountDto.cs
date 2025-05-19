@@ -33,7 +33,7 @@ namespace Query.SocialMedia.Instagram.Account.DTOs
         public string Link { get;  set; }
         public bool IsSend { get;  set; } = false;
         //public long InstagramId { get;  set; }
-        public List<InstagramPostImageDto>? Images { get;  set; }
+        //public List<InstagramPostImageDto>? Images { get;  set; }
         public List<InstagramPostVideoDto>? Videos { get;  set; }
     }
     public class InstagramAccountStoryDto : BaseDto

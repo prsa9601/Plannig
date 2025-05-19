@@ -14,7 +14,7 @@ namespace Application.SocialMedia.Instagram.Post.AddPost
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public List<IFormFile>? Images { get; set; }
+        //public List<IFormFile>? Images { get; set; }
         public List<IFormFile>? Videos { get; set; }
 
     }
@@ -41,17 +41,17 @@ namespace Application.SocialMedia.Instagram.Post.AddPost
             instagram.AddPost(post);
             //await _repository.Save();
 
-            if (request.Images!.Count > 0)
-            { 
-                List<string> imageNames = new List<string>();   
-                foreach (var item in request.Images)
-                {
-                    string imageName = await _fileService.SaveFileAndGenerateName
-                        (item, Directories.InstagramPostImages);
-                    imageNames.Add(imageName);
-                }
-                post.AddImage(imageNames);
-            }
+            //if (request.Images!.Count > 0)
+            //{ 
+            //    List<string> imageNames = new List<string>();   
+            //    foreach (var item in request.Images)
+            //    {
+            //        string imageName = await _fileService.SaveFileAndGenerateName
+            //            (item, Directories.InstagramPostImages);
+            //        imageNames.Add(imageName);
+            //    }
+            //    post.AddImage(imageNames);
+            //}
             
             if (request.Videos!.Count > 0)
             { 

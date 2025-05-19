@@ -94,6 +94,15 @@ namespace Domain.SocialMediaAgg.InstagramAgg.Post
             Images.Remove(image);
             return image.ImageName;
         }
+        public string RemoveVideo(long id)
+        {
+            var video = Videos.FirstOrDefault(f => f.Id == id);
+            if (video == null)
+                throw new NullOrEmptyDomainDataException("ویدیو یافت نشد");
+
+            Videos.Remove(video);
+            return video.VideoName;
+        }
         //public void Edit(DateTime dateOfPosting, string discription, string link)
         //{
         //    DateOfPosting = dateOfPosting;

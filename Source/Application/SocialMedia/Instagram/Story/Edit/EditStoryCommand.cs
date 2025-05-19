@@ -17,8 +17,8 @@ namespace Application.SocialMedia.Instagram.Story.Edit
         public long StoryId { get; set; } //TableId
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; }
-        public IFormFile? Image { get; set; }
-        public IFormFile? Video { get; set; }
+        public IFormFile Image { get; set; }
+        //public IFormFile? Video { get; set; }
     }
     internal class EditStoryCommandHandler : IBaseCommandHandler<EditStoryCommand>
     {
@@ -42,19 +42,36 @@ namespace Application.SocialMedia.Instagram.Story.Edit
             if (story == null)
                 return OperationResult.NotFound();
 
-            if (request.Image != null && request.Video != null)
-                return OperationResult.Error("امکان ذخیره تصویر و ویدیو به صورت همزمان وجود ندارد!");
-
+            //if (request.Image != null && request.Video != null)
+            //    return OperationResult.Error("امکان ذخیره تصویر و ویدیو به صورت همزمان وجود ندارد!");
+           
+            string filePath = _fileService.DetermineDirectory(request.Image);
             string imageName = await _fileService.SaveFileAndGenerateName(
-                        request.Video, Directories.InstagramStoryImages);
-            if (story.Video != null)
-                _fileService.DeleteFile(Directories.InstagramStoryImages, story.Video!.VideoPath);
-            if (story.Image != null)
-            {
+                request.Image, filePath);
 
+            //if (story.Video != null)
+            //    _fileService.DeleteFile(Directories.InstagramStoryImages, story.Video!.VideoPath);
+            //if (story.Image != null)
+            //{
+
+            //    _fileService.DeleteFile(Directories.InstagramStoryImages, story.Image!.PictureName);
+            //    story.RemoveImage();
+            //}
+            if (filePath == Directories.InstagramStoryImages)
+            {
                 _fileService.DeleteFile(Directories.InstagramStoryImages, story.Image!.PictureName);
                 story.RemoveImage();
+                story.SetImage(imageName);
+               
             }
+            //else if (filePath == "wwwroot/images/Instagram/Story/Videos")
+            else if (filePath == Directories.InstagramStoryVideos)
+            {
+                _fileService.DeleteFile(Directories.InstagramStoryVideos, story.Video!.VideoPath);
+                story.RemoveVideo();
+                story.SetVideo(imageName);
+            }
+
 
             story.SetImage(imageName);
 

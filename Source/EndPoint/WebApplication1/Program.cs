@@ -140,6 +140,16 @@ builder.Services.AddHangfire(config =>
 
 builder.Services.AddHangfireServer(); // افزودن سرور پردازشگر Job
 
+//// در Program.cs
+//builder.Services.Configure<IISServerOptions>(options =>
+//{
+//    options.MaxRequestBodySize = 100 * 1024 * 1024; // 100 مگابایت
+//});
+
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.Limits.MaxRequestBodySize = 100 * 1024 * 1024;
+//});
 //builder.Services.Configure<FormOptions>(options =>
 //{
 //    options.MultipartBodyLengthLimit = 104857600; // 100MB
