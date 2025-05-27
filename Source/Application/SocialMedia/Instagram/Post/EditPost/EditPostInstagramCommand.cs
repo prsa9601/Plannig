@@ -35,7 +35,8 @@ namespace Application.SocialMedia.Instagram.Post.EditPost
             var instagram = await _repository.GetTracking(request.InstagramAccountId);
             if (instagram == null)
                 return OperationResult.NotFound();
-            var post = instagram.Posts.FirstOrDefault(i => i.Videos.Any(x => x.Id == request.postId));
+            var post = instagram.Posts.FirstOrDefault(x => x.Id == request.postId);
+            //var post = instagram.Posts.FirstOrDefault(i => i.Videos.Any(x => x.Id == request.postId));
             if (post != null)
             {
                 post.Edit(request.DateOfPosting,
