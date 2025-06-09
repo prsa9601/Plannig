@@ -33,7 +33,7 @@ namespace Query.Blog.GetFilter
 
             if (!string.IsNullOrWhiteSpace(@params.Search))
                 result = result.Where(r => r.Title.Contains(@params.Search) ||  
-                r.Slug.Contains(@params.Search) || r.Title.Contains(@params.Search));
+                r.Slug.Contains(@params.Search) || r.Description.Contains(@params.Search));
 
             //if (@params.CategoryId != 0)
             //    result = result.Where(r => r.CategoryId == @params.CategoryId);

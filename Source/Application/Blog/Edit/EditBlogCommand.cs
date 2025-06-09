@@ -5,6 +5,7 @@ using Common.Domain.ValueObjects;
 using Domain.BlogAgg.Repository;
 using Domain.BlogAgg.Service;
 using Microsoft.AspNetCore.Http;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Application.Blog.Edit
 {
@@ -20,6 +21,14 @@ namespace Application.Blog.Edit
         public SeoData SeoData { get; set; }
         public bool IsSend { get; set; }
         public long CategoryId { get; set; }
+
+        //SeoData
+        public string MetaTitle { get; set; }
+        public string MetaDescription { get; set; }
+        public string MetaKeyWords { get; set; }
+        public bool IndexPage { get; set; }
+        public string Canonical { get; set; }
+        public string Schema { get; set; }
     }
     internal class EditBlogCommandHandler : IBaseCommandHandler<EditBlogCommand>
     {

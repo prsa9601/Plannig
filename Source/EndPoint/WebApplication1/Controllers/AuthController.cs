@@ -135,7 +135,7 @@ namespace Planning.Api.Controllers
             return CommandResult(loginResult);
         }
 
-        // DELETE api/<AuthController>/5
+        //DELETE api/<AuthController>/5
         //[HttpDelete("{id}")]
         //public void Delete(int id)
         //{

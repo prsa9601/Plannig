@@ -24,13 +24,13 @@ namespace Planning.Api.Controllers
 
         [Authorize]
         [HttpPost("CreateBlog")]
-        public async Task<ApiResult> CreateBlog(AddBlogCommand command)
+        public async Task<ApiResult> CreateBlog([FromForm]AddBlogCommand command)
         {
             return CommandResult(await _facade.Create(command));
         }
         [Authorize]
         [HttpPatch("EditBlog")]
-        public async Task<ApiResult> EditBlog(EditBlogCommand command)
+        public async Task<ApiResult> EditBlog([FromForm]EditBlogCommand command)
         {
             return CommandResult(await _facade.Edit(command));
         }

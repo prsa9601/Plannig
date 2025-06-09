@@ -169,8 +169,7 @@ var app = builder.Build();
 //// فعال کردن داشبورد Hangfire (اختیاری)
 //app.UseHangfireDashboard();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+
 
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -186,5 +185,8 @@ app.UseHangfireDashboard("/dashboard");
 //app.Run();
 app.UseApiCustomExceptionHandler();
 app.MapControllers();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.Run();

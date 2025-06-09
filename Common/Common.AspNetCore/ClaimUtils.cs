@@ -41,5 +41,4 @@ public static class ClaimUtils
         Claim? claim = claimsIdentity?.FindFirst("Id");
         return claim?.Value ?? string.Empty;
     }
- 
 }

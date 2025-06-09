@@ -18,9 +18,10 @@ namespace Application.Blog.Remove
 
         public async Task<OperationResult> Handle(RemoveBlogCommand request, CancellationToken cancellationToken)
         {
-            var blog = await _repository.Delete(i => i.Id.Equals(request.BlogId));
+            var blog = await _repository.DeleteOneEntity(i => i.Id.Equals(request.BlogId));
             if (!blog)
                 return OperationResult.Error("مشکلی در حذف بلاگ هست!");
+            await _repository.Save();
             return OperationResult.Success();
         }
     }

@@ -80,6 +80,11 @@ namespace Query.SocialMedia.Instagram.Post.GetByFilter
                         //postListResult = (List<Domain.SocialMediaAgg.InstagramAgg.Post.Post>)postListResult.OrderByDescending(r => r.CreationDate);
                         break;
                     }
+                default:
+                {
+                    postList = postList.OrderByDescending(i=>i.Id);
+                    break;
+                }
                     //case PostSearchOrderBy.visit:
                     //    {
                     //        result = result.OrderByDescending(r => r.Visit);

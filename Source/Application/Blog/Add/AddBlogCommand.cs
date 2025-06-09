@@ -17,9 +17,17 @@ namespace Application.Blog.Add
         public string Title { get; set; }
         public string Description { get; set; }
         public string CreatorUserName { get; set; }
-        public SeoData SeoData { get; set; }
+        //public SeoData SeoData { get; set; }
         public bool IsSend { get; set; }
         public long CategoryId { get; set; }
+
+        //SeoData
+        public string MetaTitle { get; set; }
+        public string MetaDescription { get; set; }
+        public string MetaKeyWords { get; set; }
+        public bool IndexPage { get; set; }
+        public string Canonical { get; set; }
+        public string Schema { get; set; }
     }
     internal class AddBlogCommandHandler : IBaseCommandHandler<AddBlogCommand>
     {
@@ -36,9 +44,11 @@ namespace Application.Blog.Add
         public async Task<OperationResult> Handle(AddBlogCommand request, CancellationToken cancellationToken)
         {
             var blogImage = await _fileService.SaveFileAndGenerateName(request.ImageName, Directories.BlogImage);
-
+            
+            var seoData = new SeoData(request.MetaKeyWords, request.MetaDescription
+                , request.MetaTitle, request.IndexPage, request.Canonical, request.Schema);
             var blog = new Domain.BlogAgg.Blog(request.SendTime, request.Title,
-                request.Description, request.CreatorUserName, request.SeoData, blogImage,
+                request.Description, request.CreatorUserName, seoData, blogImage,
                 request.IsSend, request.Slug, request.CategoryId, _service);
 
             _repository.Add(blog);

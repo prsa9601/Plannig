@@ -19,7 +19,8 @@ public class PermissionChecker(Permission permission) : AuthorizeAttribute, IAsy
 
         _userFacade = context.HttpContext.RequestServices.GetRequiredService<IUserFacade>();
         _roleFacade = context.HttpContext.RequestServices.GetRequiredService<IRoleFacade>();
-        if (context.HttpContext.User.Identity != null && context.HttpContext.User.Identity.IsAuthenticated)
+        if (context.HttpContext.User.Identity != null && 
+            context.HttpContext.User.Identity.IsAuthenticated)
         {
             if (await UserHasPermission(context) == false)
             {
