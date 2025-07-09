@@ -14,7 +14,7 @@ using Common.Application;
 using MediatR;
 using Query.Notification.DTOs;
 using Query.Notification.GetById;
-using Query.Notification.GetList;
+using Query.Notification.GetFilter;
 using Query.User._Package.GetFilterByUserId;
 
 namespace Presentation.Facade.Notification

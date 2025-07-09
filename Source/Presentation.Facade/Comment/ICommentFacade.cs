@@ -1,7 +1,7 @@
 ﻿using Application.Comment.ChangeStatus;
 using Application.Comment.Create;
+using Application.Comment.Delete;
 using Application.Comment.Edit;
-using Application.Comment.Remove;
 using Common.Application;
 using MediatR;
 using Query.Comment.DTOs;

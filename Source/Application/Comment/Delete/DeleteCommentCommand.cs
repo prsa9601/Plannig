@@ -1,7 +1,7 @@
 ﻿using Common.Application;
 using Domain.CommentAgg.Repository;
 
-namespace Application.Comment.Remove
+namespace Application.Comment.Delete
 {
     public record class DeleteCommentCommand(long CommentId) : IBaseCommand;
     public class DeleteCommentCommandHandler : IBaseCommandHandler<DeleteCommentCommand>

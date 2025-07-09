@@ -16,7 +16,6 @@ namespace Domain.UserAgg
         }
         //  public long Id { get; set; }
         public DateTime CreationDate { get; set; }
-
         public string Name { get; set; }
         public string? Family { get; private set; }
         public string Password { get; set; }
@@ -36,6 +35,7 @@ namespace Domain.UserAgg
         public List<UserEvent?> userEvents { get; } = new List<UserEvent?>();
         public List<RequestBox?> RequestBox { get; } = new List<RequestBox?>();
         public List<UserPackage?> UserPackages { get; } = new List<UserPackage?>();
+        public List<UserNotification?> UserNotifications { get; } = new List<UserNotification?>();
 
 
         public User(string email, string userName, string phoneNumber, string password, IUserService userService)
@@ -85,12 +85,12 @@ namespace Domain.UserAgg
         //}
         public void ChangeActivityStatus(bool isActive)
         {
-           IsActive = isActive;
-        }  
+            IsActive = isActive;
+        }
         public void ChangeEmailConfirmedStatus(bool emailConfirmed)
         {
             EmailConfirmed = emailConfirmed;
-        } 
+        }
         public void ChangePhoneNumberConfirmedStatus(bool phoneNumberConfirmed)
         {
             PhoneNumberConfirmed = phoneNumberConfirmed;
@@ -323,18 +323,18 @@ namespace Domain.UserAgg
             int allowedPostInstagram, int allowedStoryInstagram)
         {
             var package = new UserPackage(packageId, AllowedSmsCount, AllowedEmailCount,
-                time, packageTitle,allowedPostTelegram,allowedPostInstagram, allowedStoryInstagram);
+                time, packageTitle, allowedPostTelegram, allowedPostInstagram, allowedStoryInstagram);
             package.UserId = Id;
             package.IsActive = true;
             UserPackages.Add(package);
         }
         public void EditUserPackage(long packageId, DateTime time, int AllowedSmsCount,
-            int AllowedEmailCount, int allowedPostTelegram, 
+            int AllowedEmailCount, int allowedPostTelegram,
             int allowedPostInstagram, int allowedStoryInstagram)
         {
             var package = UserPackages.Where(i =>
                 i.UserId == Id && i.PackageId == packageId && i.IsActive == true).FirstOrDefault();
-            package.Edit(time, AllowedSmsCount, AllowedEmailCount, 
+            package.Edit(time, AllowedSmsCount, AllowedEmailCount,
                 allowedPostTelegram, allowedPostInstagram, allowedStoryInstagram);
             if (time.Equals(0))
             {
@@ -361,6 +361,38 @@ namespace Domain.UserAgg
             }
 
         }
+
+        #region UserNotification
+
+        public void AddNotification(UserNotification userNotification)
+        {
+            UserNotifications.Add(userNotification);
+        }
+
+        public void SendNotification(List<UserNotification> userNotification, long id)
+        {
+            userNotification.ForEach(i => i.SendNotification());
+        }
+
+        public void MarkNotification(long UserNotificationId)
+        {
+            UserNotifications.FirstOrDefault(i => i.Id == UserNotificationId)!.SeenNotification();
+        }
+
+        public void ClearUserNotification()
+        {
+            UserNotifications.Clear();
+        }
+
+        public void RemoveUserNotification(long userNotificationId)
+        {
+            var userNotification = UserNotifications.FirstOrDefault
+                (i => i.Id == userNotificationId);
+            if (userNotification != null) 
+                UserNotifications.Remove(userNotification);
+        }
+
+        #endregion
 
     }
 

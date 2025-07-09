@@ -4,10 +4,10 @@ using System.Net.Mail;
 using System.Net;
 using Domain.EventAgg.Repository;
 using Domain.EventAgg.Service;
-using Domain.Notification;
-using Domain.Notification.Repository;
-using Domain.Notification.Service;
+using Domain.NotificationAgg;
 using Hangfire;
+using Domain.NotificationAgg.Service;
+using Domain.NotificationAgg.Repository;
 
 namespace Application.Notification.EmailSender
 {

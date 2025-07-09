@@ -1,15 +1,10 @@
 ﻿using Common.Application;
 using Domain.EventAgg.Repository;
-using Domain.Notification;
-using Domain.Notification.Repository;
-using Domain.Notification.Service;
+using Domain.NotificationAgg.Repository;
+using Domain.NotificationAgg.Service;
 using Domain.UserAgg.Repository;
 using Hangfire;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.NotificationAgg;
 
 namespace Application.Notification.ChangeDate
 {

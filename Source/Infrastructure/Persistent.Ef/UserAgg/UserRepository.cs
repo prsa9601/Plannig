@@ -12,7 +12,7 @@ namespace Infrastructure.Persistent.Ef.UserAgg
         {
             Context = context;
         }
-        
+
         public virtual async Task<TEntity?> GetAsync(long id)
         {
             return await Context.Set<TEntity>().FirstOrDefaultAsync(t => t.Id.Equals(id)); ;
@@ -39,6 +39,11 @@ namespace Infrastructure.Persistent.Ef.UserAgg
         {
             return await Context.Set<TEntity>().AsTracking().FirstOrDefaultAsync(t => t.Id.Equals(id));
         }
+
+        public async Task<List<TEntity>> GetAllUser()
+        {
+            return await Context.Set<TEntity>().AsTracking().ToListAsync();
+        }
         public async Task AddAsync(TEntity entity)
         {
             await Context.Set<TEntity>().AddAsync(entity);
@@ -58,8 +63,8 @@ namespace Infrastructure.Persistent.Ef.UserAgg
         {
             List<TEntity> users = new List<TEntity>();
             foreach (var item in userNames)
-            { 
-                users.Add( await Context.Set<TEntity>()
+            {
+                users.Add(await Context.Set<TEntity>()
                     .Where(i => i.UserName.Equals(item)).FirstOrDefaultAsync());
             }
             return users;
@@ -76,7 +81,7 @@ namespace Infrastructure.Persistent.Ef.UserAgg
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
         {
             return await Context.Set<TEntity>().AnyAsync(expression);
-        } 
+        }
         //public async Task<List<TEntity>?> GetListAsync(Expression<Func<TEntity, bool>> expression)
         //{
         //    return await Context.Set<TEntity>().Where(expression).ToListAsync();
@@ -85,6 +90,11 @@ namespace Infrastructure.Persistent.Ef.UserAgg
         {
             return Context.Set<TEntity>().Any(expression);
         }
+        public async Task<List<TEntity>?> GetListByFilterAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return await Context.Set<TEntity>().Where(expression).AsTracking().ToListAsync();
+        }
+
 
         public TEntity? Get(long id)
         {

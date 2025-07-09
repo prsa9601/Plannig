@@ -1,7 +1,7 @@
 ﻿using Common.Query;
 using Common.Query.Filter;
 using Domain.EventAgg.Enum;
-using Domain.Notification;
+using Domain.NotificationAgg;
 
 namespace Query.Notification.DTOs
 {
@@ -14,6 +14,8 @@ namespace Query.Notification.DTOs
         public DateTime EventEndTime { get;  set; }
         public DateTime SendTime { get;  set; }
         public bool IsSeen { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
 
         public NotificationType NotificationType { get;  set; }
         public ICollection<string>? UserNames { get;  set; }
@@ -23,7 +25,7 @@ namespace Query.Notification.DTOs
     
     public class NotificationFilterParam : BaseFilterParam
     {
-        public required string UserName { get; set; }
+        public required string UserId { get; set; }
     }
     public class NotificationFilterParamViewModel : BaseFilterParam
     {

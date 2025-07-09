@@ -1,5 +1,4 @@
 ﻿using Domain.EventAgg.Repository;
-using Domain.Notification.Repository;
 using Domain.PackageAgg.Repository;
 using Domain.RoleAgg.Repository;
 using Domain.UserAgg;
@@ -28,6 +27,7 @@ using Infrastructure.Persistent.Ef.CategoryAgg;
 using Infrastructure.Persistent.Ef.BlogAgg;
 using Domain.BlogAgg.Repository;
 using AngleSharp;
+using Domain.NotificationAgg.Repository;
 
 
 namespace Infrastructure

@@ -11,12 +11,13 @@ using Application.Role.Create;
 using Application.SocialMedia.Instagram;
 using Application.SocialMedia.Telegram;
 using Application.User;
+using Application.User._Notification.Services;
 using Common.Application.Schedule;
 using Domain.BlogAgg.Service;
 using Domain.CategoryAgg.Service;
 using Domain.EventAgg.Service;
-using Domain.Notification.NotificationSchedule;
-using Domain.Notification.Service;
+using Domain.NotificationAgg.NotificationSchedule;
+using Domain.NotificationAgg.Service;
 using Domain.PackageAgg.Service;
 using Domain.SocialMediaAgg.InstagramAgg.Service;
 using Domain.SocialMediaAgg.TelegramAgg.Service;
@@ -55,6 +56,8 @@ namespace Config
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IUserNotificationDomainService
+                , UserNotificationDomainService>();
             services.AddScoped<INotificationScheduleService, NotificationScheduleService>();
             services.AddTransient<IPackageService, PackageService>();
             services.AddSingleton<EventScheduler>();

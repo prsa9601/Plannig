@@ -4,7 +4,7 @@ using Domain.EventAgg.Repository;
 using Domain.UserAgg;
 using Domain.UserAgg.Repository;
 
-namespace Domain.Notification.NotificationSchedule
+namespace Domain.NotificationAgg.NotificationSchedule
 {
     public class EventNotificationSchedule
     {
@@ -205,7 +205,7 @@ namespace Domain.Notification.NotificationSchedule
                         {
                             From = new MailAddress("parsa9601m@gmail.com"),
                             //To = {  "parsahavaset1@gmail.com","1234z1234@gmail.com"},
-                            To ={item.Value},
+                            To = { item.Value },
                             Subject = "Reminded",
                             Body = $"<i>عاااااااااااااااااااااااا</i>{item.Key}",
                             IsBodyHtml = true

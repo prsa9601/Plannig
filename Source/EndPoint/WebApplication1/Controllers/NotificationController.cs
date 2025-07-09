@@ -45,6 +45,7 @@ namespace Planning.Api.Controllers
             });
             return CommandResult(result);
         }
+
         [HttpPost("AddNotification")]
         public async Task<ApiResult<long>> AddNotification([FromBody] AddNotificationViewModel command)
         {
@@ -71,9 +72,11 @@ namespace Planning.Api.Controllers
                 EventId = command.EventId,
                 EventStartTime = command.EventStartTime,
                 IsSeen = false,
+                Title = command.Title,
+                Description = command.Description,
                 IsSend = false,
                 NotificationType = command.NotificationType,
-                SendTime = command.SendTime,
+                //SendTime = command.SendTime,
                 UserNames = command.UserNames
             });
             return CommandResult(result);
@@ -97,8 +100,10 @@ namespace Planning.Api.Controllers
                 EventStartTime = command.EventStartTime,
                 IsSeen = false,
                 IsSend = false,
+                Title = command.Title,
+                Description = command.Description,
                 NotificationType = command.NotificationType,
-                SendTime = command.SendTime,
+                //SendTime = command.SendTime,
                 UserNames = command.UserNames
             });
             return CommandResult(result);
@@ -137,7 +142,7 @@ namespace Planning.Api.Controllers
         {
             var result = await _facade.GetFilterNotificationsCurrentUser(new Query.Notification.DTOs.NotificationFilterParam
             {
-                UserName = User.GetUserName(),
+                UserId = User.GetUserIdToString(),
                 PageId = param.PageId,
                 Take = param.Take
             });
@@ -157,7 +162,7 @@ namespace Planning.Api.Controllers
             var result = await _facade.MarkNotificationAsRead(new Application.Notification.Mark.MarkNotificationAsReadCommand
             {
                 NotificationId = command.NotificationId,
-                UserName = User.GetUserName()
+                UserId = User.GetUserIdToString()
             });
             return CommandResult(result);
         }

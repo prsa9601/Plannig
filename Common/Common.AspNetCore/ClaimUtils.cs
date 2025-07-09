@@ -26,7 +26,6 @@ public static class ClaimUtils
             throw new ArgumentNullException(nameof(principal));
 
         return Convert.ToString(principal.FindFirst(ClaimTypes.Name)?.Value!);
-
     }
     public static string GetPhoneNumber(this ClaimsPrincipal principal)
     {

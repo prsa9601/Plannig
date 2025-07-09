@@ -2,8 +2,8 @@
 using System.Net.Mail;
 using Common.Application.Schedule;
 using Domain.EventAgg.Repository;
-using Domain.Notification.Repository;
-using Domain.Notification.Service;
+using Domain.NotificationAgg.Repository;
+using Domain.NotificationAgg.Service;
 using Domain.UserAgg;
 using Domain.UserAgg.Repository;
 using Microsoft.AspNet.Identity;

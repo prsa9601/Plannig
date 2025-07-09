@@ -21,6 +21,14 @@ namespace Infrastructure.Persistent.Ef.UserAgg
                 option.Property(b => b.UserFriendId);
                 option.Property(b => b.CurrentUserId);
             });
+
+            builder.OwnsMany(b => b.UserNotifications, option => 
+            {
+                option.ToTable("UserNotifications", "user");
+                option.HasIndex(b => b.Id);
+                //option.OwnsMany(b => b.UserIds);
+            });
+
             builder.OwnsMany(b => b.RequestBox, option => 
             {
                 option.ToTable("RequestBox", "user");

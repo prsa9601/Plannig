@@ -2,6 +2,7 @@
 using Application.Blog.Edit;
 using Application.Blog.IncreaseVisit;
 using Application.Blog.Remove;
+using Application.Blog.SetImage;
 using Common.Application;
 using MediatR;
 using Query.Blog.DTOs;
@@ -15,6 +16,7 @@ namespace Presentation.Facade.Blog
     {
         Task<OperationResult> Create(AddBlogCommand command);
         Task<OperationResult> Edit(EditBlogCommand command);
+        Task<OperationResult> SetImage(SetImageBlogCommand command);
         Task<OperationResult> Remove(RemoveBlogCommand command);
         Task<OperationResult> IncreaseVisit(IncreaseBlogVisitCommand command);
         Task<BlogDto?> GetBlogById(long BlogId);
@@ -64,6 +66,11 @@ namespace Presentation.Facade.Blog
         }
 
         public async Task<OperationResult> Remove(RemoveBlogCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        public async Task<OperationResult> SetImage(SetImageBlogCommand command)
         {
             return await _mediator.Send(command);
         }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PlanningContext))]
-    [Migration("20250510191344_ُفشقف")]
-    partial class _ُفشقف
+    [Migration("20250708172304_FixedPropertiesUserNotification")]
+    partial class FixedPropertiesUserNotification
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,7 +197,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Events", "event");
                 });
 
-            modelBuilder.Entity("Domain.Notification.Notification", b =>
+            modelBuilder.Entity("Domain.NotificationAgg.Notification", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -213,6 +213,10 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EventEndTime")
                         .HasColumnType("datetime2");
@@ -245,6 +249,10 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("SendTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.PrimitiveCollection<string>("UserIds")
                         .HasColumnType("nvarchar(max)");
@@ -1019,7 +1027,6 @@ namespace Infrastructure.Migrations
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("InstagramUserName")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<bool>("IsSend")
@@ -1364,6 +1371,56 @@ namespace Infrastructure.Migrations
                                 .HasForeignKey("UserId");
                         });
 
+                    b.OwnsMany("Domain.UserAgg.UserNotification", "UserNotifications", b1 =>
+                        {
+                            b1.Property<string>("UserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<long>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("bigint");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<long>("Id"));
+
+                            b1.Property<DateTime>("CreationDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsSeen")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsSend")
+                                .HasColumnType("bit");
+
+                            b1.Property<DateTime>("SendTime")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<int>("SendType")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Title")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.PrimitiveCollection<string>("UserIds")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId", "Id");
+
+                            b1.HasIndex("Id");
+
+                            b1.ToTable("UserNotifications", "user");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
                     b.OwnsMany("Domain.UserAgg.UserPackage", "UserPackages", b1 =>
                         {
                             b1.Property<string>("UserId")
@@ -1498,6 +1555,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Roles");
 
                     b.Navigation("Tokens");
+
+                    b.Navigation("UserNotifications");
 
                     b.Navigation("UserPackages");
 

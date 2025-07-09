@@ -53,6 +53,9 @@ namespace Domain.CategoryAgg
             if (slug != Slug)
                 if (service.IsSlugExist(slug))
                     throw new SlugIsDuplicateException();
+            if (title != Title)
+                if (service.IsTitleExist(title))
+                    throw new NullOrEmptyDomainDataException();
         }
     }
 }

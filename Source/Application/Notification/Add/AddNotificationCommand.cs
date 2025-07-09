@@ -1,8 +1,8 @@
 ﻿using Common.Application;
 using Domain.EventAgg.Repository;
-using Domain.Notification;
-using Domain.Notification.Repository;
-using Domain.Notification.Service;
+using Domain.NotificationAgg;
+using Domain.NotificationAgg.Repository;
+using Domain.NotificationAgg.Service;
 using Domain.UserAgg;
 using Domain.UserAgg.Repository;
 using FluentValidation.Validators;
@@ -22,10 +22,11 @@ namespace Application.Notification.Add
         //public int AllowedSmsCount { get; set; }
         public DateTime EventStartTime { get; set; }
         //public DateTime EventExpiredTime { get; set; }
-        public DateTime SendTime { get; set; }
+        //public DateTime SendTime { get; set; }
         public string creatorUserName { get; set; }
         //public string ScheduleId { get; set; }
-
+        public string Title { get; set; }
+        public string Description { get; set; }
         public NotificationType NotificationType { get; set; }
         public ICollection<string> UserNames { get; set; }
     }
@@ -50,10 +51,14 @@ namespace Application.Notification.Add
         {
             try
             {
-                request.UserNames.Add(request.creatorUserName);
-                var notification = new Domain.Notification.Notification(request.EventId,
+                var creator = await _userRepository.GetTrackingByUserName(request.creatorUserName);
+                //request.UserNames.Add(creator.Id);
+                var UserIds = await _userRepository.GetListAsync(request.UserNames.ToList());
+                UserIds.Add(creator);
+                var notification = new Domain.NotificationAgg.Notification(request.EventId,
                        request.IsSend, request.IsSeen, request.EventStartTime,
-                       request.SendTime, NotificationType.Email, request.UserNames, request.IsActive
+                       NotificationType.Email, UserIds.Select(i=>i.Id).ToList(), request.IsActive,
+                       request.Title, request.Description
                        );
 
                 await _repository.AddAsync(notification);
@@ -71,7 +76,7 @@ namespace Application.Notification.Add
                 //        Error("شما به این ایونت دسترسی برای ارسال ایمیل ندادید!");
                 await _repository.Save();
                var NotificationScheduleId =
-                    BackgroundJob.Schedule(() => _service.SendNotification(notification.Id), request.SendTime);
+                    BackgroundJob.Schedule(() => _service.SendNotification(notification.Id), request.EventStartTime.AddMinutes(-30));
                 notification.NotificationScheduleId = NotificationScheduleId;
                 if (notification.IsSend == false && notification.IsActive == true
                     && notification.NotificationType == NotificationType.Email &&
@@ -82,7 +87,7 @@ namespace Application.Notification.Add
                     //, notification.EventStartTime, notification.EventExpiredTime,
                     //notification.IsSend, notification.AllowedEmailCount, notification.IsActive
                     //, eventClass.eventUser.Select(i => i.CreatorUserName).FirstOrDefault());
-                    var creator = await _userRepository.GetTrackingByUserName(request.creatorUserName);
+                    //var creator = await _userRepository.GetTrackingByUserName(request.creatorUserName);
                     int SendEmailCount = 0;
                     foreach (var item in request.UserNames)
                     {
@@ -104,7 +109,7 @@ namespace Application.Notification.Add
                         , request.EventId
                     , notification.EventStartTime,
                     notification.SendTime,
-                    eventClass.EventUser.Select(i => i.CreatorUserId).FirstOrDefault()), request.SendTime);
+                    eventClass.EventUser.Select(i => i.CreatorUserId).FirstOrDefault()), request.EventStartTime.AddMinutes(-30));
 
                     notification.ScheduleId = scheduleId;
                 }

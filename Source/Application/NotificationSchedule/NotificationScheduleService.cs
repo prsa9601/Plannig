@@ -1,4 +1,4 @@
-﻿using Domain.Notification.NotificationSchedule;
+﻿using Domain.NotificationAgg.NotificationSchedule;
 
 namespace Application.NotificationSchedule
 {

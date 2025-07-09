@@ -41,15 +41,18 @@ namespace Application.Event.Edit
 
         public async Task<OperationResult<long>> Handle(EditEventCommand request, CancellationToken cancellationToken)
         {
+           
+            var UserIds = await _userRepository.GetListAsync(request.userNames);
+            var creator = await _userRepository.GetTrackingByUserName(request.creatorUserName); 
             
             var Event = await _repository.GetTracking(request.Id);
             if (Event == null)
                 return OperationResult<long>.NotFound(0);
-            if (!Event.EventUser.Any(i => i.CreatorUserId.Equals(request.creatorUserName)))
+            if (!Event.EventUser.Any(i => i.CreatorUserId.Equals(creator.Id)))
             {
-                return OperationResult<long>.Error("فقط سازنده میتواند ایونترا تغییر دهد!");
+                return OperationResult<long>.Error("فقط سازنده میتواند ایونت را تغییر دهد!");
             }
-            var creator = await _userRepository.GetTrackingByUserName(request.creatorUserName);
+    
             List<Domain.UserAgg.User>? users = new List<Domain.UserAgg.User>();
             List<string>? usersEmail = new List<string>();
             if (creator.friends.Count() > 0)
@@ -61,7 +64,7 @@ namespace Application.Event.Edit
                 }
             }
             //var oldEvent = Event;
-            Event.Edit(request.creatorUserName, request.userNames,
+            Event.Edit(creator.Id, UserIds.Select(i=>i.Id).ToList(),
                 request.Title, request.StartTime, request.EndTime, 
                 request.Description, request.Link, request.EventAddress,
                 request.accessNotification, request.tag, request.NotificationEnum);

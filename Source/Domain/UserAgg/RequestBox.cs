@@ -14,9 +14,9 @@ public class RequestBox : BaseEntity
 
     public string Title { get; set; } = "";
     //public long CurrentUserId { get; set; }
-    public RequestBox(  string receiverId, string senderUserName)
+    public RequestBox(string receiverId, string senderUserName)
     {
-        Description = $" {senderUserName} به شما درخواست دوستی به شما داده است. \n برای اینکه {senderUserName} به دوستانتان اضافه شود روی دوست کلیک کنید.";
+        Description = $" {senderUserName} درخواست دوستی به شما داده است. \n برای اینکه {senderUserName} به دوستانتان اضافه شود روی قبول کلیک کنید.";
         Title = $"درخواست دوستی از {senderUserName}" ;
         ReceiverId = receiverId;
     }

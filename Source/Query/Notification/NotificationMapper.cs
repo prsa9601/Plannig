@@ -11,7 +11,7 @@ namespace Query.Notification
 {
     internal static class NotificationMapper
     {
-        internal static async Task<NotificationDto?> Map(this Domain.Notification.Notification? notification, PlanningContext context)
+        internal static async Task<NotificationDto?> Map(this Domain.NotificationAgg.Notification? notification, PlanningContext context)
         {
             return new NotificationDto
             {
@@ -29,8 +29,10 @@ namespace Query.Notification
             };
         }
         internal static NotificationFilterData? MapFilter(this
-            Domain.Notification.Notification? notification, PlanningContext context)
+            Domain.NotificationAgg.Notification notification, PlanningContext context)
         {
+            if (notification == null)
+                return null;
             return new NotificationFilterData
             {
                 Id = notification!.Id,
@@ -40,8 +42,10 @@ namespace Query.Notification
                 EventStartTime = notification.EventStartTime,
                 IsActive = notification.IsActive,
                 IsSend = notification.IsSend,
+                Description = notification.Description,
                 NotificationType = notification.NotificationType,
                 SendTime = notification.SendTime,
+                Title = notification.Title,
                 UserNames = context.
                 Users.Where(i => i.Id.Equals(notification.UserIds)).
                 Select(i => i.UserName).ToList()!,

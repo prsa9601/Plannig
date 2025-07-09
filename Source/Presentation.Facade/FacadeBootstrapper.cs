@@ -12,6 +12,7 @@ using Presentation.Facade.Telegram;
 using Presentation.Facade.Telegram.Account;
 using Presentation.Facade.User;
 using Presentation.Facade.User.Friend;
+using Presentation.Facade.User.Notification;
 using Presentation.Facade.User.Package;
 using Presentation.Facade.User.Request;
 
@@ -37,6 +38,7 @@ namespace Presentation.Facade
             services.AddScoped<IFriendFacade, FriendFacade>();
             services.AddScoped<INotificationFacade, NotificationFacade>();
             services.AddScoped<IUserPackageFacade, UserPackageFacade>();
+            services.AddScoped<IUserNotificationFacade, UserNotificationFacade>();
 
 
         }

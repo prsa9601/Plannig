@@ -1,10 +1,5 @@
 ﻿using Common.Query;
 using Domain.EventAgg.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Query.Event.DTOs
 {
@@ -20,6 +15,7 @@ namespace Query.Event.DTOs
 
         public Tagged tag { get; set; }
         public NotificationEnum notification { get; set; }
+        public List<string> UserNames { get; set; }
         //public List<UserEvent> Participants { get; private set; }
 
         public bool AccessNotification { get; set; } = true;

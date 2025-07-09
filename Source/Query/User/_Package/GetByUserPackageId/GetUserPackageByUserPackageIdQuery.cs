@@ -3,7 +3,7 @@ using Infrastructure.Persistent.Ef;
 using Microsoft.EntityFrameworkCore;
 using Query.User.DTOs;
 
-namespace Query.User._Package.GetByEventId
+namespace Query.User._Package.GetByUserPackageId
 {
     public class GetUserPackageByUserPackageIdQuery : IQuery<UserPackageDto?>
     {
@@ -21,7 +21,7 @@ namespace Query.User._Package.GetByEventId
 
         public async Task<UserPackageDto?> Handle(GetUserPackageByUserPackageIdQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.Where(i => i.Id.Equals(request.UserId)).Select(i=>i.UserPackages).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(i => i.Id.Equals(request.UserId)).Select(i => i.UserPackages).FirstOrDefaultAsync();
             var result = user!.Where(i => i!.Id.Equals(request.Id)).FirstOrDefault();
             var package = await _context.Packages.Where(i => i.Id.Equals(result.PackageId)).FirstOrDefaultAsync();
             return result.UserPackageMap(package!);

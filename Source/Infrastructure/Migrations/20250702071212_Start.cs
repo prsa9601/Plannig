@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class _ُفشقف : Migration
+    public partial class Start : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -62,7 +62,7 @@ namespace Infrastructure.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
@@ -212,6 +212,8 @@ namespace Infrastructure.Migrations
                     EventStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EventEndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SendTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotificationType = table.Column<int>(type: "int", nullable: false),
                     UserIds = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -533,6 +535,35 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                schema: "user",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsSend = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsSeen = table.Column<bool>(type: "bit", nullable: false),
+                    SendTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SendType = table.Column<int>(type: "int", nullable: false),
+                    UserIds = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => new { x.UserId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "userPackages",
                 schema: "user",
                 columns: table => new
@@ -651,7 +682,7 @@ namespace Infrastructure.Migrations
                     DateOfPosting = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsSend = table.Column<bool>(type: "bit", nullable: false),
-                    InstagramUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstagramUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -1062,6 +1093,12 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_Id",
+                schema: "user",
+                table: "UserNotifications",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_userPackages_UserId",
                 schema: "user",
                 table: "userPackages",
@@ -1173,6 +1210,10 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "userEvents",
+                schema: "user");
+
+            migrationBuilder.DropTable(
+                name: "UserNotifications",
                 schema: "user");
 
             migrationBuilder.DropTable(

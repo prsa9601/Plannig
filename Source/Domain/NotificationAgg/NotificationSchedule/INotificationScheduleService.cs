@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Notification.NotificationSchedule
+﻿namespace Domain.NotificationAgg.NotificationSchedule
 {
     public interface INotificationScheduleService
     {

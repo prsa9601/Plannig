@@ -2,6 +2,7 @@
 using Application.Blog.Edit;
 using Application.Blog.IncreaseVisit;
 using Application.Blog.Remove;
+using Application.Blog.SetImage;
 using Application.Comment.ChangeStatus;
 using Common.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +34,12 @@ namespace Planning.Api.Controllers
         public async Task<ApiResult> EditBlog([FromForm]EditBlogCommand command)
         {
             return CommandResult(await _facade.Edit(command));
+        }
+        [Authorize]
+        [HttpPatch("SetImageBlog")]
+        public async Task<ApiResult> EditBlog([FromForm]SetImageBlogCommand command)
+        {
+            return CommandResult(await _facade.SetImage(command));
         }
         [Authorize]
         [HttpPatch("IncreaseVisit")]

@@ -156,8 +156,8 @@ namespace Domain.EventAgg
             this.notification = notification;
             AccessNotification = accessNotification;
 
-            if (notification != NotificationEnum.none || userNumber.Count != 0)
-            {
+            //if (notification != NotificationEnum.none/* || userNumber.Count != 0*/)
+            //{
                 List<EventUser> users = new List<EventUser>();
 
                 foreach (var item in userNumber)
@@ -170,7 +170,7 @@ namespace Domain.EventAgg
                 //eventUser.Clear();
                 EventUser.Clear();
                 EventUser.AddRange(users);
-            }
+            //}
             //Participants = new List<UserEvent>();
             //Participants = new List<EventParticipants>();
         }

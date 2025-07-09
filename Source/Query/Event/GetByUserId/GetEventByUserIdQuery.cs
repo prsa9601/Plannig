@@ -3,12 +3,6 @@ using Domain.UserAgg;
 using Infrastructure.Persistent.Ef;
 using Microsoft.EntityFrameworkCore;
 using Query.Event.DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Query.Event.GetByUserId
 {
@@ -33,7 +27,7 @@ namespace Query.Event.GetByUserId
             {
                 foreach (var item1 in item)
                 {
-                    if (item1.UserId.Equals(user.UserName))
+                    if (item1.UserId.Equals(user.Id))
                     {
                         EventIds.Add(item1.EventId);
                     }
@@ -46,7 +40,8 @@ namespace Query.Event.GetByUserId
             {
                 model.Add(_context.Events.Where(i=>i.Id.Equals(ids)).FirstOrDefault());
             }
-            return model.MapList();
+            string myUserName = _context.Users.Where(i => i.Id == request.userId).Select(i=>i.UserName).FirstOrDefault()!;
+            return model.MapList(_context, myUserName);
         }
     }
 }

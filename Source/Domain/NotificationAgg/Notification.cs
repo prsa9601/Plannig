@@ -1,16 +1,14 @@
-﻿using System.Data;
-using Common.Domain;
-using Domain.Notification.Service;
+﻿using Common.Domain;
+using Domain.NotificationAgg.Service;
 
-namespace Domain.Notification
+namespace Domain.NotificationAgg
 {
-    //برای ارسال نوتیفیکیشن میتونم از RabbitMQ یا دیتابیس استفاده کنم
     public class Notification : BaseEntity
     {
-        public Notification(long eventId, bool isSend, bool isSeen, 
-            DateTime eventSendTime, 
-            DateTime sendTime, NotificationType notificationType,
-            ICollection<string>? userNames, bool isActive)
+        public Notification(long eventId, bool isSend, bool isSeen,
+            DateTime eventSendTime,
+            NotificationType notificationType,
+            ICollection<string>? userNames, bool isActive, string title, string description)
         {
             EventId = eventId;
             IsSend = isSend;
@@ -19,13 +17,15 @@ namespace Domain.Notification
             //AllowedSmsCount = allowedSmsCount;
             EventStartTime = eventSendTime;
             //EventExpiredTime = eventExpiredTime;
-            SendTime = sendTime;
+            //SendTime = sendTime;
             NotificationType = notificationType;
             UserIds = userNames;
             IsActive = isActive;
+            Title = title;
+            Description = description;
             //ScheduleId = scheduleId;, string scheduleId
         }
-        
+
         private Notification()
         {
             UserIds = new List<string>();
@@ -34,6 +34,8 @@ namespace Domain.Notification
             IsActive = false;
         }
         public long? EventId { get; private set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public string ScheduleId { get; set; } = "";
         public string NotificationScheduleId { get; set; } = "";
         public bool IsSend { get; private set; }
@@ -50,7 +52,7 @@ namespace Domain.Notification
 
 
 
-        public void Add (long eventId, bool isSend, bool isSeen,
+        public void Add(long eventId, bool isSend, bool isSeen,
             int allowedEmailCount, int allowedSmsCount,
             DateTime eventSendTime, DateTime eventEndTime,
             DateTime sendTime, NotificationType notificationType,
@@ -70,18 +72,21 @@ namespace Domain.Notification
 
         public void Edit(long eventId, bool isSend, bool isSeen,
             DateTime eventSendTime,
-            DateTime sendTime, NotificationType notificationType,
-            ICollection<string>? userIds ,bool isActive, DateTime endTime)
+            NotificationType notificationType,
+            ICollection<string>? userIds, bool isActive, DateTime endTime, string title,
+            string description)
         {
             EventId = eventId;
             IsSend = isSend;
+            Title = title;
+            Description = description;
             IsSeen = isSeen;
             //AllowedEmailCount = allowedEmailCount;
             //AllowedSmsCount = allowedSmsCount;
             EventStartTime = eventSendTime;
             EventEndTime = endTime;
             //EventExpiredTime = eventExpiredTime;
-            SendTime = sendTime;
+            //SendTime = sendTime;
             NotificationType = notificationType;
             UserIds = userIds;
             IsActive = isActive;
@@ -90,13 +95,13 @@ namespace Domain.Notification
         public void ChangeDate(DateTime eventStartTime,
             DateTime sendTime, DateTime endTime)
         {
-            
+
             //AllowedEmailCount = allowedEmailCount;
             //AllowedSmsCount = allowedSmsCount;
             EventStartTime = eventStartTime;
             EventEndTime = endTime;
             //EventExpiredTime = eventExpiredTime;
-            SendTime = sendTime; 
+            SendTime = sendTime;
             //ScheduleId = scheduleId;, string scheduleId
         }
 
@@ -154,8 +159,8 @@ namespace Domain.Notification
             GuardSendEmail(isSend, isActive, allowedEmailCount);
             service.SendEmail(userIds, eventId, eventStartTime, eventEndTime);
         }
-        public void SendSms(List<string> userIds, long eventId, 
-            DateTime eventStartTime, DateTime eventEndTime, bool isSend, 
+        public void SendSms(List<string> userIds, long eventId,
+            DateTime eventStartTime, DateTime eventEndTime, bool isSend,
             int allowedSmsCount, bool isActive, INotificationService service)
         {
             GuardSendSms(isSend, isActive, allowedSmsCount);

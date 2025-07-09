@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Notification.Service
+namespace Domain.NotificationAgg.Service
 {
     public interface INotificationService
     {
@@ -12,14 +12,14 @@ namespace Domain.Notification.Service
         Task SendEmail(List<string> userIds, long eventId,
             DateTime startTime, DateTime sendTime);
 
-        Task SendEmailForEvent(List<string> userIds, 
+        Task SendEmailForEvent(List<string> userIds,
             long eventId, DateTime startTime, DateTime sendTime, string creatorUserName);
-        
+
         Task SendNotification(long NotificationId);
 
         Task SendSms(List<string> userIds, long eventId,
             DateTime startTime, DateTime sendTime);
-    
+
     }
 }
 

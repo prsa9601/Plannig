@@ -1,5 +1,5 @@
 ﻿using Common.Application;
-using Domain.Notification.Repository;
+using Domain.NotificationAgg.Repository;
 using Hangfire;
 using Microsoft.Extensions.Logging;
 
